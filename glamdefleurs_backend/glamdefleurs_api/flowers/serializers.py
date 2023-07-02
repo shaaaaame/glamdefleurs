@@ -9,12 +9,11 @@ class FlowerSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'categories', 'price', 'photo', 'description']
 
 class CategorySerializer(serializers.ModelSerializer):
-    head_category = serializers.StringRelatedField(source='head_category.name')
-    flowers = serializers.PrimaryKeyRelatedField(many=True, queryset=Flower.objects.all())
+    head_category = serializers.PrimaryKeyRelatedField(queryset=HeadCategory.objects.all())
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'head_category', 'description', 'flowers']
+        fields = ['id', 'name', 'head_category', 'description']
 
 class HeadCategorySerializer(serializers.ModelSerializer):
     

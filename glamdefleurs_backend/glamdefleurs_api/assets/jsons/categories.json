@@ -1,0 +1,20 @@
+[   
+    { 
+        "id":"ceremonies", 
+        "name":"ceremonies",
+        "head_category":"weddings",
+        "description":"for ceremonies"
+    },
+    { 
+        "id":"corsages_and_boutonnieres", 
+        "name":"corsages and boutonnieres",
+        "head_category":"weddings",
+        "description":"for corsages and boutonnieres"
+    },
+    { 
+        "id":"bridal_bouquet", 
+        "name":"bridal bouquet",
+        "head_category":"weddings",
+        "description":"for bridal bouquet"
+    }
+]

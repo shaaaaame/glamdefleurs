@@ -1,3 +1,4 @@
+from typing import Iterable, Optional
 from django.db import models
 from django.urls import reverse
 
@@ -5,6 +6,7 @@ from django.urls import reverse
 # Create your models here.
 
 class HeadCategory(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=10000)
 
@@ -12,10 +14,10 @@ class HeadCategory(models.Model):
         return self.name
 
 class Category(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=10000)
     head_category = models.ForeignKey("HeadCategory", on_delete=models.CASCADE)
-    flowers = models.ManyToManyField("Flower")
 
     class Meta:
         ordering = ['name']

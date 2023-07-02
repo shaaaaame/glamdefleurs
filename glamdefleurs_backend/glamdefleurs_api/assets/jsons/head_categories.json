@@ -1,0 +1,22 @@
+[
+    {
+        "id" :"weddings",
+        "name":"weddings",
+        "description": "for weddings"
+    },
+    {
+        "id":"sympathy",
+        "name":"sympathy",
+        "description": "for sympathy"
+    },
+    {
+        "id":"special_occasions",
+        "name":"special occasions",
+        "description": "for special occasions"
+    },
+    {
+        "id":"holiday_specials",
+        "name":"holiday specials",
+        "description": "for holiday specials"
+    }
+]
