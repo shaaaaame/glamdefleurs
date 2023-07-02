@@ -3,6 +3,7 @@ from flowers import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
+    path('', views.api_root),
     path('flowers/', views.FlowerList.as_view()),
     path('flowers/<int:pk>/', views.FlowerDetail.as_view()),
     path('categories/', views.CategoryList.as_view()),
