@@ -10,6 +10,18 @@ class FlowerViewSet(viewsets.ModelViewSet):
     serializer_class = FlowerSerializer
     permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
 
+    def get_queryset(self):
+        queryset = Flower.objects.all()
+        head = self.request.query_params.get('head')
+        sub = self.request.query_params.get('sub')
+
+        if head is not None:
+            sublist = Category.objects.all().filter(head_category__exact=head)
+            queryset = queryset.filter(categories__in=sublist)
+        elif sub is not None:
+            queryset = queryset.filter(categories__id__exact=sub)
+        return queryset
+    
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

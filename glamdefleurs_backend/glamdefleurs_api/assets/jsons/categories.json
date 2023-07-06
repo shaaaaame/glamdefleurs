@@ -16,5 +16,89 @@
         "name":"bridal bouquet",
         "head_category":"weddings",
         "description":"for bridal bouquet"
+    },
+    { 
+        "id":"casket_sprays", 
+        "name":"casket sprays",
+        "head_category":"sympathy",
+        "description":"for casket sprays"
+    },
+    { 
+        "id":"home", 
+        "name":"home",
+        "head_category":"sympathy",
+        "description":"for home"
+    },
+    { 
+        "id":"wreathes", 
+        "name":"wreathes",
+        "head_category":"sympathy",
+        "description":"wreathes"
+    },
+    { 
+        "id":"funeral_packages", 
+        "name":"funeral packages",
+        "head_category":"sympathy",
+        "description":"funeral packages"
+    },
+    { 
+        "id":"birthdays", 
+        "name":"birthdays",
+        "head_category":"special_occasions",
+        "description":"birthdays"
+    },
+    { 
+        "id":"anniversaries", 
+        "name":"anniversaries",
+        "head_category":"special_occasions",
+        "description":"anniversaries"
+    },
+    { 
+        "id":"get_well_soon", 
+        "name":"get well soon",
+        "head_category":"special_occasions",
+        "description":"get well soon"
+    },
+    { 
+        "id":"baby_showers_and_birth", 
+        "name":"baby showers and birth",
+        "head_category":"special_occasions",
+        "description":"baby showers and birth"
+    },
+    { 
+        "id":"congratulations", 
+        "name":"congratulations",
+        "head_category":"special_occasions",
+        "description":"congratulations"
+    },
+    { 
+        "id":"valentines_day", 
+        "name":"valentine's day",
+        "head_category":"holiday_specials",
+        "description":"valentine's day"
+    },
+    { 
+        "id":"mothers_day", 
+        "name":"mother's day",
+        "head_category":"holiday_specials",
+        "description":"mother's day"
+    },
+    { 
+        "id":"easter_and_passover", 
+        "name":"easter and passover",
+        "head_category":"holiday_specials",
+        "description":"easter and passover"
+    },
+    { 
+        "id":"hanukkah", 
+        "name":"hanukkah",
+        "head_category":"holiday_specials",
+        "description":"hanukkah"
+    },
+    { 
+        "id":"womens_day", 
+        "name":"women's day",
+        "head_category":"holiday_specials",
+        "description":"women's day"
     }
 ]

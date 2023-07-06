@@ -10,6 +10,7 @@ class HeadCategory(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=10000)
 
+
     def __str__(self) -> str:
         return self.name
 
@@ -17,7 +18,7 @@ class Category(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=10000)
-    head_category = models.ForeignKey("HeadCategory", on_delete=models.CASCADE)
+    head_category = models.ForeignKey("HeadCategory", on_delete=models.CASCADE, null=True)
 
     class Meta:
         ordering = ['name']
@@ -31,6 +32,7 @@ class Flower(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     photo = models.URLField()
     description = models.TextField(max_length=10000)
+    is_popular = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['name']
