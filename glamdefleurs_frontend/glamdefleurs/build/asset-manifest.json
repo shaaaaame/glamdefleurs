@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/glamdefleurs/static/css/main.cb3a16f3.css",
+    "main.js": "/glamdefleurs/static/js/main.4816315b.js",
+    "static/js/787.86d17cdf.chunk.js": "/glamdefleurs/static/js/787.86d17cdf.chunk.js",
+    "static/media/popularBg.jpg": "/glamdefleurs/static/media/popularBg.425589de91dd8bb45995.jpg",
+    "static/media/about-rose.png": "/glamdefleurs/static/media/about-rose.368186afbdf0e040e025.png",
+    "static/media/login-bg.jpg": "/glamdefleurs/static/media/login-bg.818eab7e797930cb7284.jpg",
+    "static/media/Placeholder.jpg": "/glamdefleurs/static/media/Placeholder.3a58a1ad8856910aa284.jpg",
+    "static/media/glamdefleurs-logo.png": "/glamdefleurs/static/media/glamdefleurs-logo.8e0a17583dabd6587c2d.png",
+    "static/media/Oksana.jpg": "/glamdefleurs/static/media/Oksana.81b0f7595b84298cbad3.jpg",
+    "static/media/heroTulips.jpg": "/glamdefleurs/static/media/heroTulips.83f3fe5ee36e5575b240.jpg",
+    "static/media/Thesignature.otf": "/glamdefleurs/static/media/Thesignature.2275572967a1d6158dd8.otf",
+    "index.html": "/glamdefleurs/index.html",
+    "main.cb3a16f3.css.map": "/glamdefleurs/static/css/main.cb3a16f3.css.map",
+    "main.4816315b.js.map": "/glamdefleurs/static/js/main.4816315b.js.map",
+    "787.86d17cdf.chunk.js.map": "/glamdefleurs/static/js/787.86d17cdf.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cb3a16f3.css",
+    "static/js/main.4816315b.js"
+  ]
+}

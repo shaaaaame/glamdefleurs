@@ -1,0 +1,124 @@
+.about{
+    padding: 50px;
+}
+
+.about-title{
+    color: var(--clr-hl1);
+    margin: 10px;
+}
+
+.about-main{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.about-wrapper{
+    width: 100%;
+    padding: 3em 0 3em 0;
+    border-top: 1px solid var(--clr-dark);
+    border-bottom: 1px solid var(--clr-dark);
+}
+
+.about-quote{
+    font-size: 5em;
+    width: 70%;
+}
+
+.about-quote-img{
+    position: absolute;
+    width: 20vw;
+
+}
+
+.about-sign{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 4em;
+    font-family: Thesignature;
+}
+
+.about-quals{
+    margin: 20vh 0 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.about-quals-separator-wrapper{
+    margin: 0 2em 0 2em;
+}
+
+
+.about-quals-separator{
+    width: 1px;
+    height: 100%;
+    background-color: var(--clr-dark);
+}
+
+.about-quals-content{
+    width: 100%;
+}
+
+.about-quals-wrapper{
+    width: 100%;
+}
+
+
+.about-quals-title{
+    font-family: Thesignature;
+    font-size: 65px;
+    color: var(--clr-hl1);
+}
+
+.about-quals-line{
+    height: 1px;
+    width: 100%;
+    background-color: var(--clr-dark);
+    margin: 20px 0 20px 0;
+}
+
+.about-quals-list{
+    margin: 20px 0 50px 0;
+}
+
+.about-quals-list-item{
+    margin: 5px 0 5px 0;
+    font-size: 20px;
+}
+
+@media screen and (max-width: 780px) {
+    .about{
+        padding: 2em; 
+        width: 100%;
+        overflow: hidden;
+    }
+    .about-quote{
+        width: 100%;
+        font-size: 3em;
+        margin-bottom: 1em;
+    }
+
+    .about-quote-img{
+        bottom: 10%;
+        right: 0;
+    }
+    .about-quals{
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    .about-quals-img{
+        margin: 2em 0 2em 0;
+    }
+}
+
+@media screen and (min-width: 781px) {
+    .about-quote-img{
+        top: 20%;
+        right: 0;
+    }
+}

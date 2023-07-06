@@ -1,0 +1,103 @@
+@font-face {
+  font-family: Thesignature;
+  src: url('./assets/fonts/Thesignature.otf');
+}
+
+h1{
+  font-weight: 50;
+  font-size: var(--fs-h1);
+}
+
+h2{
+  font-weight: 50;
+  font-size: var(--fs-h2);
+}
+
+h3{
+  font-weight: 100;
+  font-size: var(--fs-h3);
+}
+
+body {
+  font-size: var(--fs-body);
+  font-family: 'Radley', serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input {
+  font-family: 'Radley', serif;
+}
+
+table{
+  border-collapse: collapse;
+}
+
+button{
+  font-family: 'Radley', serif;
+  font-size: var(--fs-body);
+  cursor: pointer;
+}
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+
+.link{
+  text-decoration: none;
+  color: inherit;
+}
+
+/* media queries follow this: 
+
+320px — 480px: Mobile devices.
+481px — 768px: iPads, Tablets.
+769px — 1024px: Small screens, laptops.
+1025px — 1200px: Desktops, large screens.
+1201px and more — Extra large screens, TV.
+
+*/
+
+@media screen and (max-width: 480px) {
+  :root{
+    --fs-h1: 25px;
+    --fs-h2: 20px;
+    --fs-h3: 17px;  
+
+    --fs-body: 14px;
+  }
+
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  :root{
+    --fs-h1: 35px;
+    --fs-h2: 27px;
+    --fs-h3: 20px;  
+
+  }
+
+}
+
+@media screen and (min-width: 768px) {
+  :root{
+    --fs-h1: 50px;
+    --fs-h2: 34px;
+    --fs-h3: 22px;
+    --fs-body: 16px;
+  }
+}
+
+:root{
+  --clr-dark: black;
+  --clr-light: white;
+  --clr-hl1: #E1A730;
+  --clr-hl2: #C1FFF7;
+
+  --header_height: 72px;
+}
+

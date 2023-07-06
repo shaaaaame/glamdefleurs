@@ -1,0 +1,111 @@
+
+.flower-detail{
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.3);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 5;
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+}
+
+.flower-page{
+    height: 100%;
+    background-color: var(--clr-light);
+    display: flex;
+    justify-content: center;
+}
+
+.flower-page-img{
+    height: 100%;
+}
+
+.flower-page-price{
+    margin: 1em 0 1em 0;
+}
+
+.flower-page-wrapper{
+    padding: 5em;
+}
+
+.flower-page-title{
+    text-transform:uppercase;
+    color: var(--clr-hl1);
+    border-bottom: 1px solid var(--clr-dark);
+}
+
+.flower-page-desc{
+    margin: 2em 0 2em 0;
+    padding: 2em;
+    border: 1px solid var(--clr-dark);
+    max-height: 50%;
+    word-wrap: break-word;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.flower-page-amt{
+    display: flex;
+    width: 100%;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+.flower-page-quantity{
+    border: 1px solid var(--clr-dark);
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 2em;
+}
+
+.flower-page-quantity-btn{
+    cursor: pointer;
+}
+
+.flower-page-submit{
+    border: 1px solid var(--clr-dark);
+    border-left: 0;
+    width: 100%;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+.flower-page-backBtn{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: transparent;
+}
+
+@media screen and (max-width: 768px) {
+    .flower-page{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .flower-page-img{
+        height: 35vh;
+        width: auto;
+        object-fit: contain;
+    }
+
+    .flower-page-wrapper{
+        padding: 2em;
+    }
+
+    .flower-page-desc{
+        margin: 1em 0 1em 0;
+    }
+    .flower-page-price{
+        margin: 1em 0 1em 0;
+    }
+}
