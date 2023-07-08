@@ -19,10 +19,8 @@ import Login from './components/Login/Login';
 import Contact from './components/Contact/Contact';
 import Cart from './components/Cart/Cart';
 import { CartContextProvider } from './context/CartContext';
-import { CategoryContextProvider } from './context/CategoryContext';
 
 import FlowerPage from './components/Flowers/FlowerPage';
-import { loader as flowerLoader } from './components/Flowers/FlowerPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const queryClient = new QueryClient();
@@ -41,7 +39,7 @@ const router = createBrowserRouter([
     element: <FlowerPage />,
   },
   {
-    path: "categories/:type/:id",
+    path: "categories/:type/:id?",
     element: <Flowers />,
   },
   {
@@ -62,9 +60,7 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <CartContextProvider>
-        <CategoryContextProvider>
-          <RouterProvider router={router}/>
-        </CategoryContextProvider>
+        <RouterProvider router={router}/>
       </CartContextProvider>
       <ReactQueryDevtools initialIsOpen={true} />
     </QueryClientProvider>

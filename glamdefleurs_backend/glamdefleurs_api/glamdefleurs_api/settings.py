@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure--u3a0j7@*a$r)yv1egle89c5*kx^p(ye!n^@u5(u+@z)h#s6+m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -59,9 +59,9 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000"
-]
+# CORS_ORIGIN_WHITELIST = [
+#     "http://localhost:3000"
+# ]
 
 ROOT_URLCONF = 'glamdefleurs_api.urls'
 
@@ -142,25 +142,10 @@ REST_FRAMEWORK = {
     ]
 }
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'filters': ['require_debug_true'],
-        },
-    },
-    'loggers': {
-        'mylogger': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-            'propagate': True,
-        },
-    },
-}
+# email settings
+# TODO: change this before production
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '1025'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False

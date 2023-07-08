@@ -14,12 +14,19 @@ class FlowerViewSet(viewsets.ModelViewSet):
         queryset = Flower.objects.all()
         head = self.request.query_params.get('head')
         sub = self.request.query_params.get('sub')
+        popular = self.request.query_params.get('popular')
+        ids = self.request.query_params.getlist('ids')
 
         if head is not None:
             sublist = Category.objects.all().filter(head_category__exact=head)
             queryset = queryset.filter(categories__in=sublist)
         elif sub is not None:
             queryset = queryset.filter(categories__id__exact=sub)
+        elif popular is not None:
+            queryset = queryset.filter(is_popular__exact=True)
+        elif len(ids) > 0:
+            queryset = queryset.filter(id__in=ids)
+
         return queryset
     
 class CategoryViewSet(viewsets.ModelViewSet):

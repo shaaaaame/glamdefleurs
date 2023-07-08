@@ -1,29 +1,28 @@
 import React, { useState, useContext } from 'react';
 import { Minus, Plus, X } from 'react-feather';
-import { useNavigate, useLoaderData } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { CartContext } from '../../context/CartContext';
 import Header from '../global/Header'
 import './FlowerPage.css';
 import FlowerService from '../../services/FlowerService';
-
-export async function loader({params}){
-    const response = await FlowerService.get(params.flowerId);
-    const flower = response.data
-
-    return { flower }
-}
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 function FlowerPage() {
     const navigate = useNavigate();
+    const params = useParams();
     const [ amt, setAmt ] = useState(1);
-    const { flower } = useLoaderData();
     const { addToCart } = useContext(CartContext);
+
+    const queryClient = useQueryClient();
+    const { data: flower, isLoading, error } = useQuery(['flower', {id: params.id}], () => FlowerService.getFlower(params.id));
 
     const handleSubmit = (id, q) => {
         addToCart(id, q);
         navigate(-1);
     }
+
+    if (isLoading) return (<h1>loading...</h1>)
 
     return (
         <>

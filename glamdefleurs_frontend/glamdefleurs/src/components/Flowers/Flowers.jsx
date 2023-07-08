@@ -5,7 +5,6 @@ import Footer from '../global/Footer';
 import './Flowers.css';
 import { useLocation, Outlet, Link, useParams } from 'react-router-dom';
 import FlowerService from '../../services/FlowerService';
-import { CategoryContext } from '../../context/CategoryContext';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import CategoryService from '../../services/CategoryService';
 
@@ -13,7 +12,7 @@ import CategoryService from '../../services/CategoryService';
 function FlowerItem(props) {
 
   return (
-    <Link className='flowers-item link' to={"/flowers/flowerPage/" + props.id}>
+    <Link className='flowers-item link' to={"/flowers/" + props.id}>
       <img className='flowers-item-img' src={props.src}/>
       <div className='flowers-item-name-wrapper'>
         <h3 className='flowers-item-name'>{props.name}</h3>
@@ -39,38 +38,42 @@ function Flowers() {
   const params = useParams()
   const queryClient = useQueryClient()
 
+  // query for flower list
   const { 
     isLoading: flowersIsLoading,
     isError: flowersIsError, 
     data: flowers, 
-    error: flowersError} = useQuery(['flowers', {type: params.type, id: params.id}], () => {
+    error: flowersError} = useQuery(['flowers', params.id ? {type: params.type, id: params.id} : {type: params.type}], () => {
       if(params.type === 'h'){
         return FlowerService.getFlowersFromHead(params.id);
       }
-      else{
+      else if (params.type === 's'){
         return FlowerService.getFlowersFromSub(params.id);
+      }else{
+        return FlowerService.getAll();
       }
     })
 
+  // query for category 
   const { 
     isLoading: categoryIsLoading,
     isError: categoryIsError, 
     data: category, 
-    error: categoryError } = useQuery(['categories', {id: params.id}], () => {
+    error: categoryError } = useQuery(params.id ? ['categories', {id: params.id} ] : ['categories'], () => {
     if(params.type === 'h'){
       return CategoryService.getHeadCategory(params.id)
     }else{
       return CategoryService.getSubCategory(params.id)
     }
-  })
+  }, {enabled: !!params.id})
 
-  if (categoryIsLoading || flowersIsLoading) return (<h1>loading...</h1>)
+  if ((params.id && categoryIsLoading) || flowersIsLoading) return (<h1>loading...</h1>)
 
   return (
     <>
       <Header />
       <div className='flowers'>
-        <div className='flowers-header'>{ category.name }</div>
+        <div className='flowers-header'>{ category ? category.name : "all flowers" }</div>
         <Outlet />
         <FlowerCatalog flowers={flowers} />
       </div>

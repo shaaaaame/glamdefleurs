@@ -4,81 +4,74 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const CartContext = createContext(null);
 
-const getDefaultCart = (flowers) => {
-    let cartItems = {}
-            
-    flowers.forEach(f => {
-        cartItems[f.id] = 0;
-    })
-
-    return cartItems;
-}
-
-
 export function CartContextProvider(props) {
     // cart items stores items in the form of productId : quantity
     // if quantity == 0, item not in cart
-    const [ cartItems, setCartItems ] = useState();
+    const [ cartItems, setCartItems ] = useState({});
+    const [ items, setItems ] = useState([])
+    const [ subtotal, setSubtotal ] = useState(0);
     const queryClient = useQueryClient();
-    const {isError, isLoading, data: flowers, error, isFetched }= useQuery(['flowers'], FlowerService.getAll)
-
-
 
     useEffect(() => {
+        
+        if(!isCartEmpty()){
+            const ids = Object.keys(cartItems);
 
-        if(!cartItems && isFetched){
-            setCartItems(getDefaultCart(flowers))
+            FlowerService.getFlowers(ids)
+            .then(res => {
+                setItems(res);
+            })
+            .catch(err => console.log(err))
         }
-    }, [])
 
+    }, [cartItems])
+
+    const getSubtotal = () => {
+        let total = 0;
+
+        for(const item of items){
+            total += Number(item.price) * cartItems[item.id];
+        }
+
+        return total.toFixed(2);
+    }
 
     const addToCart = (id, quantity) => {
-        setCartItems((prev => ({
+        if (cartItems[id]){
+            setCartItems((prev => ({
             ...prev,
             [id]: prev[id] + quantity
-        })))
+            })))
+        }else{
+            setCartItems((prev) => ({
+                ...prev,
+                [id] : quantity
+            }))
+        }
     }
 
     const removeFromCart = (id, quantity) => {
         setCartItems((prev => ({
             ...prev,
-            [id]: Math.max(prev[id] - quantity, 0)
+            [id]: Math.max(prev[id] - quantity)
         })))
+
+        if(cartItems[id] <= 0) {
+            delete cartItems[id];
+        }
     }
 
     const isCartEmpty = () => {
-        for(const k in cartItems){
-            if (cartItems[k] > 0){
-                return false;
-            }
-        }
-        return true;
+        return Object.keys(cartItems).length <= 0;
     }
 
-    const getItemsInCart = () => {
-        let items = []
-
-        for(const id in cartItems){
-            if(cartItems[id] !== 0){
-                items.push(flowers[id])
-            }
-        }
-
-        return items
+    const getIdsInCart = () => {
+        return Object.keys(cartItems)
     }
 
-    const getSubtotal = () => {
-        let subtotal = 0;
-        
-        for(const k in cartItems){
-            subtotal += cartItems[k] * flowers[k].price;
-        }
+    const getItemsInCart = () => items;
 
-
-        return subtotal;
-    }
-
-    const contextValue = { cartItems, addToCart, removeFromCart, getSubtotal, isCartEmpty, getItemsInCart };
+    const contextValue = { cartItems, addToCart, removeFromCart, isCartEmpty, getSubtotal, getItemsInCart};
 
     return (
         <CartContext.Provider value={contextValue}>{props.children}</CartContext.Provider>

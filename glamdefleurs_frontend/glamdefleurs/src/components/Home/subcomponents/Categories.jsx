@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Placeholder from '../../../assets/img/Placeholder.jpg';
-import { categories } from '../../../external/data';
+import categories from '../../../external/categories.json';
 import { ArrowRightCircle } from 'react-feather';
 import { Link } from 'react-router-dom';
 
@@ -11,15 +11,15 @@ function Categories() {
       <h1 className='categories-title'>categories</h1>
       <div className='categories-wrapper'>
         <ul className='categories-list'>
-          {categories.map((main) => {
+          {categories.map((head) => {
             return(
-              <li className='categories-item'>
+              <li className='categories-item' key={head.id}>
                 <img className='categories-item-img' src={Placeholder}/>
-                <h3 className='categories-item-title'>{main.title}</h3>
+                <h3 className='categories-item-title'>{head.name}</h3>
                 <div className='categories-item-text-wrapper'>
-                  <div className='categories-item-text'>{main.desc}</div>
+                  <div className='categories-item-text'>{head.description}</div>
                 </div>
-                <Link className='link categories-item-btn' to='/flowers/' state={{ category: main }}><ArrowRightCircle size={30} /></Link>
+                <Link className='link categories-item-btn' to={`/categories/h/${head.id}`}><ArrowRightCircle size={30} /></Link>
               </li>)})}
         </ul>
       </div>

@@ -1,17 +1,17 @@
 import React from 'react'
-import Placeholder from '../../../assets/img/Placeholder.jpg';
-import { POPULAR_PRODUCTS, PRODUCTS } from '../../../external/products';
 import { Link } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import FlowerService from '../../../services/FlowerService';
 
 function PopularItem(props){
   const i = props.item;
 
   return (
-    <Link className='link popular-item' to={'flowers/flowerPage/' + i.productId}>
-      <img className='popular-item-img' src={i.productImg}/>
+    <Link className='link popular-item' to={'flowers/' + i.id}>
+      <img className='popular-item-img' src={i.photo}/>
       <div className='popular-item-name-wrapper'>
-        <h3 className='popular-item-name'>{i.productName}</h3>
-        <h3 className='popular-item-name'>${i.productPrice}</h3>
+        <h3 className='popular-item-name'>{i.name}</h3>
+        <h3 className='popular-item-name'>${i.price}</h3>
       </div>
     </Link>
    
@@ -19,9 +19,10 @@ function PopularItem(props){
 }
 
 function Popular() {
-  let items = []
+  const queryClient = useQueryClient();
+  const {data: items, isLoading, error} = useQuery(['flowers', {popular : true}], FlowerService.getPopularFlowers)
 
-  POPULAR_PRODUCTS.forEach((k) => items.push(PRODUCTS[k]));
+  if(isLoading) return <h1>loading...</h1>
 
   return (
     <div className='popular'>
@@ -32,7 +33,7 @@ function Popular() {
         </div>
       </div>
       <div className='popular-content'>
-        {items.map((i) => <PopularItem item={i} />)}
+        {items.map((i) => <PopularItem key={i.id} item={i} />)}
       </div>
     </div>
   )
