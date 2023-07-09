@@ -8,6 +8,7 @@ django-cors-headers = "*"
 djangorestframework = "*"
 django = "*"
 requests = "*"
+django-phonenumber-field = {extras = ["phonenumberslite"], version = "*"}
 
 [dev-packages]
 

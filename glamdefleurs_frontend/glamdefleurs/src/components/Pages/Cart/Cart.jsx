@@ -1,13 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { CartContext } from '../../context/CartContext';
+import { CartContext } from '../../../context/CartContext';
 
 
 import './Cart.css';
-import Header from '../global/Header';
-import Footer from '../global/Footer';
+import Header from '../../global/Header';
+import Footer from '../../global/Footer';
 import { ChevronRight, Minus, Plus } from 'react-feather';
-import FlowerService from '../../services/FlowerService';
 
 // requires id, name, img, price and quantity
 function CartItem({flower, quantity}){

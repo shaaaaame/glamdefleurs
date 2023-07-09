@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import FlowerService from '../../../services/FlowerService';
+import FlowerService from '../../../../services/FlowerService';
 
 function PopularItem(props){
   const i = props.item;

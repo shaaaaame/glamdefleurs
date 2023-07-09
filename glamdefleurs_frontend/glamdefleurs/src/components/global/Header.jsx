@@ -55,7 +55,7 @@ function SideMenu(props){
                 
                 <SideMenuOption to='/' title='home' onClick={() => setShowSideMenu(false)}/>
                 {categories.map((head) =>                             
-                    <SideMenuOption key={head.id} onClick={() => setShowSideMenu(false)} id={head.id} title={head.name}/>
+                    <SideMenuOption to={`/categories/h/${head.id}`} onClick={() => setShowSideMenu(false)} title={head.name}/>
                 )}
                 <SideMenuOption to='/about' title='about' onClick={() => setShowSideMenu(false)}/>
                 <SideMenuOption to='/contact' title='contact' onClick={() => setShowSideMenu(false)}/>
@@ -71,7 +71,7 @@ function SideMenuOption(props) {
     return (
         <li onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)} onClick={props.onClick}>
             <CSSTransition nodeRef={nodeRef} in={isHovering} timeout={0} classNames='header-side-option'>
-                <Link ref={nodeRef} className='link header-side-option' to={`categories/h/${props.id}`}>{props.title}</Link>
+                <Link ref={nodeRef} className='link header-side-option' to={props.to}>{props.title}</Link>
             </CSSTransition>
         </li>
     )

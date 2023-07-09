@@ -11,16 +11,17 @@ import {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import Home from './components/Home/Home';
-import About from './components/About/About';
+import Home from './components/Pages/Home/Home';
+import About from './components/Pages/About/About';
 import ErrorPage from './components/global/ErrorPage';
-import Flowers from './components/Flowers/Flowers';
-import Login from './components/Login/Login';
-import Contact from './components/Contact/Contact';
-import Cart from './components/Cart/Cart';
+import Flowers from './components/Pages/Flowers/Flowers';
+import Login from './components/Pages/Login/Login';
+import Contact from './components/Pages/Contact/Contact';
+import Cart from './components/Pages/Cart/Cart';
+import FlowerPage from './components/Pages/Flowers/FlowerPage';
+
 import { CartContextProvider } from './context/CartContext';
 
-import FlowerPage from './components/Flowers/FlowerPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const queryClient = new QueryClient();

@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, viewsets
+from rest_framework import permissions, viewsets
 from flowers.models import Flower, Category, HeadCategory
 from flowers.serializers import FlowerSerializer, CategorySerializer, HeadCategorySerializer
 from rest_framework.decorators import api_view

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import Header from '../global/Header';
-import Footer from '../global/Footer';
+import Header from '../../global/Header';
+import Footer from '../../global/Footer';
 
 import './Flowers.css';
 import { useLocation, Outlet, Link, useParams } from 'react-router-dom';
-import FlowerService from '../../services/FlowerService';
+import FlowerService from '../../../services/FlowerService';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
-import CategoryService from '../../services/CategoryService';
+import CategoryService from '../../../services/CategoryService';
 
 
 function FlowerItem(props) {

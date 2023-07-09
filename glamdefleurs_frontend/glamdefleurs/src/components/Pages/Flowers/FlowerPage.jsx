@@ -2,10 +2,10 @@ import React, { useState, useContext } from 'react';
 import { Minus, Plus, X } from 'react-feather';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { CartContext } from '../../context/CartContext';
-import Header from '../global/Header'
+import { CartContext } from '../../../context/CartContext';
+import Header from '../../global/Header'
 import './FlowerPage.css';
-import FlowerService from '../../services/FlowerService';
+import FlowerService from '../../../services/FlowerService';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 function FlowerPage() {

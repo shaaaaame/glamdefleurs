@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import Placeholder from '../../../assets/img/Placeholder.jpg';
-import categories from '../../../external/categories.json';
+import Placeholder from '../../../../assets/img/Placeholder.jpg';
+import categories from '../../../../external/categories.json';
 import { ArrowRightCircle } from 'react-feather';
 import { Link } from 'react-router-dom';
+
+// TODO: change placeholders for categories
 
 function Categories() {
 

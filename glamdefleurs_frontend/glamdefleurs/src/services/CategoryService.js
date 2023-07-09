@@ -4,7 +4,7 @@ class CategoryService{
     async getAllSubCategories(){
 
         try{
-            const res = await http.get("/categories/")
+            const res = await http.get("categories/")
             return res.data
         }catch (err) {
             console.log(err);
@@ -13,7 +13,7 @@ class CategoryService{
 
     async getAllHeadCategories(){
         try {
-            const res = await http.get("/head_categories/")
+            const res = await http.get("head_categories/")
             return res.data
         }catch (err) {
             console.log(err);
@@ -22,7 +22,7 @@ class CategoryService{
 
     async getSubCategory(id){
         try {
-            const res = await http.get(`/categories/${id}/`)
+            const res = await http.get(`categories/${id}/`)
             return res.data
         }catch (err) {
             console.log(err);
@@ -31,7 +31,7 @@ class CategoryService{
 
     async getHeadCategory(id){
         try {
-            const res = await http.get(`/head_categories/${id}/`)
+            const res = await http.get(`head_categories/${id}/`)
             return res.data
         }catch (err) {
             console.log(err);

@@ -1,9 +1,9 @@
 import React from 'react';
-import Header from '../global/Header';
-import Footer from '../global/Footer';
+import Header from '../../global/Header';
+import Footer from '../../global/Footer';
 
-import rose from '../../assets/img/about-rose.png';
-import oksana from '../../assets/img/Oksana.jpg';
+import rose from '../../../assets/img/about-rose.png';
+import oksana from '../../../assets/img/Oksana.jpg';
 import './About.css';
 
 function About() {

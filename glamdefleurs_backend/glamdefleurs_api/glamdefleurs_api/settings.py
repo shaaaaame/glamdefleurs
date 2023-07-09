@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure--u3a0j7@*a$r)yv1egle89c5*kx^p(ye!n^@u5(u+@z)h#s6+m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# TODO: change
 ALLOWED_HOSTS = ['*']
 
 
@@ -41,8 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'flowers',
+    'rest_framework.authtoken',
     'corsheaders',
+    'phonenumber_field',
+
+    'flowers',
+    'contact',
+
+
 ]
 
 MIDDLEWARE = [
@@ -139,8 +146,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'auth.authentication.EmailAuthBackend'
+]
+
 
 # email settings
 # TODO: change this before production
