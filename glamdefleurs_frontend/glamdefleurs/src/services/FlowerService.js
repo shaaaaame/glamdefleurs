@@ -3,7 +3,7 @@ import http from "../http-common";
 class FlowerService{
     async getAll(){
         try{
-            const res = await http.get("flowers");
+            const res = await http.get("flowers/");
             return res.data;
         }catch (err){
             console.log(err);
@@ -24,6 +24,8 @@ class FlowerService{
 
         try{
             const res = await http.get(`flowers/?${queryString}`);
+            const arr = res.data;
+            
             return res.data;
         }catch (err){
             console.log(err);
@@ -32,7 +34,7 @@ class FlowerService{
 
     async getFlower(id){
         try{
-            const res = await http.get(`flowers/${id}`);
+            const res = await http.get(`flowers/${id}/`);
             return res.data;
         }catch (err){
             console.log(err);

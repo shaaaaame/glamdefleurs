@@ -3,38 +3,41 @@ import { User, ShoppingCart, ChevronDown, Menu, X } from 'react-feather';
 import './Global.css';
 import { Link, ScrollRestoration } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-import categories from '../../external/categories.json';
+import { useQuery } from '@tanstack/react-query';
+import CategoryService from '../../services/CategoryService';
 
 function FullMenu(){
-    const c = Object.values(categories);
+    const { data: categories, isLoading }= useQuery(['categories'], CategoryService.getCategories)
 
+    if (isLoading) return <></>
 
     return (<div className='header-full_menu'>
     <ul className='header-options'>
-        <li className='header-option'><Link className='link' to='/'>home</Link></li>
+        <li className='header-option'><p><Link className='link' to='/'>home</Link></p></li>
 
-        {c.map((category) => 
+        {categories.map((category) => 
         <li className='header-option header-dd'>
+            <p>
+                <Link className='link' to={`/categories/h/${category.id}`}>{category.name} <ChevronDown size='10px'/></Link>
+                <div className='header-dd-menu-wrapper'>
+                    <ul className='header-dd-menu'>
 
-            <Link to={`/categories/h/${category.id}`}>{category.name} <ChevronDown size='15px'/></Link> 
+                        {category.subcategories.map((sub) => 
+                            <li className='header-dd-menu-item'><Link to={`/categories/s/${sub.id}`}>{sub.name}</Link></li>
+                        )}
 
-            <div className='header-dd-menu-wrapper'>
-                <ul className='header-dd-menu'>
-
-                    {category.subcategories.map((sub) => 
-                        <li className='header-dd-menu-item'><Link to={`/categories/s/${sub.id}`}>{sub.name}</Link></li>
-                    )}
-
-                </ul>
-            </div>
+                    </ul>
+                </div>
+            </p>
+            
         </li>)}
 
-        <li className='header-option'><Link to='/about'>about</Link></li>
-        <li className='header-option'><Link to='/contact'>contact</Link></li>
+        <li className='header-option'><p><Link className='link' to='/about'>about</Link></p></li>
+        <li className='header-option'><p><Link className='link' to='/contact'>contact</Link></p></li>
     </ul>
     <ul className='header-icons'>
-        <li className='header-icon header-account'><Link className='link' to='/login'><User size='30'/></Link></li>
-        <li className='header-icon header-cart'><Link className='link' to='/cart'><ShoppingCart size='30'/></Link></li>
+        <li className='header-icon header-account'><Link className='link' to='/login'><User size='20'/></Link></li>
+        <li className='header-icon header-cart'><Link className='link' to='/cart'><ShoppingCart size='20'/></Link></li>
     </ul>
 </div>)}
 
@@ -42,6 +45,9 @@ function SideMenu(props){
     const nodeRef = useRef(null);
     const showSideMenu = props.showSideMenu;
     const setShowSideMenu = props.setShowSideMenu;
+    const { data: categories, isLoading }= useQuery(['categories'], CategoryService.getCategories)
+
+    if (isLoading) return <></>
     
 
     return (<CSSTransition nodeRef={nodeRef} in={showSideMenu} timeout={200} unmountOnExit classNames="header-side">

@@ -69,6 +69,8 @@ function Flowers() {
 
   if ((params.id && categoryIsLoading) || flowersIsLoading) return (<h1>loading...</h1>)
 
+  if (flowers.isError) return <h1>Error loading flowers: {flowersError.request.data}</h1>
+
   return (
     <>
       <Header />

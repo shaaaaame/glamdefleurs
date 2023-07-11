@@ -8,7 +8,7 @@ function PopularItem(props){
 
   return (
     <Link className='link popular-item' to={'flowers/' + i.id}>
-      <img className='popular-item-img' src={i.photo}/>
+      <img className='popular-item-img' src={i.photo} loading='lazy'/>
       <div className='popular-item-name-wrapper'>
         <h3 className='popular-item-name'>{i.name}</h3>
         <h3 className='popular-item-name'>${i.price}</h3>
@@ -20,9 +20,9 @@ function PopularItem(props){
 
 function Popular() {
   const queryClient = useQueryClient();
-  const {data: items, isLoading, error} = useQuery(['flowers', {popular : true}], FlowerService.getPopularFlowers)
+  const {data: items, isLoading, isError, error} = useQuery(['flowers', {popular : true}], FlowerService.getPopularFlowers)
 
-  if(isLoading) return <h1>loading...</h1>
+  if(isLoading || isError) return <></>
 
   return (
     <div className='popular'>

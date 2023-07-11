@@ -10,7 +10,7 @@ import { ChevronRight, Minus, Plus } from 'react-feather';
 // requires id, name, img, price and quantity
 function CartItem({flower, quantity}){
 
-    const { addToCart, removeFromCart } = useContext(CartContext);
+    const { addToCart, removeFromCart, deleteFromCart } = useContext(CartContext);
 
     return (
         <tr className='cart-item'>
@@ -18,7 +18,7 @@ function CartItem({flower, quantity}){
             <td>
                 <div className='cart-item-title'>
                     <h3>{flower.name}</h3>
-                    <button className='cart-item-btn' onClick={() => removeFromCart(flower.id, quantity)}>remove <ChevronRight /></button>
+                    <button className='cart-item-btn' onClick={() => deleteFromCart(flower.id)}>remove <ChevronRight /></button>
                 </div>
             </td>
             <td>
@@ -39,7 +39,7 @@ function CartItem({flower, quantity}){
 
 function CartItemMobile({flower, quantity}){
 
-    const {addToCart, removeFromCart } = useContext(CartContext);
+    const {addToCart, removeFromCart, deleteFromCart } = useContext(CartContext);
 
     return (<tr className='cart-item-mobile'>  
             <td className='cart-item-img-row'><img className='cart-item-img' src={flower.photo} alt={flower.name} /></td>
@@ -48,7 +48,7 @@ function CartItemMobile({flower, quantity}){
                     <p>{flower.name}</p>
                     <p>${flower.price}</p>
                 </div>
-                <button className='cart-item-btn' onClick={() => removeFromCart(flower.id, quantity)}>remove <ChevronRight /></button>
+                <button className='cart-item-btn' onClick={() => deleteFromCart(flower.id)}>remove <ChevronRight /></button>
                 <div className='cart-item-mobile-quantity'>
                     <button className='cart-item-quantity-btn' onClick={() => {addToCart(flower.id, 1)}}><Plus size={20}/></button>
                     <h3>{quantity}</h3>

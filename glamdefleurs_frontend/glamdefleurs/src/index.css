@@ -18,6 +18,10 @@ h3{
   font-size: var(--fs-h3);
 }
 
+p{
+  font-size: var(--fs-body);
+}
+
 body {
   font-size: var(--fs-body);
   font-family: 'Radley', serif;
@@ -68,22 +72,23 @@ button{
     --fs-h2: 20px;
     --fs-h3: 17px;  
 
-    --fs-body: 14px;
+    --fs-body: 12px;
   }
 
 }
 
-@media screen and (min-width: 481px) and (max-width: 768px) {
+@media screen and (min-width: 481px) and (max-width: 1024px) {
   :root{
     --fs-h1: 35px;
     --fs-h2: 27px;
     --fs-h3: 20px;  
+    --fs-body: 14px;
 
   }
 
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1025px) {
   :root{
     --fs-h1: 50px;
     --fs-h2: 34px;

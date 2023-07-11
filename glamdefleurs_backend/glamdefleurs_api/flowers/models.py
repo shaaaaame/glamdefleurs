@@ -9,6 +9,7 @@ class HeadCategory(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=10000)
+    display_photo = models.URLField(default="https://drive.google.com/uc?export=view&id=1qZOythbdopUd6AW-QCk6rIcpxK81C9gv")
 
 
     def __str__(self) -> str:

@@ -1,6 +1,7 @@
 import React, { Children } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import 'react-toastify/dist/ReactToastify.min.css';
 import reportWebVitals from './reportWebVitals';
 
 import {
@@ -8,8 +9,9 @@ import {
   RouterProvider,
   ScrollRestoration,
 } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useIsFetching } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ToastContainer } from 'react-toastify';
 
 import Home from './components/Pages/Home/Home';
 import About from './components/Pages/About/About';
@@ -21,6 +23,7 @@ import Cart from './components/Pages/Cart/Cart';
 import FlowerPage from './components/Pages/Flowers/FlowerPage';
 
 import { CartContextProvider } from './context/CartContext';
+import Loading from './components/global/Loading';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -61,6 +64,8 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <CartContextProvider>
+        <Loading />
+        <ToastContainer />
         <RouterProvider router={router}/>
       </CartContextProvider>
       <ReactQueryDevtools initialIsOpen={true} />

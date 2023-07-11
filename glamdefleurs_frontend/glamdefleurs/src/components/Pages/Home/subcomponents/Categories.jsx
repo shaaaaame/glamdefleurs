@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import Placeholder from '../../../../assets/img/Placeholder.jpg';
-import categories from '../../../../external/categories.json';
 import { ArrowRightCircle } from 'react-feather';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import CategoryService from '../../../../services/CategoryService';
 
 // TODO: change placeholders for categories
 
 function Categories() {
+  const { data: categories, isLoading, isError } = useQuery(['categories'], CategoryService.getCategories)
+
+  if (isLoading) return <></>
 
   return (
     <div className='categories'>
@@ -16,7 +20,7 @@ function Categories() {
           {categories.map((head) => {
             return(
               <li className='categories-item' key={head.id}>
-                <img className='categories-item-img' src={Placeholder}/>
+                <img className='categories-item-img' src={head.display_photo}/>
                 <h3 className='categories-item-title'>{head.name}</h3>
                 <div className='categories-item-text-wrapper'>
                   <div className='categories-item-text'>{head.description}</div>

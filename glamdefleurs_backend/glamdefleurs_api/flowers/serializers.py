@@ -19,4 +19,4 @@ class HeadCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = HeadCategory
-        fields = ['id', 'name', 'description']
+        fields = ['id', 'name', 'description', 'display_photo']

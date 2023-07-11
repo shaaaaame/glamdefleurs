@@ -1,12 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { ChevronRight } from 'react-feather';
 import { CSSTransition } from 'react-transition-group';
+import { ToastContainer, toast } from 'react-toastify';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import Header from '../../global/Header';
 import Footer from '../../global/Footer';
-
 import './Login.css';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import AuthService from '../../../services/AuthService';
+import http from '../../../http-common';
+import { Navigate, redirect, useNavigate } from 'react-router-dom';
 
 function Login() {
     const [isLoggingIn, setIsLoggingIn] = useState(true);
@@ -22,6 +25,27 @@ function Login() {
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
     const [ cfmPassword, setCfmPassword] = useState("");
+    const triggerErrorToast = (error) => toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+    const triggerSuccessToast = (success) => toast.success(success,{
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationKey: ['auth-token'],
@@ -30,6 +54,11 @@ function Login() {
         },
         onSuccess: (res) => {
             queryClient.setQueryData(['auth-token'], res.data)
+            http.defaults.headers.common['Authorization'] = "Token " + res.data.token;
+            triggerSuccessToast("Login successful!");
+        },
+        onError: (error) => {
+            triggerErrorToast(error.response.data.non_field_errors[0]);
         }
     })
 
@@ -41,7 +70,8 @@ function Login() {
         }
         mutation.mutate(data);
     }
-    
+
+    if (mutation.isSuccess) return (<Navigate to='/' />)
 
     return (
         <>

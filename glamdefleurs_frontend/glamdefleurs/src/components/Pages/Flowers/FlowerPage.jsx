@@ -28,22 +28,20 @@ function FlowerPage() {
         <>
             <Header />
             <div className='flower-detail'>
-                <div className='flower-page'>
-                    <button className='flower-page-backBtn' onClick={() => navigate(-1)}><X size={30} /></button>  
-                    <img className='flower-page-img' src={flower.photo} alt={flower.name}/>
-                    <div className='flower-page-wrapper'>
-                        <h1 className='flower-page-title'>{flower.name}</h1>
-                        <h2 className='flower-page-price'>${flower.price}</h2>
-                        <p className='flower-page-desc'>{flower.description}</p>
-                        <div className='flower-page-amt'>
-                            <div className='flower-page-quantity'>
-                                <Plus size={30} onClick={() => setAmt(amt + 1)} className='flower-page-quantity-btn'/>
-                                {amt}
-                                <Minus size={30} onClick={() => setAmt(Math.max(1, amt - 1))} className='flower-page-quantity-btn'/>
-                            </div>
-                            
-                            <button className='flower-page-submit' onClick={() => handleSubmit(flower.id, amt)}>add to cart</button>
+                <button className='flower-page-backBtn' onClick={() => navigate(-1)}><X size={30} /></button>  
+                <img className='flower-page-img' src={flower.photo} alt={flower.name}/>
+                <div className='flower-page-wrapper'>
+                    <h1 className='flower-page-title'>{flower.name}</h1>
+                    <h2 className='flower-page-price'>${flower.price}</h2>
+                    <p className='flower-page-desc'>{flower.description}</p>
+                    <div className='flower-page-amt'>
+                        <div className='flower-page-quantity'>
+                            <Plus size={30} onClick={() => setAmt(amt + 1)} className='flower-page-quantity-btn'/>
+                            {amt}
+                            <Minus size={30} onClick={() => setAmt(Math.max(1, amt - 1))} className='flower-page-quantity-btn'/>
                         </div>
+                        
+                        <button className='flower-page-submit' onClick={() => handleSubmit(flower.id, amt)}>add to cart</button>
                     </div>
                 </div>
             </div>

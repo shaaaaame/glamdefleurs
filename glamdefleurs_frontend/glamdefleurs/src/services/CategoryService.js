@@ -37,6 +37,28 @@ class CategoryService{
             console.log(err);
         }
     }
+    async getCategories(){
+        try {
+            const head = await http.get('head_categories/');
+            const sub = await http.get('categories/');
+
+            for (const s of sub.data){
+                for (const h of head.data){
+                    if (s.head_category == h.id){
+                        if (h.subcategories){
+                            h.subcategories.push(s)
+                        }else{
+                            h.subcategories = [s]
+                        }
+                    }
+                }
+            }
+
+            return head.data
+        }catch (err ){
+            console.log(err);
+        }
+    }
 }
 
 export default new CategoryService();
