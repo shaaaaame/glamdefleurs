@@ -46,8 +46,9 @@
 
 .contact-form-box{
     width: 100%;
-    height: 20px;
+    height: 25px;
     margin: 10px 0 10px 0;
+    padding: 5px;
     border: 1px solid var(--clr-dark);
     border-radius: 5px;
 }

@@ -3,10 +3,11 @@ from flowers.models import Flower, Category, HeadCategory
 
 class FlowerSerializer(serializers.ModelSerializer):
     categories = serializers.PrimaryKeyRelatedField(many=True, queryset=Category.objects.all())
+    variants = serializers.PrimaryKeyRelatedField(many=True, queryset=Flower.objects.all())
 
     class Meta:
         model = Flower
-        fields = ['id', 'name', 'categories', 'price', 'photo', 'description', 'is_popular']
+        fields = ['id', 'name', 'categories', 'price', 'photo', 'description', 'is_popular', 'variants']
 
 class CategorySerializer(serializers.ModelSerializer):
     head_category = serializers.PrimaryKeyRelatedField(queryset=HeadCategory.objects.all())

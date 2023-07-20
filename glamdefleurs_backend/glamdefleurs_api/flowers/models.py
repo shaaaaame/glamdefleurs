@@ -34,6 +34,7 @@ class Flower(models.Model):
     photo = models.URLField()
     description = models.TextField(max_length=10000)
     is_popular = models.BooleanField(default=False)
+    variants = models.ManyToManyField("self")
 
     class Meta:
         ordering = ['name']

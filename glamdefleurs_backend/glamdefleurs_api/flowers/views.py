@@ -4,6 +4,7 @@ from flowers.serializers import FlowerSerializer, CategorySerializer, HeadCatego
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from django.shortcuts import get_object_or_404
 
 class FlowerViewSet(viewsets.ModelViewSet):
     queryset = Flower.objects.all()
@@ -28,7 +29,12 @@ class FlowerViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(id__in=ids)
 
         return queryset
-    
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

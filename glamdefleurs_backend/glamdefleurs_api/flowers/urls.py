@@ -8,7 +8,6 @@ router.register(r'flowers', views.FlowerViewSet, basename="flower")
 router.register(r'categories', views.CategoryViewSet, basename="category")
 router.register(r'head_categories', views.HeadCategoryViewSet, basename="head_category")
 
-
 urlpatterns = [
     path('', include(router.urls))
 ]
