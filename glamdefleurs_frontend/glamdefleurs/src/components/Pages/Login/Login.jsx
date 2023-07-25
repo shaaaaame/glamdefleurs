@@ -48,12 +48,11 @@ function Login() {
 
     const queryClient = useQueryClient();
     const mutation = useMutation({
-        mutationKey: ['auth-token'],
         mutationFn: (data) => {
             return AuthService.postLogin(data)
         },
         onSuccess: (res) => {
-            queryClient.setQueryData(['auth-token'], res.data)
+            localStorage.setItem("auth_token", res.data.token)
             http.defaults.headers.common['Authorization'] = "Token " + res.data.token;
             triggerSuccessToast("Login successful!");
         },

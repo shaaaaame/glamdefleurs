@@ -8,6 +8,9 @@ class AuthService{
             console.log(err);
         }
     }
+
+    // get user details
+    
 }
 
 export default new AuthService();

@@ -10,6 +10,15 @@ export function CartContextProvider(props) {
     const [ cartItems, setCartItems ] = useState({});
     const queryClient = useQueryClient();
 
+    useEffect(() => {
+        for(const id in cartItems){
+            queryClient.prefetchQuery({
+                queryKey: ['flower', {id : id}],
+                queryFn: () => FlowerService.getFlower(id)
+            })
+        }
+    }, [cartItems])
+
     const addToCart = (id, quantity) => {
         if (cartItems[id]){
             setCartItems((prev => ({
@@ -52,6 +61,11 @@ export function CartContextProvider(props) {
         return Object.keys(cartItems).length <= 0;
     }
 
+    const clearCart = () =>{
+        for(const id in cartItems){
+            deleteFromCart(id);
+        }
+    }
 
     const getSubtotal = () => {
 
@@ -66,7 +80,6 @@ export function CartContextProvider(props) {
 
     const getItemsInCart = () => {
         let items = []
-        console.log(cartItems);
 
         for(const id in cartItems){
             items.push(queryClient.getQueryData(['flower', {id : id}]))
@@ -75,7 +88,7 @@ export function CartContextProvider(props) {
         return items
     };
 
-    const contextValue = { cartItems, addToCart, removeFromCart, isCartEmpty, getSubtotal, getItemsInCart, deleteFromCart};
+    const contextValue = { cartItems, addToCart, removeFromCart, isCartEmpty, getSubtotal, getItemsInCart, deleteFromCart, clearCart };
 
     return (
         <CartContext.Provider value={contextValue}>{props.children}</CartContext.Provider>

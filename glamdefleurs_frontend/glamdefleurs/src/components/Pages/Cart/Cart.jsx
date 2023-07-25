@@ -6,6 +6,7 @@ import './Cart.css';
 import Header from '../../global/Header';
 import Footer from '../../global/Footer';
 import { ChevronRight, Minus, Plus } from 'react-feather';
+import { useNavigate } from 'react-router-dom';
 
 // requires id, name, img, price and quantity
 function CartItem({flower, quantity}){
@@ -63,6 +64,7 @@ function Cart() {
 
     const { cartItems, isCartEmpty, getIdsInCart, getItemsInCart, getSubtotal } = useContext(CartContext);
     const [ showMobileCart, setShowMobileCart ] = useState(false);
+    const navigate = useNavigate();
 
 
 
@@ -133,6 +135,10 @@ function Cart() {
         </div>) 
     } 
 
+    const handleSubmit = () => {
+        navigate("/checkout")
+    }
+
     return (
         <>
             <Header />
@@ -146,7 +152,7 @@ function Cart() {
                     {showMobileCart ? <DisplayMobileCartItems /> : <DisplayCartItems />}
                     <div className='cart-footer'>
                         <h3 className='cart-footer-subtotal'>subtotal: ${getSubtotal()}</h3>
-                        <button className='cart-order-btn'>order</button>
+                        <button className='cart-order-btn' onClick={handleSubmit}>order</button>
                     </div>
                 </> }
                 

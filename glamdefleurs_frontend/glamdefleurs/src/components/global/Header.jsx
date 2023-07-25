@@ -36,7 +36,7 @@ function FullMenu(){
         <li className='header-option'><p><Link className='link' to='/contact'>contact</Link></p></li>
     </ul>
     <ul className='header-icons'>
-        <li className='header-icon header-account'><Link className='link' to='/login'><User size='20'/></Link></li>
+        <li className='header-icon header-account'><Link className='link' to={localStorage.getItem("auth_token") ? '/profile/account' : '/login'} ><User size='20'/></Link></li>
         <li className='header-icon header-cart'><Link className='link' to='/cart'><ShoppingCart size='20'/></Link></li>
     </ul>
 </div>)}
@@ -54,7 +54,7 @@ function SideMenu(props){
         <div className='header-side_menu' ref={nodeRef}>
             <X className='header-side-close' size={25} onClick={() => setShowSideMenu(false)}/>
             <div className='header-side-icons'>
-                <div className='header-side-icon header-account'><Link className='link' to='/login'><User size={25}/></Link></div>
+                <div className='header-side-icon header-account'><Link className='link' to={localStorage.getItem("auth_token") ? '/profile/account' : '/login'}><User size={25}/></Link></div>
                 <div className='header-side-icon header-cart'><Link className='link' to='/cart'><ShoppingCart size={25}/></Link></div>
             </div>
             <ul className='header-side-options'>

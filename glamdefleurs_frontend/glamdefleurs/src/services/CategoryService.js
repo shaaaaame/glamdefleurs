@@ -2,7 +2,6 @@ import http from "../http-common";
 
 class CategoryService{
     async getAllSubCategories(){
-
         try{
             const res = await http.get("categories/")
             return res.data

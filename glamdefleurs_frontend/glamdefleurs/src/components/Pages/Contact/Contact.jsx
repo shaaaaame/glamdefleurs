@@ -12,7 +12,6 @@ function Contact() {
     const [ name, setName ] = useState("");
     const [ email, setEmail ] = useState("");
     const [ phone, setPhone ] = useState("");
-    const [ phoneCountry, setPhoneCountry] = useState("")
     const [ subject, setSubject ] = useState("");
     const [ message, setMessage ] = useState("");
     const [ preferredContact, setPreferredContact ] = useState("")
@@ -25,18 +24,17 @@ function Contact() {
 
     
     const handleSubmit = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         const form = {
             name: name,
             email: email,
             phone_number: phone,
-            phone_country: phoneCountry,
             subject: subject,
             message: message,
             preferred_contact_method: preferredContact
         }
 
-        mutation.mutate(form);
+        // mutation.mutate(form);
         
     }
 
@@ -74,14 +72,13 @@ function Contact() {
                             <label>phone number: </label>
                             <PhoneInput
                                 name='phone'
-                                withCountryCallingCode
                                 required
+                                international
                                 defaultCountry='CA'
                                 placeholder='Enter phone number' 
                                 className='contact-form-box'
                                 value={phone}
                                 onChange={setPhone}
-                                onCountryChange={setPhoneCountry}
                             />
                         </div>
                     </div>

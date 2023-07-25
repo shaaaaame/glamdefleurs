@@ -5,9 +5,8 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import reportWebVitals from './reportWebVitals';
 
 import {
-  createBrowserRouter,
+  createHashRouter,
   RouterProvider,
-  ScrollRestoration,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider, useIsFetching } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -21,14 +20,25 @@ import Login from './components/Pages/Login/Login';
 import Contact from './components/Pages/Contact/Contact';
 import Cart from './components/Pages/Cart/Cart';
 import FlowerPage from './components/Pages/Flowers/FlowerPage';
+import PaymentSuccess from './components/Pages/Checkout/Subpages/PaymentSuccess';
+
 
 import { CartContextProvider } from './context/CartContext';
 import Loading from './components/global/Loading';
+import Profile from './components/Pages/Profile/Profile';
+import Account from './components/Pages/Profile/subcomponents/Account';
+import Address from './components/Pages/Profile/subcomponents/Address';
+import Purchases from './components/Pages/Profile/subcomponents/Purchases';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { CLIENT_ID } from './Config/Config';
+import Checkout from './components/Pages/Checkout/Checkout';
+
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const queryClient = new QueryClient();
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Home/>,
@@ -57,18 +67,65 @@ const router = createBrowserRouter([
   {
     path: "cart/",
     element: <Cart />
+  },
+  {
+    path: "checkout/",
+    element: <Checkout />
+  },
+  {
+    path: "payment_success/",
+    element: <PaymentSuccess />
+  },
+  {
+    path: "profile/",
+    element: <Profile />,
+    children: [
+      {
+        path: "account/",
+        element: <Account />,
+        loader: () => {
+          const example_user = {
+            first_name: "John",
+            last_name: "Doe",
+            email: "email@example.com",
+            phone_number: "+10123456789",
+            dob: "2013-01-29", //yyyy-mm-dd
+            address: "321 Example St",
+            orders: [
+                // TODO
+            ]
+          }
+          
+          return example_user
+        }
+      },
+      {
+        path: "address/",
+        element: <Address />,
+      },
+      {
+        path: "purchases/",
+        element: <Purchases />
+      }
+    ]
   }
 ]);
 
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <CartContextProvider>
-        <Loading />
-        <ToastContainer />
-        <RouterProvider router={router}/>
-      </CartContextProvider>
-      <ReactQueryDevtools initialIsOpen={true} />
+      <PayPalScriptProvider options={{
+              clientId: CLIENT_ID,
+              currency: "CAD",
+              intent: "capture",
+          }}>
+        <CartContextProvider>
+          <Loading />
+          <ToastContainer />
+          <RouterProvider router={router}/>
+        </CartContextProvider>
+        <ReactQueryDevtools initialIsOpen={true} />
+      </PayPalScriptProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );
