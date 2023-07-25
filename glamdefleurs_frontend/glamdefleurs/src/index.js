@@ -13,6 +13,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 
 import Home from './components/Pages/Home/Home';
+import Root from './components/global/Root';
 import About from './components/Pages/About/About';
 import ErrorPage from './components/global/ErrorPage';
 import Flowers from './components/Pages/Flowers/Flowers';
@@ -32,6 +33,7 @@ import Purchases from './components/Pages/Profile/subcomponents/Purchases';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { CLIENT_ID } from './Config/Config';
 import Checkout from './components/Pages/Checkout/Checkout';
+import Header from './components/global/Header';
 
 
 
@@ -41,74 +43,85 @@ const queryClient = new QueryClient();
 const router = createHashRouter([
   {
     path: "/",
-    element: <Home/>,
+    element: <Root/>,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: "about/",
-    element: <About />,
-  },
-  {
-    path: "flowers/:id",
-    element: <FlowerPage />,
-  },
-  {
-    path: "categories/:type/:id?",
-    element: <Flowers />,
-  },
-  {
-    path: "login/",
-    element: <Login />,
-  },
-  {
-    path: "contact/",
-    element: <Contact />,
-  },
-  {
-    path: "cart/",
-    element: <Cart />
-  },
-  {
-    path: "checkout/",
-    element: <Checkout />
-  },
-  {
-    path: "payment_success/",
-    element: <PaymentSuccess />
-  },
-  {
-    path: "profile/",
-    element: <Profile />,
     children: [
       {
-        path: "account/",
-        element: <Account />,
-        loader: () => {
-          const example_user = {
-            first_name: "John",
-            last_name: "Doe",
-            email: "email@example.com",
-            phone_number: "+10123456789",
-            dob: "2013-01-29", //yyyy-mm-dd
-            address: "321 Example St",
-            orders: [
-                // TODO
-            ]
+        path: "",
+        element: <Home />
+      },
+      {
+        path: "about/",
+        element: <About />,
+      },
+      {
+        path: "flowers/:id",
+        element: <FlowerPage />,
+      },
+      {
+        path: "categories/:type/:id?",
+        element: <Flowers />,
+      },
+      {
+        path: "categories/",
+        element: <Flowers />,
+      },
+      {
+        path: "login/",
+        element: <Login />,
+      },
+      {
+        path: "contact/",
+        element: <Contact />,
+      },
+      {
+        path: "cart/",
+        element: <Cart />
+      },
+      {
+        path: "checkout/",
+        element: <Checkout />
+      },
+      {
+        path: "payment_success/",
+        element: <PaymentSuccess />
+      },
+      {
+        path: "profile/",
+        element: <Profile />,
+        children: [
+          {
+            path: "account/",
+            element: <Account />,
+            loader: () => {
+              const example_user = {
+                first_name: "John",
+                last_name: "Doe",
+                email: "email@example.com",
+                phone_number: "+10123456789",
+                dob: "2013-01-29", //yyyy-mm-dd
+                address: "321 Example St",
+                orders: [
+                    // TODO
+                ]
+              }
+              
+              return example_user
+            }
+          },
+          {
+            path: "address/",
+            element: <Address />,
+          },
+          {
+            path: "purchases/",
+            element: <Purchases />
           }
-          
-          return example_user
-        }
-      },
-      {
-        path: "address/",
-        element: <Address />,
-      },
-      {
-        path: "purchases/",
-        element: <Purchases />
+        ]
       }
     ]
-  }
+  },
+  
 ]);
 
 root.render(
@@ -124,7 +137,7 @@ root.render(
           <ToastContainer />
           <RouterProvider router={router}/>
         </CartContextProvider>
-        <ReactQueryDevtools initialIsOpen={true} />
+        <ReactQueryDevtools initialIsOpen={false} />
       </PayPalScriptProvider>
     </QueryClientProvider>
   </React.StrictMode>

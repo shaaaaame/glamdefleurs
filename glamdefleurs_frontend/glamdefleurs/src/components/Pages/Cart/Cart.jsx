@@ -141,7 +141,6 @@ function Cart() {
 
     return (
         <>
-            <Header />
             <div className='cart'>
                 <div className='cart-header'>
                     <h3 className='cart-title'>YOUR CART</h3>

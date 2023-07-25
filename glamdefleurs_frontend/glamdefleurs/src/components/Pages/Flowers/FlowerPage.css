@@ -21,7 +21,7 @@
 }
 
 .flower-page-price{
-    margin: 1em 0 1em 0;
+    margin: 1em 0 1em 1em;
 }
 
 .flower-page-wrapper{
@@ -68,6 +68,7 @@
 
 .flower-page-submit{
     border: 1px solid var(--clr-dark);
+    background-color: var(--clr-hl1);
     border-left: 0;
     width: 100%;
     -webkit-user-select: none; /* Safari */
@@ -82,6 +83,48 @@
     background-color: transparent;
 }
 
+.flower-page-horizontal-container{
+    margin: 0 0 10px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;  
+    align-items: baseline;
+}
+
+
+/* variants */
+.flower-variants{
+    border-left: 1px solid var(--clr-dark);
+    padding-left: 1rem;
+    min-width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.flower-variants-container{
+    display: flex;
+    justify-content: right;
+    padding: 1rem 1rem 0 0;
+}
+
+.flower-variants-item{
+    width: 5em;
+    height: 5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--clr-hl1);
+    font-weight: 500;
+    border: 2px solid var(--clr-hl1);
+    /* background-color: var(--clr-hl1); */
+}
+
+.flower-variants-item-name{
+    font-weight: 550;
+}
 @media screen and (max-width: 768px) {
     .flower-detail{
         flex-direction: column;
@@ -89,7 +132,7 @@
     }
 
     .flower-page-img{
-        width: 80%;
+        width: 65%;
         max-width: none;
     }
 

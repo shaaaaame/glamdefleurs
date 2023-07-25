@@ -12,7 +12,7 @@ function Hero() {
             <li className='hero-title'>GLAM DE FLEURS</li>
             <li className='hero-subtitle'>- feel the blossom -</li>
             <li className='hero-btn'>
-                <Link className='hero-btn-txt link' to='/categories/all'>shop all</Link>
+                <Link className='hero-btn-txt link' to='/categories/'>shop all</Link>
             </li>
         </ul>
     </div>

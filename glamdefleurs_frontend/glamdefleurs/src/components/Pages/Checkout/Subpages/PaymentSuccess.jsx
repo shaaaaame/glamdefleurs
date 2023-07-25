@@ -21,7 +21,7 @@ function PaymentSuccess() {
   }, [isOnPaymentSuccess])
 
   return (
-    <div>Payment Success! Redirecting you...</div>
+    <div className='payment_success'>thank you for your purchase!</div>
   )
 }
 

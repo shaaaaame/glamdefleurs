@@ -3,11 +3,15 @@ import { User, ShoppingCart, ChevronDown, Menu, X } from 'react-feather';
 import './Global.css';
 import { Link, ScrollRestoration } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import CategoryService from '../../services/CategoryService';
 
-function FullMenu(){
-    const { data: categories, isLoading }= useQuery(['categories'], CategoryService.getCategories)
+function FullMenu(props){
+    const { data: categories, isLoading }= useQuery({
+        queryKey: ['categories'], 
+        queryFn: CategoryService.getCategories,
+        staleTime: Infinity
+    })
 
     if (isLoading) return <></>
 
@@ -45,7 +49,11 @@ function SideMenu(props){
     const nodeRef = useRef(null);
     const showSideMenu = props.showSideMenu;
     const setShowSideMenu = props.setShowSideMenu;
-    const { data: categories, isLoading }= useQuery(['categories'], CategoryService.getCategories)
+    const { data: categories, isLoading }= useQuery({
+        queryKey: ['categories'], 
+        queryFn: CategoryService.getCategories,
+        staleTime: Infinity
+    })
 
     if (isLoading) return <></>
     
@@ -86,7 +94,6 @@ function SideMenuOption(props) {
 function Header() {
     const [ isMenuFull, setIsMenuFull ] = useState(window.innerWidth >= 768);
     const [ showSideMenu, setShowSideMenu ] = useState(false);
-
 
     // handle when to change to mobile menu
     useEffect(() => {

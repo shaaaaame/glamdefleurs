@@ -8,7 +8,7 @@ import CategoryService from '../../../../services/CategoryService';
 // TODO: change placeholders for categories
 
 function Categories() {
-  const { data: categories, isLoading, isError } = useQuery(['categories'], CategoryService.getCategories)
+  const { data: categories, isLoading, isError } = useQuery(['categories'], CategoryService.getCategories, {staleTime: Infinity})
 
   if (isLoading) return <></>
 

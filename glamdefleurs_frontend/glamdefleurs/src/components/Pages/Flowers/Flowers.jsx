@@ -59,13 +59,17 @@ function Flowers() {
     isLoading: categoryIsLoading,
     isError: categoryIsError, 
     data: category, 
-    error: categoryError } = useQuery(params.id ? ['categories', {id: params.id} ] : ['categories'], () => {
+    error: categoryError,
+    status: categoryStatus
+   } = useQuery(params.id ? ['categories', {id: params.id} ] : ['categories'], () => {
     if(params.type === 'h'){
       return CategoryService.getHeadCategory(params.id)
-    }else{
+    }else if(params.type === 's'){
       return CategoryService.getSubCategory(params.id)
+    }else{
+      return null;
     }
-  }, {enabled: !!params.id})
+  }, {enabled: !!params.id, staleTime: Infinity})
 
   if ((params.id && categoryIsLoading) || flowersIsLoading) return (<h1>loading...</h1>)
 
@@ -73,9 +77,8 @@ function Flowers() {
 
   return (
     <>
-      <Header />
       <div className='flowers'>
-        <div className='flowers-header'>{ category ? category.name : "all flowers" }</div>
+        <div className='flowers-header'>{ category && category.name ? category.name : "all flowers" }</div>
         <Outlet />
         <FlowerCatalog flowers={flowers} />
       </div>

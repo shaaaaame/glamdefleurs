@@ -7,7 +7,7 @@ class FlowerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Flower
-        fields = ['id', 'name', 'categories', 'price', 'photo', 'description', 'is_popular', 'variants']
+        fields = ['id', 'name', 'categories', 'price', 'photo', 'description', 'is_popular', 'variants', 'variant_name']
 
 class CategorySerializer(serializers.ModelSerializer):
     head_category = serializers.PrimaryKeyRelatedField(queryset=HeadCategory.objects.all())

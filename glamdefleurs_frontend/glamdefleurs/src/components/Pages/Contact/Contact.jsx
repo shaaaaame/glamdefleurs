@@ -40,7 +40,6 @@ function Contact() {
 
     return (
         <>
-            <Header />
             <div className='contact'>
                 <div className='contact-header'>
                     <h1 className='contact-title'>CONTACT</h1>

@@ -18,7 +18,6 @@ function About() {
 
   return (
     <>
-    <Header />
     <div className='about'>
 
       <div className='about-main'>

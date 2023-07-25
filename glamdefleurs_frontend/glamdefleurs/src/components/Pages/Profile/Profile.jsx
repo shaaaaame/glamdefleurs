@@ -43,7 +43,6 @@ function Profile() {
 
     return (
         <>
-            <Header />
             <div className='profile-page'>
                 <SideBar />
                 <Outlet />

@@ -13,7 +13,6 @@ import Loading from '../../global/Loading';
 function Home() {
   return (
     <>
-      <Header />
       <div className='home'>
           <Hero/>
           <Categories/>

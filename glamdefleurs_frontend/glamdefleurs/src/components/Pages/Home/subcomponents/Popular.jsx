@@ -20,7 +20,7 @@ function PopularItem(props){
 
 function Popular() {
   const queryClient = useQueryClient();
-  const {data: items, isLoading, isError, error} = useQuery(['flowers', {popular : true}], FlowerService.getPopularFlowers)
+  const {data: items, isLoading, isError, error} = useQuery(['flowers', {popular : true}], FlowerService.getPopularFlowers, {staleTime: Infinity})
 
   if(isLoading || isError) return <></>
 
