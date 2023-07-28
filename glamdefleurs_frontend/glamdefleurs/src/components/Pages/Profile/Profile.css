@@ -81,3 +81,21 @@
     border-radius: 5px;
 }
 
+/* address child */
+.address-form{
+    display: flex;
+    flex-direction: column;
+}
+
+.address-form-label{
+    margin: 15px 0 0 0;
+}
+
+.address-form-text{
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100px;
+    border: 1px solid var(--clr-dark);
+    border-radius: 10px;
+    margin: 15px 0 15px 0;
+}

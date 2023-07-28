@@ -112,10 +112,52 @@ const router = createHashRouter([
           {
             path: "address/",
             element: <Address />,
+            loader: () => {
+              const example_user = {
+                first_name: "John",
+                last_name: "Doe",
+                email: "email@example.com",
+                phone_number: "+10123456789",
+                dob: "2013-01-29", //yyyy-mm-dd
+                address: "321 Example St",
+                orders: [
+                    // TODO
+                ]
+              }
+
+              return example_user
+            }
           },
           {
             path: "purchases/",
-            element: <Purchases />
+            element: <Purchases />,
+            loader: () => {
+              const example_user = {
+                first_name: "John",
+                last_name: "Doe",
+                email: "email@example.com",
+                phone_number: "+10123456789",
+                dob: "2013-01-29", //yyyy-mm-dd
+                address: "321 Example St",
+                orders: [
+                    {
+                      id: "123",
+                      customer_id: "1",
+                      date_created: "25/6/2023",
+                      status: "COMPLETED",
+                      transaction_id: "1321321312",
+                      total: 320.00,
+                      items: {
+                        1: 1,
+                        2: 1,
+                        3: 1,
+                      }
+                    }
+                ]
+              }
+
+              return example_user
+            }
           }
         ]
       }

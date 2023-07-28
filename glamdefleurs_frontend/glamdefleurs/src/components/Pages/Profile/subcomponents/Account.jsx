@@ -3,7 +3,7 @@ import PhoneInput from "react-phone-number-input";
 import '../Profile.css'
 import { useLoaderData } from "react-router-dom";
 
-export default function Account(props){
+export default function Account(){
     const user = useLoaderData();
 
     const [ firstName, setFirstName ] = useState(user.first_name);

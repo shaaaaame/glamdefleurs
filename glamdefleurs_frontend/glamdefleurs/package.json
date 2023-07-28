@@ -1,7 +1,6 @@
 {
   "name": "glamdefleurs",
   "version": "0.1.0",
-  "homepage": "https://shaaaaame.github.io/glamdefleurs",
   "private": true,
   "dependencies": {
     "@paypal/react-paypal-js": "^8.1.0",

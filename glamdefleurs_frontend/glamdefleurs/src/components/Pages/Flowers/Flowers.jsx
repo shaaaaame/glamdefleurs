@@ -69,7 +69,7 @@ function Flowers() {
     }else{
       return null;
     }
-  }, {enabled: !!params.id, staleTime: Infinity})
+  }, { enabled: !!params.id, staleTime: Infinity })
 
   if ((params.id && categoryIsLoading) || flowersIsLoading) return (<h1>loading...</h1>)
 

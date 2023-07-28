@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     'flowers',
     'contact',
+    'shop',
 
 
 ]
