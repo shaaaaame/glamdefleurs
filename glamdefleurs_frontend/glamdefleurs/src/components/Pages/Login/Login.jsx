@@ -10,17 +10,20 @@ import './Login.css';
 import AuthService from '../../../services/AuthService';
 import http from '../../../http-common';
 import { Navigate, redirect, useNavigate } from 'react-router-dom';
+import useToken from '../../auth/useToken';
+import CustomerService from '../../../services/CustomerService';
 
 function Login() {
     const [isLoggingIn, setIsLoggingIn] = useState(true);
     const [isCreating, setIsCreating] = useState(false);
+    const navigate = useNavigate();
 
     const toggleIsLoggingIn = () => setIsLoggingIn(!isLoggingIn);
     const toggleIsCreating = () => setIsCreating(!isCreating);
     const loginRef = useRef(null);
     const createRef = useRef(null);
 
-    // logic variables
+    // logic variables (login / signup)
     const [ username, setUsername ] = useState("");
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
@@ -45,6 +48,7 @@ function Login() {
         progress: undefined,
         theme: "light",
         })
+    const { setToken } = useToken();
 
     const queryClient = useQueryClient();
     const mutation = useMutation({
@@ -52,9 +56,10 @@ function Login() {
             return AuthService.postLogin(data)
         },
         onSuccess: (res) => {
-            localStorage.setItem("auth_token", res.data.token)
-            http.defaults.headers.common['Authorization'] = "Token " + res.data.token;
+            setToken(res.data.token);
+            http.defaults.headers['Authorization'] = "Token " + res.data.token;
             triggerSuccessToast("Login successful!");
+            navigate('/profile/account');
         },
         onError: (error) => {
             triggerErrorToast(error.response.data.non_field_errors[0]);

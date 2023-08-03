@@ -26,7 +26,7 @@ function FlowerCatalog(props) {
   const flowers = props.flowers;
 
   // TODO: add a better no flowers screen
-  if(!flowers) return (<h1> No flowers yet! Check back later.</h1>)
+  if(flowers.length === 0) return (<h1> no flowers yet! check back later.</h1>)
 
   return (
   <div className='flowers-content'>

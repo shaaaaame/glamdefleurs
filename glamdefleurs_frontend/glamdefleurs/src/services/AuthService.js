@@ -8,8 +8,6 @@ class AuthService{
             console.log(err);
         }
     }
-
-    // get user details
     
 }
 

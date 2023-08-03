@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, Navigate, redirect, useLocation, useNavigate } from 'react-router-dom'
 
 import Header from '../../global/Header'
 import Footer from '../../global/Footer'
@@ -10,11 +10,12 @@ import Address from './subcomponents/Address'
 import './Profile.css'
 import { MapPin, ShoppingBag, User } from 'react-feather'
 import { Outlet } from 'react-router-dom'
+import useToken from '../../auth/useToken'
 
 function Profile() {
 
-    // replace when backend implemented
-
+    const location = useLocation();
+    const { token  } = useToken();
 
     const SIDE_OPTIONS = [
         { icon: <User />, name: "account" },
@@ -39,6 +40,10 @@ function Profile() {
                 {SIDE_OPTIONS.map((so) => <SideOption icon={so.icon} name={so.name} className={location.pathname.includes(so.name) ? "side-option-selected" : "" }/>)}
             </div>
         )
+    }
+
+    if ((!token && !location.pathname.includes("login"))){
+        return <Navigate to='/login' />;
     }
 
     return (

@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'flowers',
     'contact',
     'shop',
-
+    'auth_utils',
 
 ]
 
@@ -156,7 +156,7 @@ REST_FRAMEWORK = {
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'auth.authentication.EmailAuthBackend'
+    'auth_utils.authentication.EmailAuthBackend'
 ]
 
 

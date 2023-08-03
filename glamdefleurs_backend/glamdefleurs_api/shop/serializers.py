@@ -24,10 +24,11 @@ class CustomerSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
     address = serializers.CharField()
     orders = serializers.PrimaryKeyRelatedField(many=True, queryset=Order.objects.all())
+    dob = serializers.DateField()
 
     class Meta:
         model = Customer,
-        fields = ['first_name', 'last_name', 'username', 'email', 'password', 'phone_number', 'address', 'orders']
+        fields = ['first_name', 'last_name', 'username', 'email', 'password', 'phone_number', 'address', 'orders', 'dob']
 
     def create(self, validated_data):
         # create user object
@@ -45,6 +46,7 @@ class CustomerSerializer(serializers.Serializer):
             user=user,
             phone_number=validated_data['phone_number'],
             address=validated_data['address'],
+            dob=validated_data['dob'],
         )
 
         customer.orders.set(validated_data['orders'])

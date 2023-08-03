@@ -1,10 +1,11 @@
 import React from 'react'
 import { useLoaderData } from 'react-router-dom';
-import FlowerService from '../../../../services/FlowerService';
 import { useQuery } from '@tanstack/react-query';
+import FlowerService from '../../../../services/FlowerService';
+import CustomerService from '../../../../services/CustomerService';
 
 function Purchases() {
-  const user = useLoaderData();
+  const { data: user, isLoading } = useQuery(['customer'], CustomerService.getCustomerData, { staleTime: Infinity})
 
   function PurchaseItem(props){
     const { data: flowers, isLoading } = useQuery(['flowers', { ids: props.items }], () => FlowerService.getFlowers(props.items))
@@ -19,6 +20,7 @@ function Purchases() {
             <div className='purchase-unit'>
               <img className='purchase-unit-img' />
               <h3 className='purchase-unit-title'>{f.name}</h3>
+
             </div>
           })}
         </div>
@@ -26,12 +28,22 @@ function Purchases() {
     )
   }
 
+  function NoPurchases(){
+    return (
+      <div className='purchases-none'>
+        <h2>no purchases yet!</h2>
+      </div>
+    )
+  }
+
+  if(isLoading) return <p>loading...</p>
+
   return (
     <div className='profile-details'>
-        <h1 className='profile-title'>address</h1>
-        {user.orders.map((order) => {
+        <h1 className='profile-title'>purchases</h1>
+        {user.length > 0 ? user.orders.map((order) => {
 
-        })}
+        }) : <NoPurchases />}
     </div>
   )
 }

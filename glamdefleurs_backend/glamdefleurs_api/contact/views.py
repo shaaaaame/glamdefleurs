@@ -14,6 +14,6 @@ class ContactFormViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
 
-        # send email on contact form record create
+        #TODO: send email on contact form record create
         
         return super().create(request, *args, **kwargs)
