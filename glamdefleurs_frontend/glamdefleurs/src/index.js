@@ -34,6 +34,7 @@ import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { CLIENT_ID } from './Config/Config';
 import Checkout from './components/Pages/Checkout/Checkout';
 import Header from './components/global/Header';
+import CustomerService from './services/CustomerService';
 
 
 
@@ -93,70 +94,37 @@ const router = createHashRouter([
           {
             path: "account/",
             element: <Account />,
-            loader: () => {
-              const example_user = {
-                first_name: "John",
-                last_name: "Doe",
-                email: "email@example.com",
-                phone_number: "+10123456789",
-                dob: "2013-01-29", //yyyy-mm-dd
-                address: "321 Example St",
-                orders: [
-                    // TODO
-                ]
-              }
+            loader: async () => {
               
-              return example_user
+              return await queryClient.fetchQuery({
+                queryKey: ['customer'],
+                queryFn: CustomerService.getCustomerData,
+                staleTime: Infinity
+              })
             }
           },
           {
             path: "address/",
             element: <Address />,
-            loader: () => {
-              const example_user = {
-                first_name: "John",
-                last_name: "Doe",
-                email: "email@example.com",
-                phone_number: "+10123456789",
-                dob: "2013-01-29", //yyyy-mm-dd
-                address: "321 Example St",
-                orders: [
-                    // TODO
-                ]
-              }
+            loader: async () => {
 
-              return example_user
+              return await queryClient.fetchQuery({
+                queryKey: ['customer'],
+                queryFn: CustomerService.getCustomerData,
+                staleTime: Infinity
+              })
             }
           },
           {
             path: "purchases/",
             element: <Purchases />,
-            loader: () => {
-              const example_user = {
-                first_name: "John",
-                last_name: "Doe",
-                email: "email@example.com",
-                phone_number: "+10123456789",
-                dob: "2013-01-29", //yyyy-mm-dd
-                address: "321 Example St",
-                orders: [
-                    {
-                      id: "123",
-                      customer_id: "1",
-                      date_created: "25/6/2023",
-                      status: "COMPLETED",
-                      transaction_id: "1321321312",
-                      total: 320.00,
-                      items: {
-                        1: 1,
-                        2: 1,
-                        3: 1,
-                      }
-                    }
-                ]
-              }
+            loader: async () => {
 
-              return example_user
+              return await queryClient.fetchQuery({
+                queryKey: ['customer'],
+                queryFn: CustomerService.getCustomerData,
+                staleTime: Infinity
+              })
             }
           }
         ]

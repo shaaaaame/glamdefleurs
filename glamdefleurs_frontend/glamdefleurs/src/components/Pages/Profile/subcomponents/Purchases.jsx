@@ -5,7 +5,7 @@ import FlowerService from '../../../../services/FlowerService';
 import CustomerService from '../../../../services/CustomerService';
 
 function Purchases() {
-  const { data: user, isLoading } = useQuery(['customer'], CustomerService.getCustomerData, { staleTime: Infinity})
+  const user = useLoaderData();
 
   function PurchaseItem(props){
     const { data: flowers, isLoading } = useQuery(['flowers', { ids: props.items }], () => FlowerService.getFlowers(props.items))
@@ -35,8 +35,6 @@ function Purchases() {
       </div>
     )
   }
-
-  if(isLoading) return <p>loading...</p>
 
   return (
     <div className='profile-details'>

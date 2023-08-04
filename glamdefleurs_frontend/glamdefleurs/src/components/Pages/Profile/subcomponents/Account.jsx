@@ -3,27 +3,36 @@ import PhoneInput from "react-phone-number-input";
 import '../Profile.css'
 import { useLoaderData, useNavigate } from "react-router-dom";
 import useToken from "../../../auth/useToken";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CustomerService from "../../../../services/CustomerService";
 import http from "../../../../http-common";
 
 export default function Account(){
 
     const navigate = useNavigate();
-    const { token, removeToken } = useToken();
+    const { removeToken } = useToken();
     const queryClient = useQueryClient();
-    const { data: user, isLoading } = useQuery(['customer'], CustomerService.getCustomerData, {staleTime: Infinity})
+    const user = useLoaderData();
 
     const [ firstName, setFirstName ] = useState(user.first_name);
     const [ lastName, setLastName ] = useState(user.last_name);
     const [ phoneNumber, setPhoneNumber ] = useState(user.phone_number);
     const [ email, setEmail ] = useState(user.email);
     const [ dob, setDob ] = useState(user.dob);
-    
+
+    const { mutate, data, isLoading } = useMutation({mutationFn: () => CustomerService.patchCustomerData({
+        first_name: firstName,
+        last_name: lastName,
+        phone_number: phoneNumber,
+        email: email,
+        dob: dob,
+    })})
+
     const handleSubmit = (e) =>{
         e.preventDefault();
+        console.log(dob);
+        mutate();
 
-        // TODO: send PATCH request to update user information
     }
 
     const handleSignOut = (e) => {
@@ -40,15 +49,15 @@ export default function Account(){
                 <div className="profile-info">
                     <div className='profile-info-item'>
                         <label>first name:</label>
-                        <input className='profile-info-input' type='text' name='first_name' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                        <input required className='profile-info-input' type='text' name='first_name' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                     </div>
                     <div className='profile-info-item'>
                         <label>last name:</label>
-                        <input className='profile-info-input' type='text' name='last_name' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                        <input required className='profile-info-input' type='text' name='last_name' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
                     </div>
                     <div className='profile-info-item'>
                         <label>email:</label>
-                        <input className='profile-info-input' type='text' name='email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        <input required className='profile-info-input' type='text' name='email' value={email} onChange={(e) => setEmail(e.target.value)}/>
                     </div>
                     <div className='profile-info-item'>
                         <label>phone number:</label>
@@ -65,7 +74,7 @@ export default function Account(){
                     </div>
                     <div className='profile-info-item'>
                         <label>date of birth:</label>
-                        <input className='profile-info-input' type='date' name='dob' value={dob} onChange={(e) => setDob(e.target.value)}/>
+                        <input required className='profile-info-input' type='date' name='dob' value={dob} onChange={(e) => setDob(e.target.value)}/>
                     </div>
                 </div>
                 <div className="profile-info-submit-buttons">

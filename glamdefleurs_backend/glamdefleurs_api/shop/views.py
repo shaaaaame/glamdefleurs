@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from shop.models import Order, Customer
 from shop.serializers import OrderSerializer, CustomerSerializer
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, mixins, status
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
@@ -13,7 +13,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
 
-class DetailCustomers(APIView):
+class DetailCustomers(APIView, mixins.UpdateModelMixin):
     authentication_classes = [TokenAuthentication]
 
     def get(self, request, format=None):
@@ -33,5 +33,23 @@ class DetailCustomers(APIView):
             return Response(data)
         else:
             return HttpResponseForbidden("not authenticated")
+
+    def patch(self, request, pk=None):
+        customer = request.user.customer
+        serializer = CustomerSerializer(customer, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data="Success!", status=status.HTTP_200_OK)
+
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
+
 
 

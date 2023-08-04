@@ -3,19 +3,17 @@ import { useState } from 'react';
 import "../Profile.css"
 import { useQuery } from '@tanstack/react-query';
 import CustomerService from '../../../../services/CustomerService';
+import { useLoaderData } from 'react-router-dom';
 
 function Address() {
 
-  const { data: user, isLoading } = useQuery(['customer'], CustomerService.getCustomerData, {staleTime: Infinity})
-
+  const user = useLoaderData();
   const [ address, setAddress ] = useState(user.address);
 
   const handleSubmit = (e) =>{
     e.preventDefault();
-
     // TODO: send PUT request to update user information
   }
-  if(isLoading) return <p>loading...</p>
 
   return (
     <div className='profile-details'>

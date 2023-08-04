@@ -15,7 +15,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
-class CustomerSerializer(serializers.Serializer):
+class CustomerSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     username = serializers.CharField(max_length=150)
@@ -27,7 +27,7 @@ class CustomerSerializer(serializers.Serializer):
     dob = serializers.DateField()
 
     class Meta:
-        model = Customer,
+        model = Customer
         fields = ['first_name', 'last_name', 'username', 'email', 'password', 'phone_number', 'address', 'orders', 'dob']
 
     def create(self, validated_data):
