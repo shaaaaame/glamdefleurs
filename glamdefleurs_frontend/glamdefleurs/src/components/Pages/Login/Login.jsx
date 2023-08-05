@@ -48,7 +48,7 @@ function Login() {
         progress: undefined,
         theme: "light",
         })
-    const { setToken } = useToken();
+    const { token, setToken } = useToken();
 
     const queryClient = useQueryClient();
     const mutation = useMutation({
@@ -59,7 +59,7 @@ function Login() {
             setToken(res.data.token);
             http.defaults.headers['Authorization'] = "Token " + res.data.token;
             triggerSuccessToast("Login successful!");
-            navigate('/profile/account');
+            navigate('/profile/account/');
         },
         onError: (error) => {
             triggerErrorToast(error.response.data.non_field_errors[0]);
@@ -75,7 +75,7 @@ function Login() {
         mutation.mutate(data);
     }
 
-    if (mutation.isSuccess) return (<Navigate to='/' />)
+    if(token) return <Navigate to='/profile/account' />
 
     return (
         <>

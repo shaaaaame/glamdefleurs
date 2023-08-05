@@ -94,14 +94,7 @@ const router = createHashRouter([
           {
             path: "account/",
             element: <Account />,
-            loader: async () => {
-              
-              return await queryClient.fetchQuery({
-                queryKey: ['customer'],
-                queryFn: CustomerService.getCustomerData,
-                staleTime: Infinity
-              })
-            }
+            // TODO : change this approach. fetches query during login because of redirect
           },
           {
             path: "address/",

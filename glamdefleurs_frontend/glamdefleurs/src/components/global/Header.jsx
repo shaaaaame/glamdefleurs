@@ -5,6 +5,7 @@ import { Link, ScrollRestoration } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import CategoryService from '../../services/CategoryService';
+import httpCommon from '../../http-common';
 
 function FullMenu(props){
     const { data: categories, isLoading }= useQuery({
@@ -40,7 +41,7 @@ function FullMenu(props){
         <li className='header-option'><p><Link className='link' to='/contact'>contact</Link></p></li>
     </ul>
     <ul className='header-icons'>
-        <li className='header-icon header-account'><Link className='link' to='/profile/account' ><User size='20'/></Link></li>
+        <li className='header-icon header-account'><Link className='link' to={'/profile/account'} ><User size='20'/></Link></li>
         <li className='header-icon header-cart'><Link className='link' to='/cart'><ShoppingCart size='20'/></Link></li>
     </ul>
 </div>)}

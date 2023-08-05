@@ -74,6 +74,9 @@
     font-size: calc(var(--fs-body) * 0.8);
 }
 
+.profile-info-username{
+    margin-left: 20px;
+}
 /* sidebar */
 .profile-side{
     border: 3px solid var(--clr-hl1);

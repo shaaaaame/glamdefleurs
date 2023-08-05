@@ -1,19 +1,33 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import "../Profile.css"
-import { useQuery } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import CustomerService from '../../../../services/CustomerService';
 import { useLoaderData } from 'react-router-dom';
 
 function Address() {
 
-  const user = useLoaderData();
-  const [ address, setAddress ] = useState(user.address);
+  const [ address, setAddress ] = useState();
+  const queryClient = useQueryClient();
 
   const handleSubmit = (e) =>{
     e.preventDefault();
     // TODO: send PUT request to update user information
   }
+
+  useEffect(() => {
+      const getUserData = async () => {
+          const data = await queryClient.fetchQuery({
+              queryKey: ['customer'],
+              queryFn: CustomerService.getCustomerData,
+              staleTime: Infinity
+          })
+
+          setAddress(data.address);
+      }
+
+      getUserData();
+  }, [])
 
   return (
     <div className='profile-details'>

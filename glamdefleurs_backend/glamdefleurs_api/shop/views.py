@@ -13,8 +13,8 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
 
-class DetailCustomers(APIView, mixins.UpdateModelMixin):
-    authentication_classes = [TokenAuthentication]
+class DetailCustomers(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, format=None):
         if request.user.is_authenticated:
