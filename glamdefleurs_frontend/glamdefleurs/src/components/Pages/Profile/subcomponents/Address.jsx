@@ -1,9 +1,10 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import "../Profile.css"
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import CustomerService from '../../../../services/CustomerService';
 import { useLoaderData } from 'react-router-dom';
+import GeolocationService from '../../../../services/GeolocationService';
 
 function Address() {
 
@@ -20,13 +21,15 @@ function Address() {
           const data = await queryClient.fetchQuery({
               queryKey: ['customer'],
               queryFn: CustomerService.getCustomerData,
-              staleTime: Infinity
+              staleTime: Infinity,
+
           })
 
           setAddress(data.address);
       }
 
       getUserData();
+
   }, [])
 
   return (

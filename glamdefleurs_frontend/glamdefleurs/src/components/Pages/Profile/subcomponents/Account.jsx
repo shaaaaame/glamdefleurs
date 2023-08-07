@@ -39,9 +39,10 @@ export default function Account(){
         delete http.defaults.headers.Authorization;
         removeToken();
         queryClient.removeQueries(['customer'])
-        navigate('/');
+        navigate('/login');
     }
 
+    // get user data here
     useEffect(() => {
         const getUserData = async () => {
             const data = await queryClient.fetchQuery({

@@ -44,6 +44,17 @@ class DetailCustomers(APIView):
 
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class CreateCustomer(APIView):
+    queryset = Customer.objects.all()
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        serializer = CustomerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data="Create user success!", status=status.HTTP_200_OK)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 

@@ -22,7 +22,7 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='customer')
     phone_number = models.CharField(max_length=20)
     address = models.TextField(max_length=999999)
-    orders = models.ManyToManyField("Order")
+    orders = models.ManyToManyField("Order", default=[])
     dob = models.DateField(null=True, blank=True)
 
     def __str__(self):

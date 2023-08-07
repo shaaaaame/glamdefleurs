@@ -8,6 +8,10 @@ class AuthService{
             console.log(err);
         }
     }
+
+    async postSignUp(data){
+        return http.post('shop/customer/create/', data)
+    }
     
 }
 

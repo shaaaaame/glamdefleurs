@@ -44,6 +44,7 @@
     height: 30px;
     border-radius: 5px;
     border: 1px solid var(--clr-dark);
+    padding: 5px;
 }
 
 .login-form-button{
@@ -65,6 +66,36 @@
 
 .login-content-create{
     opacity: 0;
+}
+
+/* signup values */
+.signup-table{
+    border-spacing: 10px;
+}
+
+.signup-form-textarea{
+    min-width: 100%;
+    max-height: 70px;
+    resize: none;
+    border-radius: 5px;
+    border: 1px solid var(--clr-dark);
+    padding: 5px;
+}
+
+.signup-form-cell{
+    padding: 5px;
+}
+
+.signup-form-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.signup-form-text{
+    border-radius: 5px;
+    border: 1px solid var(--clr-dark);
+    padding: 3px;
 }
 
 /* animations */

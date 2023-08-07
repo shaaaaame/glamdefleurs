@@ -23,7 +23,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     password = serializers.CharField()
     phone_number = serializers.CharField()
     address = serializers.CharField()
-    orders = serializers.PrimaryKeyRelatedField(many=True, queryset=Order.objects.all())
+    orders = serializers.PrimaryKeyRelatedField(many=True, queryset=Order.objects.all(), required=False)
     dob = serializers.DateField()
 
     class Meta:
@@ -49,7 +49,7 @@ class CustomerSerializer(serializers.ModelSerializer):
             dob=validated_data['dob'],
         )
 
-        customer.orders.set(validated_data['orders'])
+        # customer.orders.set(validated_data['orders'])
 
         return customer
 

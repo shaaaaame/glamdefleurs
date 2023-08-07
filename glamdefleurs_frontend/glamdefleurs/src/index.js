@@ -22,6 +22,7 @@ import Contact from './components/Pages/Contact/Contact';
 import Cart from './components/Pages/Cart/Cart';
 import FlowerPage from './components/Pages/Flowers/FlowerPage';
 import PaymentSuccess from './components/Pages/Checkout/Subpages/PaymentSuccess';
+import Payment from './components/Pages/Checkout/Payment';
 
 
 import { CartContextProvider } from './context/CartContext';
@@ -82,6 +83,10 @@ const router = createHashRouter([
       {
         path: "checkout/",
         element: <Checkout />
+      },
+      {
+        path: "payment/",
+        element: <Payment />
       },
       {
         path: "payment_success/",

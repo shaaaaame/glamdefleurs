@@ -151,7 +151,7 @@ function Cart() {
                     {showMobileCart ? <DisplayMobileCartItems /> : <DisplayCartItems />}
                     <div className='cart-footer'>
                         <h3 className='cart-footer-subtotal'>subtotal: ${getSubtotal()}</h3>
-                        <button className='cart-order-btn' onClick={handleSubmit}>order</button>
+                        <button className='cart-order-btn' onClick={handleSubmit}>checkout</button>
                     </div>
                 </> }
                 

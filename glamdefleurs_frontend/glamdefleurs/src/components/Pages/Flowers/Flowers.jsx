@@ -25,7 +25,6 @@ function FlowerItem(props) {
 function FlowerCatalog(props) {
   const flowers = props.flowers;
 
-  // TODO: add a better no flowers screen
   if(flowers.length === 0) return (<h1> no flowers yet! check back later.</h1>)
 
   return (
@@ -52,7 +51,7 @@ function Flowers() {
       }else{
         return FlowerService.getAll();
       }
-    })
+    }, {staleTime: Infinity})
 
   // query for category 
   const { 
