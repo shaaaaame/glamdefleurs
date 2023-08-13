@@ -13,13 +13,8 @@ class CustomerService{
     }
 
     async patchCustomerData(data){
-
-        try {
-            const res = await http.patch('shop/customer/', data)
-            return res.data
-        }catch (err) {
-            console.log(err);
-        }
+        const res = await http.patch('shop/customer/', data)
+        return res.data
 
     }
 }

@@ -42,18 +42,21 @@ function CartItemMobile({flower, quantity}){
 
     const {addToCart, removeFromCart, deleteFromCart } = useContext(CartContext);
 
-    return (<tr className='cart-item-mobile'>  
+    return (<tr className='cart-item-mobile'>
             <td className='cart-item-img-row'><img className='cart-item-img' src={flower.photo} alt={flower.name} /></td>
             <td>
                 <div className='cart-item-mobile-title'>
-                    <p>{flower.name}</p>
-                    <p>${flower.price}</p>
+                    <h3>{flower.name}</h3>
+                    <h3>${Number(flower.price * quantity).toFixed(2)}</h3>
                 </div>
                 <button className='cart-item-btn' onClick={() => deleteFromCart(flower.id)}>remove <ChevronRight /></button>
                 <div className='cart-item-mobile-quantity'>
-                    <button className='cart-item-quantity-btn' onClick={() => {addToCart(flower.id, 1)}}><Plus size={20}/></button>
-                    <h3>{quantity}</h3>
                     <button className='cart-item-quantity-btn' onClick={() => removeFromCart(flower.id, 1)}><Minus size={20} /></button>
+                    <div className='cart-item-quantity-num'>
+                        <h3>{quantity}</h3>
+                    </div>
+                    <button className='cart-item-quantity-btn' onClick={() => {addToCart(flower.id, 1)}}><Plus size={20}/></button>
+
                 </div>
             </td>
         </tr>
@@ -63,10 +66,8 @@ function CartItemMobile({flower, quantity}){
 function Cart() {
 
     const { cartItems, isCartEmpty, getIdsInCart, getItemsInCart, getSubtotal } = useContext(CartContext);
-    const [ showMobileCart, setShowMobileCart ] = useState(false);
+    const [ showMobileCart, setShowMobileCart ] = useState(window.innerWidth < 780);
     const navigate = useNavigate();
-
-
 
     // handle transition to mobile cart on small devices
     useEffect(() => {
@@ -136,7 +137,7 @@ function Cart() {
     } 
 
     const handleSubmit = () => {
-        navigate("/checkout")
+        navigate("/checkout/delivery")
     }
 
     return (

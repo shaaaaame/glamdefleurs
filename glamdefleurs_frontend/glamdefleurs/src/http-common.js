@@ -10,6 +10,6 @@ if(sessionStorage.getItem("auth_token")){
 
 // TODO: change the base URL 
 export default axios.create({
-    baseURL: "http://localhost:8000/",
+    baseURL: "http://121.121.163.173:8000/",
     headers: headers
 });

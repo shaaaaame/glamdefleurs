@@ -91,12 +91,13 @@
     display: flex;
     align-items: center;
     width: 100%;
-    height: 35px;
+    height: 45px;
     cursor: pointer;
+    padding: 10px;
 }
 
 .side-option-icon{
-    margin: 10px;
+    margin-right: 10px;
 }
 
 .side-option-selected{
@@ -107,6 +108,7 @@
 @media screen and (max-width: 780px) {
 
     .profile-page{
+        padding: 10px;
         flex-direction: column;
     }
 
@@ -114,10 +116,22 @@
         width: auto;
         flex-direction: row;
         margin-bottom: 5vh;
+        padding: 15px;
+    }
+
+    .side-option{
+        justify-content: center;
+        height: 35px;
+        padding: 2px;
+    }
+
+    .side-option-icon{
+        margin-right: 3px;
     }
 
     .profile-details{
         width: 100%;
+        padding: 30px;
     }
 }
 
@@ -128,14 +142,13 @@
     flex-direction: column;
 }
 
-.address-form-label{
-    margin: 15px 0 0 0;
+.address-form-item{
+    display: block;
 }
 
 .address-form-text{
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 100px;
+    padding: 10px;
+    width: 100%;
     border: 1px solid var(--clr-dark);
     border-radius: 10px;
     margin: 15px 0 15px 0;

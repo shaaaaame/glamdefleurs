@@ -1,5 +1,6 @@
 .login{
     padding: 50px;
+    overflow: hidden;
 }
 
 .login-wrapper{
@@ -54,6 +55,7 @@
     background-color: var(--clr-hl1);
     font-size: var(--fs-body);
     cursor: pointer;
+    margin: 15px 0 10px 0;
 }
 
 .login-create{
@@ -71,6 +73,7 @@
 /* signup values */
 .signup-table{
     border-spacing: 10px;
+    border-collapse: separate;
 }
 
 .signup-form-textarea{
@@ -100,6 +103,11 @@
 
 /* animations */
 
+.login-anim{
+    width: 100%;
+    height: 100%;
+}
+
 .login-anim-enter {
     opacity: 0;
     transform: translateX(20%);
@@ -125,8 +133,8 @@
 
     .login-wrapper{
         height: 90vh;
-        padding: 3em;
-        width: auto;
+        padding: 10px;
+        width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -134,10 +142,36 @@
         background-position-x: 70%;
     }
     .login-content{
-        width: 80%;
+        width: 90%;
     }
 
     .login-form-text{
         width: 100%;
     }
+
+    .signup-form{
+        position: relative;
+        width: 100%;
+    }
+
+    .signup-table{
+        border-collapse: collapse;
+        border-spacing: 5px;
+        width: 100%;
+
+    }
+
+    .signup-form-cell{
+        width: 40px;
+
+    }
+
+    .signup-form-item{
+        width: 100%;
+    }
+
+    .signup-form-text{
+        width: 100%;
+    }
+
 }

@@ -1,0 +1,36 @@
+.payment_success{
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.payment_success-text{
+    position: relative;
+    font-size: 80px;
+    border-bottom: 1px solid var(--clr-dark);
+    z-index: 1;
+    text-align: center;
+}
+
+.payment_success-pinkRose{
+    position: absolute;
+    width: 20%;
+    left: -10%;
+    top: -100%;
+    z-index: 0;
+}
+
+.payment_success-yellowRose{
+    position: absolute;
+    width: 50%;
+    z-index: 2;
+    right: -20%;
+    top: 20%;
+}
+
+.payment_success-container{
+    position: relative;
+}

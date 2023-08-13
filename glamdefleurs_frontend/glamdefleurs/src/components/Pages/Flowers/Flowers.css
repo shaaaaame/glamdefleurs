@@ -1,47 +1,61 @@
 
 .flowers{
     padding: 50px;
+    height: max-content;
 }
 
 .flowers-header{
-    font-size: 4em;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--clr-dark);
     color: var(--clr-hl1);
 }
 
-.flowers-categorySelectors{
+.flowers-category-selectors-container{
     display: flex;
-    flex-direction: row;
-    position: relative;
-    width: 100%;
-    margin: 20px 0 20px 0;
+    width: min-content;
+    align-items: center;
 }
 
-.flowers-categorySelector{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 20%;
+.flowers-head-category-selector{
+    width: 15em;
     margin: 10px 10px 10px 0;
-    padding: 5px;
-    position: relative;
     border: 1px solid var(--clr-dark);
-    cursor: pointer;
+    background-color: lightgray;
+    font-size: var(--fs-body);
+    padding: 5px;
+}
+
+.flowers-sub-category-selector{
+    width: 15em;
+    margin: 10px 10px 10px 0;
+    border: 1px solid var(--clr-dark);
+    background-color: lightgray;
+    font-size: var(--fs-body);
+    padding: 5px;
+}
+
+.flowers-category-selector-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4em;
+    height: 2em;
+    border: 1px solid var(--clr-dark);
+    border-radius: 1em;
+    background-color: var(--clr-hl1);
+
 }
 
 .flowers-content{
-    margin-top: 100px;
+    margin-top: 50px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-auto-rows: auto;
     column-gap: 20px;
     row-gap: 20px;
     width: 100%;
-}
+    height: min-content;
 
-.flowers-item{
-    max-height: 50vh;
 }
 
 .flowers-item-img{
@@ -49,24 +63,30 @@
     object-fit: cover;
     width: 100%;
     height: 20em;
-    max-height: 100%;
     border: 1px solid var(--clr-dark);
 }
 
 @media screen and (max-width: 1024px) {
     .flowers-content{
         grid-template-columns: repeat(3, 1fr);
-        column-gap: 20px;
-        row-gap: 20px;
+        column-gap: 10px;
+        row-gap: 10px;
+    }
+
+    .flowers-item-img{
+        height: 15em;
     }
 
 }
 
 @media screen and (max-width: 768px) {
+    .flowers{
+        padding: 10px;
+    }
     .flowers-content{
         grid-template-columns: repeat(2, 1fr);
-        column-gap: 20px;
-        row-gap: 20px;
+        column-gap: 10px;
+        row-gap: 10px;
     }
 
 }

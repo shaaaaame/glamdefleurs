@@ -14,7 +14,7 @@ function Footer() {
 
                 <div className='footer-contact-item'>
                     <Phone size={30} className='footer-contact-icon'/>
-                    <p>+13231231232</p>
+                    <p>647-673-3463</p>
                 </div>
                 <div className='footer-contact-item'>
                     <Mail size={30} className='footer-contact-icon'/>
@@ -24,8 +24,8 @@ function Footer() {
             <div className='footer-socials'>
                 <p><b>socials:</b></p>
                 <div className='footer-socials-icons'>
-                    <Facebook size={30} />
-                    <Instagram size={30} />
+                    <a className='link' href='https://www.facebook.com/profile.php?id=100089218477568&mibextid=LQQJ4d'><Facebook size={30} /></a>
+                    <a className='link' href='https://www.instagram.com/glamdefleurs_gta/'><Instagram size={30} /></a>
                 </div>
             </div>
             <div className='footer-logo'>

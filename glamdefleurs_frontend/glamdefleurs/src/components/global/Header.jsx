@@ -77,8 +77,8 @@ function SideMenu(props){
         <div className='header-side_menu' ref={nodeRef}>
             <X className='header-side-close' size={25} onClick={() => setShowSideMenu(false)}/>
             <div className='header-side-icons'>
-                <div className='header-side-icon header-account'><Link className='link' to='/profile/account'><User size={25}/></Link></div>
-                <div className='header-side-icon header-cart'><Link className='link' to='/cart'><ShoppingCart size={25}/></Link></div>
+                <div className='header-side-icon header-account' onClick={() => setShowSideMenu(false)}><Link className='link' to='/profile/account'><User size={25}/></Link></div>
+                <div className='header-side-icon header-cart' onClick={() => setShowSideMenu(false)}><Link className='link' to='/cart'><ShoppingCart size={25}/></Link></div>
             </div>
             <ul className='header-side-options'>
                 

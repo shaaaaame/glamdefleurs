@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import PhoneInput from "react-phone-number-input";
 import '../Profile.css'
-import { useLoaderData, useNavigate, Form } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useNavigate, Form } from "react-router-dom";
 import useToken from "../../../auth/useToken";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CustomerService from "../../../../services/CustomerService";
@@ -28,17 +29,29 @@ export default function Account(){
         dob: dob,
     })})
 
+    const triggerInfoToast = (success) => toast.info(success,{
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+
     const handleSubmit = (e) =>{
         e.preventDefault();
-        console.log(dob);
         mutate();
-
+        queryClient.invalidateQueries({queryKey: ["customer"]})
+        navigate(0);
     }
 
     const handleSignOut = (e) => {
         delete http.defaults.headers.Authorization;
         removeToken();
         queryClient.removeQueries(['customer'])
+        triggerInfoToast("Signed out!")
         navigate('/login');
     }
 

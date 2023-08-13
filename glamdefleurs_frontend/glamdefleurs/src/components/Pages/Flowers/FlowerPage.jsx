@@ -7,7 +7,7 @@ import Header from '../../global/Header'
 import './FlowerPage.css';
 import FlowerService from '../../../services/FlowerService';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 function Variants(props){
 
@@ -58,9 +58,21 @@ function FlowerPage() {
         queryFn: () => FlowerService.getFlower(params.id),
         staleTime: Infinity
     });
+    const triggerSuccessToast = (success) => toast.success(success,{
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+
 
     const handleSubmit = (id, q) => {
         addToCart(id, q);
+        triggerSuccessToast("Added item to cart!")
         navigate("/categories/");
     }
 
@@ -70,7 +82,9 @@ function FlowerPage() {
         <>
             <div className='flower-detail'>
                 <button className='flower-page-backBtn' onClick={() => navigate(`/categories/`)}><X size={30} /></button>  
-                <img className='flower-page-img' src={flower.photo} alt={flower.name}/>
+                <div className='flower-page-img-container'>
+                    <img className='flower-page-img' src={flower.photo} alt={flower.name}/>
+                </div>
                 <div className='flower-page-wrapper'>
                     <h1 className='flower-page-title'>{flower.name} {flower.variant_name.length != "" && `(${flower.variant_name})`}</h1>
                     <div className='flower-page-horizontal-container'>

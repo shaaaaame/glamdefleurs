@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from shop.models import Order, Customer
-from shop.serializers import OrderSerializer, CustomerSerializer
+from shop.serializers import OrderSerializer, CustomerSerializer, AddressSerializer
 from rest_framework import permissions, viewsets, mixins, status
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
@@ -19,14 +19,15 @@ class DetailCustomers(APIView):
     def get(self, request, format=None):
         if request.user.is_authenticated:
             customer = request.user.customer
+            address_serializer = AddressSerializer(customer.address)
             data = {
                 "username" : request.user.username,
                 "first_name" : request.user.first_name,
                 "last_name" : request.user.last_name,
                 "email" : request.user.email,
                 "phone_number" : customer.phone_number,
-                "address" : customer.address,
                 "dob" : customer.dob,
+                "address" : address_serializer.data,
                 "orders" : customer.order_set.all()
             }
 

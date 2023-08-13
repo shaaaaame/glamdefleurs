@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from shop.models import Order, OrderItem, Customer
+from shop.models import Order, OrderItem, Customer, Address
 from django.contrib.auth.models import User
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -15,6 +15,11 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = '__all__'
+
 class CustomerSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
@@ -22,13 +27,14 @@ class CustomerSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     password = serializers.CharField()
     phone_number = serializers.CharField()
-    address = serializers.CharField()
     orders = serializers.PrimaryKeyRelatedField(many=True, queryset=Order.objects.all(), required=False)
     dob = serializers.DateField()
+    address = AddressSerializer()
 
     class Meta:
         model = Customer
-        fields = ['first_name', 'last_name', 'username', 'email', 'password', 'phone_number', 'address', 'orders', 'dob']
+        fields = ['first_name', 'last_name', 'username', 'email', 'password', 'phone_number', 'orders', 'dob', 'address']
+        depth = 1
 
     def create(self, validated_data):
         # create user object
@@ -41,16 +47,41 @@ class CustomerSerializer(serializers.ModelSerializer):
         )
         user.save()
 
+        # create address object
+        address_serializer = AddressSerializer(data=validated_data["address"])
+        if address_serializer.is_valid():
+            address = address_serializer.save()
+        else:
+            raise ValueError
+
         # create related customer object
         customer = Customer.objects.create(
             user=user,
             phone_number=validated_data['phone_number'],
-            address=validated_data['address'],
             dob=validated_data['dob'],
+            address=address
         )
 
-        # customer.orders.set(validated_data['orders'])
 
         return customer
+
+    def update(self, instance, validated_data):
+        # assumes partial = True
+
+        if "address" in validated_data.keys():
+            address_data = validated_data.pop('address')
+
+            if instance.address:
+                address_serializer = AddressSerializer(instance.address, data=address_data, partial=True)
+                if address_serializer.is_valid():
+                    address_serializer.save()
+            else:
+                address, created = Address.objects.update_or_create(**address_data)
+                address.save()
+                instance.address = address
+                instance.save()
+
+        return super().update(instance=instance, validated_data=validated_data)
+
 
 

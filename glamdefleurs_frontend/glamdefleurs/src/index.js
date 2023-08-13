@@ -21,9 +21,10 @@ import Login from './components/Pages/Login/Login';
 import Contact from './components/Pages/Contact/Contact';
 import Cart from './components/Pages/Cart/Cart';
 import FlowerPage from './components/Pages/Flowers/FlowerPage';
-import PaymentSuccess from './components/Pages/Checkout/Subpages/PaymentSuccess';
-import Payment from './components/Pages/Checkout/Payment';
-
+import PaymentSuccess from './components/Pages/Checkout/PaymentSuccess';
+import CheckoutPayment from './components/Pages/Checkout/subcomponents/CheckoutPayment';
+import CheckoutDelivery from './components/Pages/Checkout/subcomponents/CheckoutDelivery';
+import CheckoutDetails from './components/Pages/Checkout/subcomponents/CheckoutDetails';
 
 import { CartContextProvider } from './context/CartContext';
 import Loading from './components/global/Loading';
@@ -34,8 +35,7 @@ import Purchases from './components/Pages/Profile/subcomponents/Purchases';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { CLIENT_ID } from './Config/Config';
 import Checkout from './components/Pages/Checkout/Checkout';
-import Header from './components/global/Header';
-import CustomerService from './services/CustomerService';
+
 
 
 
@@ -82,12 +82,23 @@ const router = createHashRouter([
       },
       {
         path: "checkout/",
-        element: <Checkout />
+        element: <Checkout />,
+        children: [
+          {
+            path: "delivery/",
+            element: <CheckoutDelivery />
+          },
+          {
+            path: "details/",
+            element: <CheckoutDetails />
+          },
+          {
+            path: "payment/",
+            element: <CheckoutPayment />
+          },
+        ]
       },
-      {
-        path: "payment/",
-        element: <Payment />
-      },
+
       {
         path: "payment_success/",
         element: <PaymentSuccess />
@@ -99,31 +110,14 @@ const router = createHashRouter([
           {
             path: "account/",
             element: <Account />,
-            // TODO : change this approach. fetches query during login because of redirect
           },
           {
             path: "address/",
             element: <Address />,
-            loader: async () => {
-
-              return await queryClient.fetchQuery({
-                queryKey: ['customer'],
-                queryFn: CustomerService.getCustomerData,
-                staleTime: Infinity
-              })
-            }
           },
           {
             path: "purchases/",
             element: <Purchases />,
-            loader: async () => {
-
-              return await queryClient.fetchQuery({
-                queryKey: ['customer'],
-                queryFn: CustomerService.getCustomerData,
-                staleTime: Infinity
-              })
-            }
           }
         ]
       }

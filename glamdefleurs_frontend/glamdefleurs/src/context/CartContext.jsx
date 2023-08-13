@@ -1,6 +1,8 @@
 import React, { createContext, useEffect, useState } from 'react';
 import FlowerService from '../services/FlowerService';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+
 
 export const CartContext = createContext(null);
 
@@ -8,15 +10,30 @@ export function CartContextProvider(props) {
     // cart items stores items in the form of productId : quantity
     // if quantity == 0, item not in cart
     const [ cartItems, setCartItems ] = useState({});
+    const [ items, setItems ] = useState([])
+
     const queryClient = useQueryClient();
 
+
     useEffect(() => {
-        for(const id in cartItems){
-            queryClient.prefetchQuery({
-                queryKey: ['flower', {id : id}],
-                queryFn: () => FlowerService.getFlower(id)
-            })
+        const fetchItems = async () => {
+            let arr = []
+
+            for(const id in cartItems){
+                const item = await queryClient.fetchQuery({
+                    queryKey: ['flower', {id : id}],
+                    queryFn: () => FlowerService.getFlower(id),
+                    staleTime: Infinity
+                })
+
+                arr.push(item);
+            }
+
+            setItems(arr);
         }
+
+        fetchItems();
+
     }, [cartItems])
 
     const addToCart = (id, quantity) => {
@@ -71,19 +88,23 @@ export function CartContextProvider(props) {
 
         let total = 0;
 
-        for(const id in cartItems){
-            total += Number(queryClient.getQueryData(['flower', {id : id}]).price) * cartItems[id]
+        // for(const id in cartItems){
+        //     total += Number(queryClient.getQueryData(['flower', {id : id}]).price) * cartItems[id]
+        // }
+
+        for(const item of items){
+            total += Number(item.price) * cartItems[item.id]
         }
 
         return total.toFixed(2);
     }
 
     const getItemsInCart = () => {
-        let items = []
+        // let items = []
 
-        for(const id in cartItems){
-            items.push(queryClient.getQueryData(['flower', {id : id}]))
-        }
+        // for(const id in cartItems){
+        //     items.push(queryClient.getQueryData(['flower', {id : id}]))
+        // }
 
         return items
     };
