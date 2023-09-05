@@ -74,7 +74,7 @@ button{
 
 @media screen and (max-width: 480px) {
   :root{
-    --fs-h1: 35px;
+    --fs-h1: 30px;
     --fs-h2: 22px;
     --fs-h3: 17px;  
 

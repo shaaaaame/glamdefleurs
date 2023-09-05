@@ -2,14 +2,35 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 import { CartContext } from "../../../../context/CartContext";
 import React, { useState, useEffect, useContext } from "react" ;
 import { useNavigate, useOutletContext, Link } from "react-router-dom";
-import { CLIENT_ID } from "../../../../Config/Config";
+import useToken from "../../../auth/useToken";
+import { useMutation } from "@tanstack/react-query";
 import '../Checkout.css';
+
+import ShopService from "../../../../services/ShopService";
+import CustomerService from "../../../../services/CustomerService";
 
 function CheckoutPayment(){
 
     const navigate = useNavigate();
     const { cartItems, getSubtotal, getItemsInCart} = useContext(CartContext);
     const { total, shipping, user } = useOutletContext();
+
+    // send order to backend
+    const orderMutation = useMutation({
+        mutationFn: (data) => {
+            return ShopService.createOrder(data)
+        },
+        // onSuccess: (res) => {
+        //     triggerSuccessToast("Order successful!");
+        // },
+        // onError: (error) => {
+        //     if(error.response.status == 500){
+        //         triggerErrorToast("An error occured on our side. Please try again later!")
+        //     }else{
+        //         triggerErrorToast(error.response.data.non_field_errors[0]);
+        //     }
+        // }
+    })
 
     // async function that returns order id
     const createOrder = (data, actions) => {
@@ -70,7 +91,33 @@ function CheckoutPayment(){
 
     const onApprove = (data, actions) => {
         return actions.order.capture().then((details) => {
-            const name = details.payer.name.given_name;
+            const cart = getItemsInCart()
+
+            let items = []
+
+            cart.forEach(i => {
+                items.push({
+                    item: i.id,
+                    quantity: cartItems[i.id]
+                })
+            })
+
+
+            const order_data = {
+                payment_id: details.id,
+                customer_id: user.id ? user.id : null,
+                items: items,
+                address: user.address,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                phone_number: user.phone_number,
+                subtotal: getSubtotal(),
+                shipping: shipping,
+                total: total
+            }
+
+            orderMutation.mutate(order_data)
             navigate('/payment_success');
         })
     }

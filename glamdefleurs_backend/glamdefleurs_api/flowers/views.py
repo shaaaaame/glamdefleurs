@@ -28,7 +28,7 @@ class FlowerViewSet(viewsets.ModelViewSet):
         elif len(ids) > 0:
             queryset = queryset.filter(id__in=ids)
 
-        return queryset
+        return queryset.distinct()
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()

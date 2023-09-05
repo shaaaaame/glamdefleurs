@@ -9,8 +9,18 @@ import '../Checkout.css';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import useToken from "../../../auth/useToken";
 import PhoneInput from "react-phone-number-input";
+import { toast } from "react-toastify";
 
-
+const triggerErrorToast = (error) => toast.error(error, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    })
 function CheckoutDelivery(){
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -22,6 +32,7 @@ function CheckoutDelivery(){
 
     // delivery form data
     // snake case because django uses snake case TT
+    const [ id, setId ] = useState(user?.id)
     const [ email, setEmail ] = useState(user?.email);
     const [ phoneNumber, setPhoneNumber ] = useState(user?.phone_number);
     const [ firstName, setFirstName ] = useState(user?.first_name);
@@ -37,6 +48,7 @@ function CheckoutDelivery(){
         e.preventDefault();
 
         const user = {
+            id: id,
             email: email,
             phone_number: phoneNumber,
             first_name: firstName,
@@ -57,7 +69,12 @@ function CheckoutDelivery(){
 
         setShipping(Number(Math.ceil(distance / 1000)).toFixed(2));
         setUser(user);
-        navigate('/checkout/details')
+
+        if (distance > 70000){
+            triggerErrorToast("Sorry, we don't deliver to your area.")
+        }else{
+            navigate('/checkout/details')
+        }
 
     }
 
@@ -65,9 +82,10 @@ function CheckoutDelivery(){
         const getUserData = async () => {
             const data = await queryClient.fetchQuery({
                 queryKey: ['customer'],
-                queryFn: () => CustomerService.getCustomerData()
+                queryFn: CustomerService.getCustomerData
             })
 
+            setId(data.id);
             setEmail(data.email);
             setPhoneNumber(data.phone_number);
             setFirstName(data.first_name);

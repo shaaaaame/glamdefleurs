@@ -51,6 +51,7 @@ export default function Account(){
         delete http.defaults.headers.Authorization;
         removeToken();
         queryClient.removeQueries(['customer'])
+        queryClient.removeQueries(['orders'])
         triggerInfoToast("Signed out!")
         navigate('/login');
     }

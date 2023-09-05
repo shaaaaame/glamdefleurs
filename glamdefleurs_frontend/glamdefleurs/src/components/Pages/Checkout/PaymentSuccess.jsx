@@ -20,7 +20,7 @@ function PaymentSuccess() {
   }, [location])
 
   useEffect(() => {
-    setTimeout(() => navigate('/'), 3000);
+    setTimeout(() => navigate('/'), 10000);
     clearCart();
   }, [isOnPaymentSuccess])
 

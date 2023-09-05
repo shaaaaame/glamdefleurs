@@ -3,29 +3,35 @@ import { useLoaderData } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import FlowerService from '../../../../services/FlowerService';
 import CustomerService from '../../../../services/CustomerService';
+import ShopService from '../../../../services/ShopService';
+
 
 function Purchases() {
 
-  const [ orderIds, setOrderIds ] = useState([]);
+  const [ orders, setOrders ] = useState([]);
   const queryClient = useQueryClient();
 
   function PurchaseItem(props){
-    const { data: flowers, isLoading } = useQuery(['flowers', { ids: props.items }], () => FlowerService.getFlowers(props.items))
+    const ids = props.items.map(o => o.item);
+
+    const { data: flowers, isLoading } = useQuery(['flowers', { ids: ids }], () => FlowerService.getFlowers(ids), { staleTime: Infinity})
 
     if(isLoading) return (<div className='purchase-item'>loading...</div>)
 
     return (
       <div className='purchase-item'>
-        <div className='purchase-status'>status: {props.status}</div>
+        <p>order id: {props.order.id}</p>
+        <p>purchase date: {props.order.date_created}</p>
         <div className='purchase-units'>
-          {flowers.map((f) => {
+          {flowers.map((f) =>
             <div className='purchase-unit'>
-              <img className='purchase-unit-img' />
+              <img className='purchase-unit-img' src={f.photo}/>
               <h3 className='purchase-unit-title'>{f.name}</h3>
-
+              <h3>x{props.items.find(o => o.item == f.id).quantity}</h3>
             </div>
-          })}
+          )}
         </div>
+        <p>total: ${props.order.total}</p>
       </div>
     )
   }
@@ -39,23 +45,31 @@ function Purchases() {
   }
 
   useEffect(() => {
-    const getUserData = async () => {
+    const getOrders = async () => {
         const data = await queryClient.fetchQuery({
             queryKey: ['customer'],
             queryFn: CustomerService.getCustomerData,
             staleTime: Infinity
         })
-        setOrderIds(data.orders);
+
+        const order_data = await queryClient.fetchQuery({
+            queryKey: ['orders'],
+            queryFn: () => ShopService.getOrders(data.id),
+            staleTime: Infinity
+        })
+
+        setOrders(order_data.data)
     }
 
-    getUserData();
+    getOrders()
+
   }, [])
 
   return (
     <div className='profile-details'>
         <h1 className='profile-title'>purchases</h1>
-        {orderIds.length > 0 ? orderIds.map((orderId) => {
-
+        {orders.length > 0 ? orders.map((order) => {
+          return <PurchaseItem items={order.items} order={order}/>
         }) : <NoPurchases />}
     </div>
   )

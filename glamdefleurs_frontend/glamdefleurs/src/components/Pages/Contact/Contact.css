@@ -83,12 +83,13 @@
 
 .contact-form-submit{
     margin: 5vh 0 5vh 0;
-
     width: 150px;
     height: 50px;
     border-radius: 25px;
     background-color: var(--clr-hl1);
     font-size: var(--fs-body);
+
+    cursor: pointer;
 }
 
 @media screen and (max-width: 960px) {

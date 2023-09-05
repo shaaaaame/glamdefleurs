@@ -165,3 +165,32 @@
     margin-top: 20px;
     min-height: 10vh;
 }
+
+.purchase-item{
+    width: auto;
+    height: auto;
+    margin-top: 20px;
+    min-height: 10vh;
+    border: 1px solid var(--clr-dark);
+    padding: 2em;
+
+}
+
+.purchase-units{
+    border-top: 1px solid var(--clr-dark);
+    border-bottom: 1px solid var(--clr-dark);
+
+    margin: 1em 0 1em 0;
+}
+
+.purchase-unit{
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.purchase-unit-img{
+    height: 100%;
+}

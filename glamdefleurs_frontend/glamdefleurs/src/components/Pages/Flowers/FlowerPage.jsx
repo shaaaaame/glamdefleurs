@@ -8,6 +8,7 @@ import './FlowerPage.css';
 import FlowerService from '../../../services/FlowerService';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import Flowers from './Flowers';
 
 function Variants(props){
 
@@ -88,10 +89,13 @@ function FlowerPage() {
                 <div className='flower-page-wrapper'>
                     <h1 className='flower-page-title'>{flower.name} {flower.variant_name.length != "" && `(${flower.variant_name})`}</h1>
                     <div className='flower-page-horizontal-container'>
-                        <h2 className='flower-page-price'>${flower.price}</h2>
+                        <h2 className='flower-page-price'>{flower.require_contact ? <div><h2>{flower.price_text}</h2><br /><h3>contact <a href='mailto:glamdefleurs@gmail.com'>glamdefleurs@gmail.com</a> for more information</h3></div>: "$" + flower.price}</h2>
                         {flower.variants.length > 0 && <Variants variants={flower.variants}/>}
                     </div>
                     <p className='flower-page-desc'>{flower.description}</p>
+
+                    {flower.require_contact ?
+                    "":
                     <div className='flower-page-amt'>
                         <div className='flower-page-quantity'>
                             <Plus size={30} onClick={() => setAmt(amt + 1)} className='flower-page-quantity-btn'/>
@@ -101,6 +105,8 @@ function FlowerPage() {
                         
                         <button className='flower-page-submit' onClick={() => handleSubmit(flower.id, amt)}>add to cart</button>
                     </div>
+                    }
+
                 </div>
             </div>
         </>

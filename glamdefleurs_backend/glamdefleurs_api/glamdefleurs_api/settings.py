@@ -45,12 +45,12 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'phonenumber_field',
+    'django_crontab',
 
     'flowers',
     'contact',
     'shop',
     'auth_utils',
-
 ]
 
 MIDDLEWARE = [
@@ -151,7 +151,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -162,8 +162,15 @@ AUTHENTICATION_BACKENDS = [
 
 # email settings
 # TODO: change this before production
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = '1025'
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = False
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'glamdefleursnotifications@gmail.com'
+EMAIL_HOST_PASSWORD = 'Sofia2023'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+# cronjob settings
+CRONJOBS = [
+    ('0 4 * * * *', 'flowers.cron.main')
+]

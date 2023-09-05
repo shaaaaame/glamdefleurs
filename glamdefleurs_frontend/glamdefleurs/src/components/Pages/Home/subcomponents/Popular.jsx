@@ -11,7 +11,7 @@ function PopularItem(props){
       <img className='popular-item-img' src={i.photo} loading='lazy'/>
       <div className='popular-item-name-wrapper'>
         <h3 className='popular-item-name'>{i.name}</h3>
-        <h3 className='popular-item-name'>${i.price}</h3>
+        <h3 className='popular-item-name'>{i.require_contact ? i.price_text : "$" + i.price}</h3>
       </div>
     </Link>
    

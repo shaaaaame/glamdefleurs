@@ -7,6 +7,19 @@ import 'react-phone-number-input/style.css'
 import './Contact.css';
 import { useMutation } from '@tanstack/react-query';
 import ContactService from '../../../services/ContactService';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+const triggerSuccessToast = (success) => toast.success(success,{
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    })
 
 function Contact() {
     const [ name, setName ] = useState("");
@@ -14,7 +27,9 @@ function Contact() {
     const [ phone, setPhone ] = useState("");
     const [ subject, setSubject ] = useState("");
     const [ message, setMessage ] = useState("");
-    const [ preferredContact, setPreferredContact ] = useState("")
+    const [ preferredContact, setPreferredContact ] = useState("email")
+
+    const navigate = useNavigate();
 
     const mutation = useMutation({
         mutationFn: (form) => {
@@ -24,7 +39,7 @@ function Contact() {
 
     
     const handleSubmit = (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         const form = {
             name: name,
             email: email,
@@ -34,7 +49,9 @@ function Contact() {
             preferred_contact_method: preferredContact
         }
 
-        // mutation.mutate(form);
+        mutation.mutate(form);
+        triggerSuccessToast("Contact form successfully submitted!")
+        navigate("/")
         
     }
 
@@ -61,7 +78,7 @@ function Contact() {
                             <label>email address: </label>
                             <input 
                             className='contact-form-box' 
-                            type='text' 
+                            type='email'
                             name='email' 
                             required 
                             value={email}
@@ -71,7 +88,6 @@ function Contact() {
                             <label>phone number: </label>
                             <PhoneInput
                                 name='phone'
-                                required
                                 international
                                 defaultCountry='CA'
                                 placeholder='Enter phone number' 

@@ -37,7 +37,7 @@ class GeolocationService{
 
             return res.data.distances[0][0];
         }catch (err){
-            console.log(err);
+            return 20000
         }
     }
     

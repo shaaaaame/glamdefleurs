@@ -26,10 +26,6 @@
     height: 100%;
 }
 
-.flower-page-price{
-    margin: 1em 0 1em 1em;
-}
-
 .flower-page-wrapper{
     padding: 1em;
     width: 60%;
@@ -119,6 +115,7 @@
 .flower-variants-item{
     width: 5em;
     height: 5em;
+    margin: 0 5px 0 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -137,11 +134,12 @@
         flex-direction: column;
         padding: 1em;
         height: 100%;
+        overflow: scroll;
     }
 
     .flower-page-img-container{
         width: 100%;
-        height: 40%;
+        height: 30%;
     }
 
     .flower-page-wrapper{
