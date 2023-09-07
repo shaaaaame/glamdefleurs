@@ -98,13 +98,9 @@ WSGI_APPLICATION = 'glamdefleurs_api.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'glamdefleurs',
-        'USER': 'glamdefleurs',
-        'PASSWORD': 'Sofia2023',
-        'HOST': 'localhost',
-        'PORT': '',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
     }
 }
 
