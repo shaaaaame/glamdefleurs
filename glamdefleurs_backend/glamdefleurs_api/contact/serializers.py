@@ -2,7 +2,6 @@ from rest_framework import serializers
 from contact.models import ContactForm
 from glamdefleurs_api.email_service.email_service_v2 import send_email, send_purchase_email
 
-# TODO change this
 TO_EMAIL = "glamdefleurs@gmail.com"
 SUBJECT = "Glam de Fleurs Contact: "
 

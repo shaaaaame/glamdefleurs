@@ -121,8 +121,7 @@ Shipping Address:
 
 
 """
-        # TODO change email
-        send_html_email(message, "hanxheng@gmail.com", f"ORDER PLACED: {order.id}")
+        send_html_email(message, "glamdefleurs@gmail.com", f"ORDER PLACED: {order.id}")
 
 
         return order

@@ -33,7 +33,7 @@ import Account from './components/Pages/Profile/subcomponents/Account';
 import Address from './components/Pages/Profile/subcomponents/Address';
 import Purchases from './components/Pages/Profile/subcomponents/Purchases';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
-import { CLIENT_ID } from './Config/Config';
+import { REACT_APP_CLIENT_ID } from './Config/Config';
 import Checkout from './components/Pages/Checkout/Checkout';
 
 
@@ -130,7 +130,7 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <PayPalScriptProvider options={{
-              clientId: CLIENT_ID,
+              clientId: REACT_APP_CLIENT_ID,
               currency: "CAD",
               intent: "capture",
           }}>

@@ -118,7 +118,10 @@
 }
 
 .categories-item-img{
-    width: 75%;
+    width: 10em;
+    height: 10em;
+    object-fit: cover;
+
 }
 
 .categories-item-text-wrapper{

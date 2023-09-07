@@ -47,7 +47,7 @@ function CheckoutDetails() {
                     <p>${getSubtotal()}</p>
                 </div>
                 <div className='checkout-details-summary-item'>
-                    <p>shipping to {user.address.address1} <Link to="/checkout/delivery"><small>[change]</small></Link>: </p> {/* TODO: click to change address */}
+                    <p>shipping to {user.address.address1} <Link to="/checkout/delivery"><small>[change]</small></Link>: </p>
                     <p>${shipping}</p>
                 </div>
                 <div className='checkout-details-summary-item checkout-total'>

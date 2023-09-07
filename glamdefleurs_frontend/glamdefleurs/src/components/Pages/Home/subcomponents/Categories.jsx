@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import Placeholder from '../../../../assets/img/Placeholder.jpg';
 import { ArrowRightCircle } from 'react-feather';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import CategoryService from '../../../../services/CategoryService';
-
-// TODO: change placeholders for categories
+import './HomeSubcomponents.css'
 
 function Categories() {
   const { data: categories, isLoading, isError } = useQuery(['categories'], CategoryService.getCategories, {staleTime: Infinity})

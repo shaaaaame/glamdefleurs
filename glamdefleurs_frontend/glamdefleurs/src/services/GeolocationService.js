@@ -1,7 +1,5 @@
 import http from "../http-common";
 
-// TODO: HIDE API KEY
-
 const ORIGIN_COORDS = '43.53016, -79.659641'
 
 class GeolocationService{
@@ -20,7 +18,7 @@ class GeolocationService{
         }
     }
 
-    async getDistanceFromOrigin(address){
+    async getDistanceFromOrigin(address, rapidapi_key){
         try{
             const geocode = await this.getGeocode(address);
             const destination = String(geocode.lat) + ", " + String(geocode.lon);
@@ -30,7 +28,7 @@ class GeolocationService{
                     destinations: destination
                 },
                 headers: {
-                    'X-RapidAPI-Key': 'f688891cb9mshf100bfe48237605p118762jsn36e61cd40949',
+                    'X-RapidAPI-Key': rapidapi_key,
                     'X-RapidAPI-Host': 'trueway-matrix.p.rapidapi.com'
                 }
             })

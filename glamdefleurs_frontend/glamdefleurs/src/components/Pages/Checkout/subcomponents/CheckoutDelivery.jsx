@@ -10,6 +10,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import useToken from "../../../auth/useToken";
 import PhoneInput from "react-phone-number-input";
 import { toast } from "react-toastify";
+import { REACT_APP_RAPIDAPI_KEY } from "../../../../Config/Config";
 
 const triggerErrorToast = (error) => toast.error(error, {
     position: "top-right",
@@ -64,7 +65,7 @@ function CheckoutDelivery(){
         const fullAddress = address1 + ", " + city + ", " + province;
         const distance = await queryClient.fetchQuery({
             queryKey: ['distance', {address: fullAddress}],
-            queryFn: () => GeolocationService.getDistanceFromOrigin(fullAddress)
+            queryFn: () => GeolocationService.getDistanceFromOrigin(fullAddress, REACT_APP_RAPIDAPI_KEY)
         })
 
         setShipping(Number(Math.ceil(distance / 1000)).toFixed(2));

@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,9 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--u3a0j7@*a$r)yv1egle89c5*kx^p(ye!n^@u5(u+@z)h#s6+m'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+
 DEBUG = True
 
 # TODO: change
@@ -67,10 +73,6 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-# CORS_ORIGIN_WHITELIST = [
-#     "http://localhost:3000"
-# ]
-
 ROOT_URLCONF = 'glamdefleurs_api.urls'
 
 TEMPLATES = [
@@ -97,8 +99,12 @@ WSGI_APPLICATION = 'glamdefleurs_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'glamdefleurs',
+        'USER': 'glamdefleurs',
+        'PASSWORD': 'Sofia2023',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -159,16 +165,6 @@ AUTHENTICATION_BACKENDS = [
     'auth_utils.authentication.EmailAuthBackend'
 ]
 
-
-# email settings
-# TODO: change this before production
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'glamdefleursnotifications@gmail.com'
-EMAIL_HOST_PASSWORD = 'Sofia2023'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
 
 # cronjob settings
 CRONJOBS = [
