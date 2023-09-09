@@ -2,6 +2,7 @@ import ast
 import re
 from decimal import Decimal
 import uuid
+import gc
 
 from flowers.serializers import FlowerSerializer
 from flowers.models import Flower, Category
@@ -39,6 +40,7 @@ def write_new():
 
     # external ids to add, in the form "row : external id"
     external_ids = {}
+    included_ids = []
 
     # errors that need to be added to error sheet
     errors = []
@@ -52,6 +54,14 @@ def write_new():
             for sheet_row in sheet_rows:
                 sheet_row = [str(x) for x in sheet_row]
                 write_rows.append(sheet_row)
+
+            try:
+                id_dict = ast.literal_eval(external_id)
+                for id in id_dict.values():
+                    included_ids.append(id)
+            except:
+                included_ids.append(id)
+
         except Exception as err:
 
             error_row = [rows[i][2], str(err)]
@@ -60,17 +70,20 @@ def write_new():
         # write the external ids
         external_ids[f"flowers!A{i + 2}"] = [[ external_id ]]
 
-    Flower.objects.all().exclude(external_id__in=list(external_ids.keys())).delete()
+    Flower.objects.all().exclude(external_id__in=included_ids).delete()
 
 
     # write to "current" spreadsheet
     write_to_spreadsheet(SPREADSHEET_ID, WRITE_RANGE_NAME, write_rows)
+    gc.collect()
 
     # write external ids in to "flowers" spreadsheet
     write_multiple_ranges(SPREADSHEET_ID, external_ids)
+    gc.collect()
 
     # write errors to errors spreadsheet
     write_to_spreadsheet(SPREADSHEET_ID, ERROR_RANGE_NAME, errors)
+    gc.collect()
 
 def compile_errors():
     raise NotImplementedError

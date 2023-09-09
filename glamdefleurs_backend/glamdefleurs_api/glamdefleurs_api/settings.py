@@ -100,7 +100,7 @@ WSGI_APPLICATION = 'glamdefleurs_api.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "mydatabase",
+        "NAME": "db.sqlite3",
     }
 }
 
@@ -168,10 +168,6 @@ CRONJOBS = [
 ]
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'whole-static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'whole-media')
-
-STATICFILES_DIRS = [
-os.path.join(BASE_DIR, 'static'),
-]
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
