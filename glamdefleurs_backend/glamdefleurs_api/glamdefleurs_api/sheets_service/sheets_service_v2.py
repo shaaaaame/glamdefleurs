@@ -41,6 +41,17 @@ def read_spreadsheet(spreadsheet_id, range):
         print(f"An error has occured: {err}")
         return None
 
+def clear_spreadsheet(spreadsheet_id, range):
+    creds = get_credentials()
+
+    try:
+        service = discovery.build('sheets', 'v4', credentials=creds)
+        result = service.spreadsheets().values().clear(spreadsheetId=spreadsheet_id, range=range).execute()
+        return result
+
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        return error
 
 def write_to_spreadsheet(spreadsheet_id, range, values):
     """

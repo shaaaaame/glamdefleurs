@@ -4,13 +4,15 @@ from flowers.models import Flower, Category, HeadCategory
 class FlowerSerializer(serializers.ModelSerializer):
     categories = serializers.PrimaryKeyRelatedField(many=True, queryset=Category.objects.all())
     variants = serializers.PrimaryKeyRelatedField(many=True, queryset=Flower.objects.all(), default=[])
-    description = serializers.CharField(max_length=10000, default="", allow_null=True, required=False)
+    description = serializers.CharField(max_length=10000, default="", allow_null=True, required=False, allow_blank=True)
     external_id = serializers.UUIDField(format='hex', required=False)
     price = serializers.DecimalField(max_digits=6, decimal_places=2, allow_null=True, required=False)
+    price_text = serializers.CharField(max_length=99999, default="", allow_null=True, allow_blank=True, required=False)
 
     class Meta:
         model = Flower
         fields = ['id', 'external_id', 'name', 'categories', 'price', 'price_text', 'photo', 'description', 'is_popular', 'variants', 'variant_name', 'require_contact']
+        extra_kwargs = {"price_text": {"required": False, "allow_null": True}}
 
 class CategorySerializer(serializers.ModelSerializer):
     head_category = serializers.PrimaryKeyRelatedField(queryset=HeadCategory.objects.all())

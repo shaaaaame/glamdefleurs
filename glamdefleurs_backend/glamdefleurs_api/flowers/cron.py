@@ -6,9 +6,7 @@ import gc
 
 from flowers.serializers import FlowerSerializer
 from flowers.models import Flower, Category
-from glamdefleurs_api.sheets_service.sheets_service_v2 import read_spreadsheet, write_to_spreadsheet, write_multiple_ranges
-
-# TODO: send email detailing errors with spreadsheet.
+from glamdefleurs_api.sheets_service.sheets_service_v2 import read_spreadsheet, write_to_spreadsheet, write_multiple_ranges, clear_spreadsheet
 
 # The ID and range of a sample spreadsheet.
 SPREADSHEET_ID = '1M9taW0jW7_b3_sZbSRC7U7PoJIXtB080iPAQeMPHJR4'
@@ -35,7 +33,7 @@ def write_new():
     """
     Reads the "flower" sheet and adds everything into the db.
     """
-    write_rows = [['id', 'external id', 'name', 'categories', 'price', 'photo', 'description', 'is popular', 'variants', 'variant name']]
+    write_rows = [['id', 'external id', 'name', 'categories', 'price', 'price_text', 'photo', 'description', 'is popular', 'variants', 'variant name', 'require contact']]
     rows = read_spreadsheet(SPREADSHEET_ID, INITIAL_RANGE_NAME)
 
     # external ids to add, in the form "row : external id"
@@ -55,20 +53,22 @@ def write_new():
                 sheet_row = [str(x) for x in sheet_row]
                 write_rows.append(sheet_row)
 
-            try:
-                id_dict = ast.literal_eval(external_id)
-                for id in id_dict.values():
-                    included_ids.append(id)
-            except:
-                included_ids.append(id)
+                try:
+                    id_dict = ast.literal_eval(external_id)
+                    for id in id_dict.values():
+                        included_ids.append(id)
+                except:
+                    included_ids.append(external_id)
+
+            # write the external ids
+            external_ids[f"flowers!A{i + 2}"] = [[ external_id ]]
 
         except Exception as err:
+            if rows[i][0]:
+                included_ids.append(rows[i][0])
 
             error_row = [rows[i][2], str(err)]
             errors.append(error_row)
-
-        # write the external ids
-        external_ids[f"flowers!A{i + 2}"] = [[ external_id ]]
 
     Flower.objects.all().exclude(external_id__in=included_ids).delete()
 
@@ -82,6 +82,7 @@ def write_new():
     gc.collect()
 
     # write errors to errors spreadsheet
+    clear_spreadsheet(SPREADSHEET_ID, ERROR_RANGE_NAME)
     write_to_spreadsheet(SPREADSHEET_ID, ERROR_RANGE_NAME, errors)
     gc.collect()
 
@@ -269,8 +270,10 @@ def parse_flower(row):
             "price_text": ""
         }
 
-        if flower_ex_id:
+        if flower_ex_id != "":
             flowers = Flower.objects.filter(external_id=flower_ex_id)
+
+            print(flowers)
 
             # manually update categories
             flowers[0].categories.clear()
