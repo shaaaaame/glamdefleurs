@@ -160,7 +160,7 @@ AUTHENTICATION_BACKENDS = [
 
 # cronjob settings
 CRONJOBS = [
-    ('0 4 * * * *', 'flowers.cron.main')
+    ('0 4 * * *', 'flowers.cron.main')
 ]
 
 STATIC_URL = '/static/'

@@ -273,8 +273,6 @@ def parse_flower(row):
         if flower_ex_id != "":
             flowers = Flower.objects.filter(external_id=flower_ex_id)
 
-            print(flowers)
-
             # manually update categories
             flowers[0].categories.clear()
             for category in categories:
