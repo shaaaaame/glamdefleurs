@@ -242,7 +242,7 @@ def add_flower(external_id, categories, name, has_variants, require_contact, pri
         "media": media_ids,
         "description": description,
         "has_variants": has_variants,
-        "default_variant": variant_ids[-1],
+        "default_variant": variant_ids[0],
         "require_contact": require_contact,
         "price_text": price_text
     }
@@ -283,7 +283,7 @@ def update_flower(external_id, categories, name, has_variants, require_contact, 
         "media": media_ids,
         "description": description,
         "has_variants": has_variants,
-        "default_variant": variant_ids[-1],
+        "default_variant": variant_ids[0],
         "require_contact": require_contact,
         "price_text": price_text
     }
@@ -297,3 +297,4 @@ def update_flower(external_id, categories, name, has_variants, require_contact, 
             raise Exception()
     except:
         raise Exception("Flower does not exist! Check the external ID")
+main()

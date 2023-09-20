@@ -17,10 +17,10 @@ function FlowerItem(props) {
   return (
     <Link className='flowers-item link' to={"/flowers/" + props.flower.id}>
       <div className='flower-item-img-container'>
-        <LazyLoadImage className='flowers-item-img' width={'100%'} height={'20em'} style={{border: '1px solid var(--clr-dark)'}}src={props.flower.photo} alt='flower-img' effect='blur' />
+        <LazyLoadImage className='flowers-item-img' width={'100%'} height={'20em'} style={{border: '1px solid var(--clr-dark)'}}src={props.flower.media.image} alt='flower-img' effect='blur' />
       </div>
       <div className='flowers-item-name-wrapper'>
-        <h3 className='flowers-item-name'>{props.flower.name} {props.flower.variant_name ? "(" + props.flower.variant_name + ")": ""}</h3>
+        <h3 className='flowers-item-name'>{props.flower.name}</h3>
         <h3 className='flowers-item-price'>{props.flower.require_contact ? props.flower.price_text : "$" + props.flower.price}</h3>
       </div>
     </Link>

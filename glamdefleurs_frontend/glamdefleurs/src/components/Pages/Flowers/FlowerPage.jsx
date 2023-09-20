@@ -84,7 +84,7 @@ function FlowerPage() {
             <div className='flower-detail'>
                 <button className='flower-page-backBtn' onClick={() => navigate(`/categories/`)}><X size={30} /></button>  
                 <div className='flower-page-img-container'>
-                    <img className='flower-page-img' src={flower.photo} alt={flower.name}/>
+                    <img className='flower-page-img' src={flower.media.image} alt={flower.name}/>
                 </div>
                 <div className='flower-page-wrapper'>
                     <h1 className='flower-page-title'>{flower.name} {flower.variant_name.length != "" && `(${flower.variant_name})`}</h1>
