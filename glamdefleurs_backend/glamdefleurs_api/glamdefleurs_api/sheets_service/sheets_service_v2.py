@@ -39,7 +39,7 @@ def read_spreadsheet(spreadsheet_id, range):
 
     except HttpError as err:
         print(f"An error has occured: {err}")
-        return None
+        raise Exception(err)
 
 def clear_spreadsheet(spreadsheet_id, range):
     creds = get_credentials()
@@ -94,6 +94,7 @@ def write_multiple_ranges(spreadsheet_id, ranges_value_dict):
                 'values': ranges_value_dict[key]
             } for key in ranges_value_dict.keys()
         ]
+        print(data)
         body = {
             'valueInputOption': 'USER_ENTERED',
             'data': data

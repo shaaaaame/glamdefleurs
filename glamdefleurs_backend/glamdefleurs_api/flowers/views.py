@@ -1,10 +1,15 @@
 from rest_framework import permissions, viewsets
-from flowers.models import Flower, Category, HeadCategory
-from flowers.serializers import FlowerSerializer, CategorySerializer, HeadCategorySerializer
+from flowers.models import Flower, FlowerMedia, Category, HeadCategory
+from flowers.serializers import FlowerSerializer, FlowerMediaSerializer, CategorySerializer, HeadCategorySerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from django.shortcuts import get_object_or_404
+
+class FlowerMediaViewSet(viewsets.ModelViewSet):
+    queryset = FlowerMedia.objects.all()
+    serializer_class = FlowerMediaSerializer
+    permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
 
 class FlowerViewSet(viewsets.ModelViewSet):
     queryset = Flower.objects.all()
@@ -45,5 +50,6 @@ def api_root(request, format=None):
     return Response({
         'head_categories': reverse('head_category-list', request=request, format=format),
         'categories': reverse('category-list', request=request, format=format),
-        'flowers': reverse('flower-list', request=request, format=format)
+        'flowers': reverse('flower-list', request=request, format=format),
+        'flower_medias': reverse('flower_media-list', request=request, format=format)
     })

@@ -31,17 +31,30 @@ class Flower(models.Model):
     external_id = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     categories = models.ManyToManyField("Category")
-    price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
-    price_text = models.CharField(max_length=99999, default="")
-    photo = models.URLField()
+    media = models.ManyToManyField("FlowerMedia")
     description = models.TextField(max_length=10000, default="", null=True, blank=True)
     is_popular = models.BooleanField(default=False)
-    variant_name = models.CharField(max_length=255, default="", null=True, blank=True) # use this if item has variants as an identifer, e.g "small", "medium", "big"
-    variants = models.ManyToManyField("self", blank=True)
+    has_variants = models.BooleanField(default=False)
+    default_variant = models.OneToOneField("FlowerVariant", related_name="variants", on_delete=models.CASCADE)
     require_contact = models.BooleanField(default=False)
+    price_text = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         ordering = ['name']
 
     def __str__(self) -> str:
         return self.name
+
+class FlowerVariant(models.Model):
+    flower = models.ForeignKey("Flower", related_name="flower", on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=None, null=True)
+
+    class Meta:
+        ordering = ['price']
+
+class FlowerMedia(models.Model):
+    image = models.ImageField(upload_to="flower_media", blank=True, null=True)
+    alt = models.CharField(max_length=255, blank=True)
+    external_url = models.URLField()
+

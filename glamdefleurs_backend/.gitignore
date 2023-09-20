@@ -1,2 +1,3 @@
 venv/
-glamdefleurs_api\glamdefleurs_api\.env
+.env/
+glamdefleurs_api/media/

@@ -123,7 +123,6 @@ Shipping Address:
 """
         send_html_email(message, "glamdefleurs@gmail.com", f"ORDER PLACED: {order.id}")
 
-
         return order
 
 class CustomerSerializer(serializers.ModelSerializer):

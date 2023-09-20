@@ -1,16 +1,20 @@
 import ast
-import re
+import os
 from decimal import Decimal
-import uuid
+from flowers.utils.sheet_utils import get_photo_url, extract_photo_drive_id
+from urllib import request
+from django.core.files import File
 import gc
+import uuid
 
-from flowers.serializers import FlowerSerializer
-from flowers.models import Flower, Category
+from flowers.serializers import FlowerSerializer, FlowerVariantSerializer, FlowerMediaSerializer
+from flowers.models import Flower, FlowerMedia,FlowerVariant, Category, FlowerVariant
 from glamdefleurs_api.sheets_service.sheets_service_v2 import read_spreadsheet, write_to_spreadsheet, write_multiple_ranges, clear_spreadsheet
+from glamdefleurs_api.drive_service.drive_service import download_file
 
 # The ID and range of a sample spreadsheet.
-SPREADSHEET_ID = '1M9taW0jW7_b3_sZbSRC7U7PoJIXtB080iPAQeMPHJR4'
-INITIAL_RANGE_NAME = 'flowers!A:F'
+SPREADSHEET_ID = '1_imuOcVRVfw8gWX9ilDGvHSoBNw5sr7UcyV0SqZDZEE'
+INITIAL_RANGE_NAME = 'flowers!A:H'
 WRITE_RANGE_NAME = 'current!A:L'
 ID_RANGE_NAME = 'flowers!A:A'
 POPULAR_RANGE_NAME = 'popular!A:A'
@@ -30,52 +34,12 @@ def set_popular():
         flower.save()
 
 def write_new():
-    """
-    Reads the "flower" sheet and adds everything into the db.
-    """
-    write_rows = [['id', 'external id', 'name', 'categories', 'price', 'price_text', 'photo', 'description', 'is popular', 'variants', 'variant name', 'require contact']]
-    rows = read_spreadsheet(SPREADSHEET_ID, INITIAL_RANGE_NAME)
-
-    # external ids to add, in the form "row : external id"
-    external_ids = {}
-    included_ids = []
-
-    # errors that need to be added to error sheet
-    errors = []
-
-    for i in range(len(rows)):
-        # parse record in sheet and add to db
-        external_id = ""
-
-        try:
-            sheet_rows, external_id = parse_flower(rows[i])
-            for sheet_row in sheet_rows:
-                sheet_row = [str(x) for x in sheet_row]
-                write_rows.append(sheet_row)
-
-                try:
-                    id_dict = ast.literal_eval(external_id)
-                    for id in id_dict.values():
-                        included_ids.append(id)
-                except:
-                    included_ids.append(external_id)
-
-            # write the external ids
-            external_ids[f"flowers!A{i + 2}"] = [[ external_id ]]
-
-        except Exception as err:
-            if rows[i][0]:
-                included_ids.append(rows[i][0])
-
-            error_row = [rows[i][2], str(err)]
-            errors.append(error_row)
-
-    Flower.objects.all().exclude(external_id__in=included_ids).delete()
+    external_ids, errors = read_to_db()
 
 
-    # write to "current" spreadsheet
-    write_to_spreadsheet(SPREADSHEET_ID, WRITE_RANGE_NAME, write_rows)
-    gc.collect()
+    # # write to "current" spreadsheet
+    # write_to_spreadsheet(SPREADSHEET_ID, WRITE_RANGE_NAME, write_rows)
+    # gc.collect()
 
     # write external ids in to "flowers" spreadsheet
     write_multiple_ranges(SPREADSHEET_ID, external_ids)
@@ -96,210 +60,240 @@ def is_float(string):
     except ValueError:
         return False
 
-def get_photo_url(drive_url):
+def read_to_db():
     """
-    Converts a drive url to a photo url.
+    Read the spreadsheet and add everything to the database
+
+    Returns the dictionary of external ids and their cell in A1 notation, in the form
+    ( cell : external id)
+    Also returns list of error messages.
     """
+    errors = []
+    external_ids = {}
 
-    if "file" in drive_url:
-        photo_id = re.search('drive.google.com/file/d/(.*)/view', drive_url).group(1)
-        photo = f"https://drive.google.com/uc?export=view&id={photo_id}"
-    else:
-        return drive_url
+    rows = read_spreadsheet(SPREADSHEET_ID, INITIAL_RANGE_NAME)
 
-    return photo
+    for i in range(len(rows)):
+        try:
+            external_id = parse_flower(rows[i])
+            external_ids[f"flowers!A{i + 2}"] = [[ external_id.hex ]]
+        except Exception as err:
+            error_message = parse_error_detail(err)
+            errors.append([error_message])
 
+
+    return (external_ids, errors)
+
+def parse_error_detail(exception):
+    """
+    Takes exception and returns an error message
+    """
+    name, error_detail = exception.args
+    return_string = name + " : "
+
+    for error in error_detail.keys():
+        return_string += error_detail[error][0].title() + ", "
+
+    return return_string
 
 def parse_flower(row):
     """
     Takes in a row in read spreadsheet.
-    Parses it into a flowers.Flower object and saves in db.
-    Returns
-    (
-        array of rows to add to sheets. (sheet_rows),
-        external_id of flower that's just added
-    )
+    Parses it into a 'flowers.Flower' object and saves in db.
+    If flower exists (external_id row filled), update the flower object.
 
+    parameters:
     row: contents of row
-    num: row number
-    errors: list of errors if any
+
+    returns:
+    external_id of newly added flower
+
     """
-    sheet_rows = []
-    external_id = {}
+    external_id = uuid.UUID(row[0]) if row[0] != "" else ""
+    categories = row[1].split("/")
+    has_variants = True if row[3].lower() == "yes" else False
+    require_contact = True if row[4].lower() == "yes" else False
 
-    flower_ex_id = row[0]
-    categories = row[1].split('/')
-    name = row[2]
-    prices = row[3]
-    # if row[4] (photos) is a dict, multiple photos for multiple variants.
-    try:
-        photos = ast.literal_eval("{" + row[4] + "}")
-    except:
-        photos = get_photo_url(row[4])
-    description = row[5]
-
-    # if multiple prices, variants exist.
-    # create multiple Flowers.
-
-    if not is_float(prices):
-
-        try:
-            # case where prices are multiple variants
-            prices = ast.literal_eval("{" + prices + "}")
-            all_flowers = []
-
-            for price_name in prices.keys():
-                if isinstance(photos, str):
-                    photo = photos
-                else:
-                    photo = get_photo_url(photos[price_name])
-
-                data = {
-                    "categories": categories,
-                    "name": name,
-                    "price": prices[price_name],
-                    "photo": photo,
-                    "description": description,
-                    "variants": [],
-                    "variant_name": price_name
-                }
-
-                # check if flower already exists in database
-                if flower_ex_id:
-                    try:
-                        flower_ex_id = ast.literal_eval(row[0])
-                    except:
-                        raise Exception("external_id")
-
-                    if price_name in flower_ex_id.keys():
-                        flowers = Flower.objects.filter(external_id=flower_ex_id[price_name])
-                        # manually update categories
-                        flowers[0].categories.clear()
-                        for category in categories:
-                            flowers[0].categories.add(Category.objects.get(pk=category))
-                        data.pop("categories")
-
-                        # manually update variants
-                        flowers[0].variants.clear()
-                        data.pop("variants")
-
-                        flowers.update(**data)
-                        all_flowers.append(flowers[0])
-                    else:
-                        serializer = FlowerSerializer(data=data)
-                        if serializer.is_valid():
-                            flower = serializer.save()
-                            all_flowers.append(flower)
-                        else:
-                            raise TypeError(serializer.errors)
-                else:
-                    serializer = FlowerSerializer(data=data)
-                    if serializer.is_valid():
-                        flower = serializer.save()
-                        all_flowers.append(flower)
-                    else:
-                        raise TypeError(serializer.errors)
-
-            # adding relationships
-            for i in range(len(all_flowers)):
-                for j in range(i + 1, len(all_flowers)):
-                    all_flowers[i].variants.add(all_flowers[j])
-
-            # add flowers to be written as rows in google sheets
-            for f in all_flowers:
-                serializer = FlowerSerializer(instance=f)
-                sheet_row = list(serializer.data.values())
-                sheet_rows.append(sheet_row)
-
-                external_id[f.variant_name] = f.external_id.hex
-
-            external_id = str(external_id).replace(', ',',\n')
-        except:
-            # case where price is invalid, set require_contact = True
-            data = {
-                "categories": categories,
-                "name": name,
-                "price": '0.00',
-                "photo": photos,
-                "description": description,
-                "variants": [],
-                "require_contact": True,
-                "price_text": prices
-            }
-
-            if flower_ex_id:
-                flower_ex_id = row[0]
-
-                flowers = Flower.objects.filter(external_id=flower_ex_id)
-
-                # manually update categories
-                flowers[0].categories.clear()
-                for category in categories:
-                    flowers[0].categories.add(Category.objects.get(pk=category))
-                data.pop("categories")
-
-                # manually update variants
-                flowers[0].variants.clear()
-                data.pop("variants")
-
-                flowers.update(**data)
-
-                flowers[0].save()
-
-                serializer = FlowerSerializer(instance=flowers[0])
-                sheet_rows.append(list(serializer.data.values()))
-                external_id = flowers[0].external_id.hex
-            else:
-                serializer = FlowerSerializer(data=data)
-                if serializer.is_valid():
-                    flower = serializer.save()
-                else:
-                    raise TypeError(serializer.errors)
-
-                sheet_rows.append(list(serializer.data.values()))
-                external_id = flower.external_id.hex
-
+    if has_variants:
+        price = ast.literal_eval("{" + row[5] + "}")
+    elif not require_contact:
+        price = Decimal(row[5])
     else:
-        data = {
-            "categories": categories,
-            "name": name,
-            "price": Decimal(row[3]),
-            "photo": photos,
-            "variants": [],
-            "description": description,
-            "price_text": ""
+        price = None
+
+    media = [url.strip() for url in row[6].split(",")]
+
+    flower_data = {
+        "external_id": row[0],
+        "categories": categories,
+        "name": row[2],
+        "has_variants": has_variants,
+        "require_contact": require_contact,
+        "price": price,
+        "media": media,
+        "description": row[7]
+    }
+
+    # check if flower in db
+    if flower_data["external_id"] != "" and len(Flower.objects.filter(external_id=flower_data["external_id"])) > 0:
+        update_flower(**flower_data)
+    else:
+        external_id = add_flower(**flower_data)
+
+    return external_id
+
+def get_media(urls, alt):
+    """
+    Create FlowerMedia objects based on given urls.
+    If url already exists, get that object's id instead.
+
+    Returns list of object ids
+    """
+
+    media_ids = []
+    for url in urls:
+
+        media_data = {
+            "alt": alt,
+            "external_url": get_photo_url(url)
         }
 
-        if flower_ex_id != "":
-            flowers = Flower.objects.filter(external_id=flower_ex_id)
+        # check if image with matching url already exists
+        filtered_flowers = FlowerMedia.objects.filter(**media_data)
 
-            # manually update categories
-            flowers[0].categories.clear()
-            for category in categories:
-                flowers[0].categories.add(Category.objects.get(pk=category))
-            data.pop("categories")
-
-            # manually update variants
-            flowers[0].variants.clear()
-            data.pop("variants")
-
-            flowers.update(**data)
-            flowers[0].save()
-
-            # add data to sheets
-            serializer = FlowerSerializer(instance=flowers[0])
-            sheet_rows.append(list(serializer.data.values()))
-            external_id = flowers[0].external_id.hex
+        if len(filtered_flowers) > 0:
+            media_ids.append(filtered_flowers[0].id)
         else:
-            serializer = FlowerSerializer(data=data)
-            if serializer.is_valid():
-                flower = serializer.save()
+            media_serializer = FlowerMediaSerializer(
+                data=media_data
+            )
+
+            if media_serializer.is_valid():
+                m = media_serializer.save()
+                photo_id = extract_photo_drive_id(url)
+
+                file = download_file(photo_id)
+
+                m.image.save(
+                    "flower.png",
+                    File(file),
+                    save=True
+                )
+                m.save()
+                media_ids.append(m.id)
             else:
-                raise TypeError(serializer.errors)
+                raise Exception('media', media_serializer.errors)
 
-            sheet_rows.append(list(serializer.data.values()))
-            external_id = flower.external_id.hex
+    return media_ids
 
-    return ( sheet_rows, external_id )
+def create_variants(has_variants, price):
+    """
+    Create FlowerVariant objects based on given prices
 
-main()
+    Returns list of object ids
+    """
+    variant_ids = []
+
+    if has_variants:
+        for variant_name in price.keys():
+            variant_data = {
+                "price": price[variant_name],
+                "name": variant_name
+            }
+            variant_serializer = FlowerVariantSerializer(data=variant_data)
+            if variant_serializer.is_valid():
+                variant = variant_serializer.save()
+                variant_ids.append(variant.id)
+            else:
+                raise Exception('variant', variant_serializer.errors)
+    else:
+        variant_data = {
+            "price": price,
+            "name": ""
+        }
+        variant_serializer = FlowerVariantSerializer(data=variant_data)
+        if variant_serializer.is_valid():
+            variant = variant_serializer.save()
+            variant_ids.append(variant.id)
+        else:
+            raise Exception('variant', variant_serializer.errors)
+
+    return variant_ids
+
+def add_flower(external_id, categories, name, has_variants, require_contact, price, media, description):
+    """
+    Adds a flower to the database given flower info
+
+    Returns [ external_ids ] (of variants)
+    """
+    price_text = price if require_contact else ""
+
+    # always create media, then variants, and then Flower object
+
+    # create media
+    media_ids = get_media(media, name)
+
+    # creating variants
+    variant_ids = create_variants(has_variants, price)
+
+    flower_data = {
+        "name": name,
+        "categories": categories,
+        "media": media_ids,
+        "description": description,
+        "has_variants": has_variants,
+        "default_variant": variant_ids[-1],
+        "require_contact": require_contact,
+        "price_text": price_text
+    }
+
+    flower_serializer = FlowerSerializer(data=flower_data)
+
+    if flower_serializer.is_valid():
+        flower = flower_serializer.save()
+        external_id = flower.external_id
+    else:
+        raise Exception(name, flower_serializer.errors)
+
+    for variant_id in variant_ids:
+        variant = FlowerVariant.objects.get(id=variant_id)
+        variant.flower = flower
+        variant.save()
+
+    return external_id
+
+
+def update_flower(external_id, categories, name, has_variants, require_contact, price, media, description):
+    """
+    Updates a flower in the db given flower data
+    """
+    price_text = price if require_contact else ""
+
+    # create media
+    media_ids = get_media(media, name)
+
+    # creating variants
+    variant_ids = create_variants(has_variants, price)
+    FlowerVariant.objects.filter(flower__external_id=external_id).exclude(id__in=variant_ids).delete()
+
+
+    flower_data = {
+        "name": name,
+        "categories": categories,
+        "media": media_ids,
+        "description": description,
+        "has_variants": has_variants,
+        "default_variant": variant_ids[-1],
+        "require_contact": require_contact,
+        "price_text": price_text
+    }
+
+    try:
+        flower = Flower.objects.get(external_id=external_id)
+        flower_serializer = FlowerSerializer(instance=flower, data=flower_data)
+        if flower_serializer.is_valid():
+            flower_serializer.save()
+        else:
+            raise Exception()
+    except:
+        raise Exception("Flower does not exist! Check the external ID")
