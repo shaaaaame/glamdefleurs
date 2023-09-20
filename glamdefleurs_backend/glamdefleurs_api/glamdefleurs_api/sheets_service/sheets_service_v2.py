@@ -94,7 +94,6 @@ def write_multiple_ranges(spreadsheet_id, ranges_value_dict):
                 'values': ranges_value_dict[key]
             } for key in ranges_value_dict.keys()
         ]
-        print(data)
         body = {
             'valueInputOption': 'USER_ENTERED',
             'data': data

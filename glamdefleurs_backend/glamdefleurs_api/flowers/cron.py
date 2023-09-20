@@ -119,7 +119,7 @@ def parse_flower(row):
     elif not require_contact:
         price = Decimal(row[5])
     else:
-        price = None
+        price = row[5]
 
     media = [url.strip() for url in row[6].split(",")]
 
@@ -186,7 +186,7 @@ def get_media(urls, alt):
 
     return media_ids
 
-def create_variants(has_variants, price):
+def create_variants(price, has_variants, require_contact):
     """
     Create FlowerVariant objects based on given prices
 
@@ -197,7 +197,7 @@ def create_variants(has_variants, price):
     if has_variants:
         for variant_name in price.keys():
             variant_data = {
-                "price": price[variant_name],
+                "price": None if require_contact else price[variant_name] ,
                 "name": variant_name
             }
             variant_serializer = FlowerVariantSerializer(data=variant_data)
@@ -208,7 +208,7 @@ def create_variants(has_variants, price):
                 raise Exception('variant', variant_serializer.errors)
     else:
         variant_data = {
-            "price": price,
+            "price": None if require_contact else price,
             "name": ""
         }
         variant_serializer = FlowerVariantSerializer(data=variant_data)
@@ -234,7 +234,7 @@ def add_flower(external_id, categories, name, has_variants, require_contact, pri
     media_ids = get_media(media, name)
 
     # creating variants
-    variant_ids = create_variants(has_variants, price)
+    variant_ids = create_variants(price, has_variants, require_contact)
 
     flower_data = {
         "name": name,
@@ -246,6 +246,10 @@ def add_flower(external_id, categories, name, has_variants, require_contact, pri
         "require_contact": require_contact,
         "price_text": price_text
     }
+
+    # add external id if provided
+    if external_id != "":
+        flower_data['external_id'] = external_id
 
     flower_serializer = FlowerSerializer(data=flower_data)
 
@@ -273,7 +277,7 @@ def update_flower(external_id, categories, name, has_variants, require_contact, 
     media_ids = get_media(media, name)
 
     # creating variants
-    variant_ids = create_variants(has_variants, price)
+    variant_ids = create_variants(price, has_variants, require_contact)
     FlowerVariant.objects.filter(flower__external_id=external_id).exclude(id__in=variant_ids).delete()
 
 

@@ -49,7 +49,6 @@ class FlowerSerializer(serializers.ModelSerializer):
         return super().to_representation(obj)
 
 
-
 class CategorySerializer(serializers.ModelSerializer):
     head_category = serializers.PrimaryKeyRelatedField(queryset=HeadCategory.objects.all())
 

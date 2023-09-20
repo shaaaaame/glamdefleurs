@@ -94,6 +94,10 @@
 
 }
 
+.flowers-item-price{
+    color: var(--clr-hl1);
+}
+
 @media screen and (max-width: 1024px) {
     .flowers-content{
         grid-template-columns: repeat(3, 1fr);
