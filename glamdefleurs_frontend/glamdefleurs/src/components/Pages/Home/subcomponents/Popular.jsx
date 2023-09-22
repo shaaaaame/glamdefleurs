@@ -8,11 +8,9 @@ function PopularItem(props){
 
   return (
     <Link className='link popular-item' to={'flowers/' + i.id}>
-      <img className='popular-item-img' src={i.photo} loading='lazy'/>
-      <div className='popular-item-name-wrapper'>
-        <h3 className='popular-item-name'>{i.name}</h3>
-        <h3 className='popular-item-name'>{i.require_contact ? i.price_text : "$" + i.price}</h3>
-      </div>
+      <img className='popular-item-img' src={i.media[0].image} loading='lazy'/>
+      <h3 className='popular-item-name'>{i.name}</h3>
+      <h3 className='popular-item-price'>{i.require_contact ? i.price_text : "$" + i.default_variant.price}</h3>
     </Link>
    
   )
