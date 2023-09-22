@@ -15,7 +15,7 @@ class FlowerVariantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FlowerVariant
-        fields = ['flower', 'name', 'price']
+        fields = ['id', 'flower', 'name', 'price']
         extra_kwargs = {
             "flower": {"required": False, "allow_null": True},
             "price": { "required": False, "allow_null": False}
@@ -31,7 +31,7 @@ class FlowerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Flower
-        fields = ['id', 'external_id', 'name', 'categories', 'description', 'is_popular', 'has_variants', 'default_variant', 'require_contact', 'price_text', 'media']
+        fields = ['id', 'external_id', 'name', 'categories', 'description', 'is_popular', 'has_variants', 'default_variant', 'require_contact', 'price_text', 'media', 'variants']
         extra_kwargs = {
             "price_text": {"required": False, "allow_null": True},
             "media": {"many": True}

@@ -74,7 +74,12 @@ function Login() {
             setToken(res.data.token);
             http.defaults.headers['Authorization'] = "Token " + res.data.token;
             triggerSuccessToast("Login successful!");
-            navigate('/profile/account/');
+
+            if (res.data.is_superuser || res.data.is_staff){
+                // TODO: replace url
+                window.open("http://localhost:8000/admin")
+            }
+            navigate('/profile/account/')
         },
         onError: (error) => {
             triggerErrorToast(error.response.data.non_field_errors[0]);

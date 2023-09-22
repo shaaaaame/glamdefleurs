@@ -15,6 +15,5 @@ class CustomAuthToken(ObtainAuthToken):
         token, created = Token.objects.get_or_create(user=user)
         return Response({
             'token': token.key,
-            'is_superuser': user.is_superuser,
-            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser
         })

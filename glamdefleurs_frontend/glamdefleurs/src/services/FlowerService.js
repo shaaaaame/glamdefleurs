@@ -68,6 +68,11 @@ class FlowerService{
         }
     }
 
+    async getFlowerVariant(variant_id){
+        const res = await http.get(`flower_variants/${variant_id}`);
+        return res.data
+    }
+
 }
 
 export default new FlowerService();

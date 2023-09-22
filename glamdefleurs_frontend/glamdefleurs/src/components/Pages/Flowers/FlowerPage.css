@@ -1,16 +1,15 @@
 
+
 .flower-detail{
-    position: fixed;
     background-color: rgba(0, 0, 0, 0.3);
-    top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: auto;
+    height: 80vh;
     z-index: 5;
     display: flex;
-    overflow: hidden;
     justify-content: space-between;
     align-items: center;
+    overflow: hidden;
     background-color: var(--clr-light);
     padding: 2em;
 }
@@ -80,14 +79,14 @@
 }
 
 .flower-page-backBtn{
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background-color: transparent;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .flower-page-horizontal-container{
-    margin: 0 0 10px 0;
+    margin: 10px 0 10px 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;  
@@ -123,12 +122,28 @@
     color: var(--clr-hl1);
     font-weight: 500;
     border: 2px solid var(--clr-hl1);
-    /* background-color: var(--clr-hl1); */
+    cursor: pointer;
 }
 
 .flower-variants-item-name{
     font-weight: 550;
 }
+
+.flower-variants-selected{
+    width: 5em;
+    height: 5em;
+    margin: 0 5px 0 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--clr-light);
+    font-weight: 500;
+    background-color: var(--clr-hl1);
+    cursor: pointer;
+
+}
+
 @media screen and (max-width: 768px) {
     .flower-detail{
         flex-direction: column;
@@ -156,6 +171,44 @@
     }
     .flower-page-price{
         margin: 1em 0 1em 0;
+    }
+
+}
+
+/* addons */
+
+.flower-addons{
+    border-top: 1px solid var(--clr-dark);
+    margin: 50px;
+}
+
+.flower-addons-title{
+    margin: 50px 0 50px 0;
+}
+
+.flower-addon-img{
+    position: relative;
+    object-fit: cover;
+    width: 100%;
+    height: 15em;
+}
+
+.flower-addons-grid{
+    display: grid;
+    row-gap: 20px;
+    column-gap: 20px;
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: auto;
+}
+
+.flower-addon-price{
+    color: var(--clr-hl1);
+}
+
+@media screen and (max-width: 768px) {
+
+    .flower-addons-grid{
+        grid-template-columns: repeat(3, 1fr);
     }
 
 }

@@ -39,11 +39,11 @@ function CheckoutPayment(){
 
         const items = flower_items.map((i) => {
             return {
-                name: i.name,
-                quantity: cartItems[i.id],
+                name: i.flower.name + `(${i.variant.name})`,
+                quantity: cartItems[i.variant.id],
                 unit_amount: {
                     currency_code: "CAD",
-                    value: i.price,
+                    value: i.variant.price,
                 }
             }
         })
@@ -97,8 +97,8 @@ function CheckoutPayment(){
 
             cart.forEach(i => {
                 items.push({
-                    item: i.id,
-                    quantity: cartItems[i.id]
+                    item: i.flower.external_id,
+                    quantity: cartItems[i.variant.id]
                 })
             })
 

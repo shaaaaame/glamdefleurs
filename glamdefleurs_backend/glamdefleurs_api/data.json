@@ -211,6 +211,15 @@
     },
     {
         "model": "flowers.category",
+        "pk": "add_ons",
+        "fields": {
+            "name": "add ons",
+            "description": "add ons",
+            "head_category": "just_because"
+        }
+    },
+    {
+        "model": "flowers.category",
         "pk": "get_well_soon",
         "fields": {
             "name": "get well soon",

@@ -32,10 +32,10 @@ function CheckoutDetails() {
                     return(
                         <div className='checkout-details-row'>
                             <div className='checkout-details-item'>
-                                <h3><b >{cartItems[i.id]}</b>x {i.name}</h3>
+                                <h3><b >{cartItems[i.variant.id]}</b>x {i.flower.name} {`(${i.variant.name})`}</h3>
                             </div>
                             <div className='checkout-details-item-price'>
-                                <h3>${i.price}</h3>
+                                <h3>${i.variant.price}</h3>
                             </div>
                         </div>
                     )

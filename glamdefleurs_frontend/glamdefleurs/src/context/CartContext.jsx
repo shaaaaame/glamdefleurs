@@ -7,26 +7,36 @@ import { toast } from 'react-toastify';
 export const CartContext = createContext(null);
 
 export function CartContextProvider(props) {
-    // cart items stores items in the form of productId : quantity
+    // cart items stores items in the form of variant id : quantity
     // if quantity == 0, item not in cart
     const [ cartItems, setCartItems ] = useState({});
+
+    // each item is object with 2 properties: flower and flower variant
     const [ items, setItems ] = useState([])
 
     const queryClient = useQueryClient();
-
 
     useEffect(() => {
         const fetchItems = async () => {
             let arr = []
 
             for(const id in cartItems){
-                const item = await queryClient.fetchQuery({
-                    queryKey: ['flower', {id : id}],
-                    queryFn: () => FlowerService.getFlower(id),
+                const variant = await queryClient.fetchQuery({
+                    queryKey: ['flower_variant', {id : Number(id)}],
+                    queryFn: () => FlowerService.getFlowerVariant(id),
                     staleTime: Infinity
                 })
 
-                arr.push(item);
+                const flower = await queryClient.fetchQuery({
+                    queryKey: ['flower', {id: variant.flower}],
+                    queryFn: () => FlowerService.getFlower(variant.flower),
+                    staleTime: Infinity
+                })
+
+                arr.push({
+                    flower: flower,
+                    variant: variant
+                });
             }
 
             setItems(arr);
@@ -48,8 +58,8 @@ export function CartContextProvider(props) {
                 [id] : quantity
             }))
             queryClient.prefetchQuery({
-                queryKey: ['flower', {id : id}],
-                queryFn: () => FlowerService.getFlower(id)
+                queryKey: ['flower_variant', {id : id}],
+                queryFn: () => FlowerService.getFlowerVariant(id)
             })
         }
 
@@ -93,7 +103,7 @@ export function CartContextProvider(props) {
         // }
 
         for(const item of items){
-            total += Number(item.price) * cartItems[item.id]
+            total += Number(item.variant.price) * cartItems[item.variant.id]
         }
 
         return total.toFixed(2);

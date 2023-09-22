@@ -88,6 +88,10 @@ def parse_error_detail(exception):
     """
     Takes exception and returns an error message
     """
+
+    if len(exception.args) != 2:
+        return exception
+
     name, error_detail = exception.args
     return_string = name + " : "
 
@@ -200,6 +204,7 @@ def create_variants(price, has_variants, require_contact):
                 "price": None if require_contact else price[variant_name] ,
                 "name": variant_name
             }
+
             variant_serializer = FlowerVariantSerializer(data=variant_data)
             if variant_serializer.is_valid():
                 variant = variant_serializer.save()
@@ -278,8 +283,6 @@ def update_flower(external_id, categories, name, has_variants, require_contact, 
 
     # creating variants
     variant_ids = create_variants(price, has_variants, require_contact)
-    FlowerVariant.objects.filter(flower__external_id=external_id).exclude(id__in=variant_ids).delete()
-
 
     flower_data = {
         "name": name,
@@ -292,13 +295,17 @@ def update_flower(external_id, categories, name, has_variants, require_contact, 
         "price_text": price_text
     }
 
-    try:
-        flower = Flower.objects.get(external_id=external_id)
-        flower_serializer = FlowerSerializer(instance=flower, data=flower_data)
-        if flower_serializer.is_valid():
-            flower_serializer.save()
-        else:
-            raise Exception()
-    except:
-        raise Exception("Flower does not exist! Check the external ID")
+    flower = Flower.objects.get(external_id=external_id)
+    flower_serializer = FlowerSerializer(instance=flower, data=flower_data)
+    if flower_serializer.is_valid():
+        flower = flower_serializer.save()
+    else:
+        raise Exception(name, "Flower does not exist! Check the external ID")
+
+    # add flower to variants
+    for variant_id in variant_ids:
+        flower_variant = FlowerVariant.objects.get(id=variant_id)
+        flower_variant.flower = flower
+        flower_variant.save()
+
 main()

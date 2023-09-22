@@ -9,53 +9,56 @@ import { ChevronRight, Minus, Plus } from 'react-feather';
 import { useNavigate } from 'react-router-dom';
 
 // requires id, name, img, price and quantity
-function CartItem({flower, quantity}){
-
+function CartItem({item, quantity}){
+    const flower = item.flower;
+    const variant = item.variant;
     const { addToCart, removeFromCart, deleteFromCart } = useContext(CartContext);
 
     return (
         <tr className='cart-item'>
-            <td className='cart-item-img-row'><img className='cart-item-img' src={flower.photo} alt={flower.name} /></td>
+            <td className='cart-item-img-row'><img className='cart-item-img' src={flower.media[0].image} alt={flower.name} /></td>
             <td>
                 <div className='cart-item-title'>
-                    <h3>{flower.name}</h3>
-                    <button className='cart-item-btn' onClick={() => deleteFromCart(flower.id)}>remove <ChevronRight /></button>
+                    <h3>{flower.name} {flower.has_variants ? `(${variant.name})` : ""}</h3>
+                    <button className='cart-item-btn' onClick={() => deleteFromCart(variant.id)}>remove <ChevronRight /></button>
                 </div>
             </td>
             <td>
                 <div className='cart-item-quantity'>
-                    <button className='cart-item-quantity-btn' onClick={() => addToCart(flower.id, 1)}><Plus /></button>
+                    <button className='cart-item-quantity-btn' onClick={() => addToCart(variant.id, 1)}><Plus /></button>
                     <h3>{quantity}</h3>
-                    <button className='cart-item-quantity-btn' onClick={() => removeFromCart(flower.id, 1)}><Minus /></button>
+                    <button className='cart-item-quantity-btn' onClick={() => removeFromCart(variant.id, 1)}><Minus /></button>
                 </div>
             </td>
             <td>
                 <div className='cart-item-total'>
-                    <h3>${flower.price * quantity}</h3>
+                    <h3>${variant.price * quantity}</h3>
                 </div>
             </td>
         </tr>
     )
 }
 
-function CartItemMobile({flower, quantity}){
+function CartItemMobile({item, quantity}){
+    const flower = item.flower;
+    const variant = item.variant;
 
     const {addToCart, removeFromCart, deleteFromCart } = useContext(CartContext);
 
     return (<tr className='cart-item-mobile'>
-            <td className='cart-item-img-row'><img className='cart-item-img' src={flower.photo} alt={flower.name} /></td>
+            <td className='cart-item-img-row'><img className='cart-item-img' src={flower.media[0].image} alt={flower.name} /></td>
             <td>
                 <div className='cart-item-mobile-title'>
-                    <h3>{flower.name}</h3>
-                    <h3>${Number(flower.price * quantity).toFixed(2)}</h3>
+                    <h3>{flower.name} {flower.has_variant ? `(${variant.name})` : ""}</h3>
+                    <h3>${Number(variant.price * quantity).toFixed(2)}</h3>
                 </div>
-                <button className='cart-item-btn' onClick={() => deleteFromCart(flower.id)}>remove <ChevronRight /></button>
+                <button className='cart-item-btn' onClick={() => deleteFromCart(variant.id)}>remove <ChevronRight /></button>
                 <div className='cart-item-mobile-quantity'>
-                    <button className='cart-item-quantity-btn' onClick={() => removeFromCart(flower.id, 1)}><Minus size={20} /></button>
+                    <button className='cart-item-quantity-btn' onClick={() => removeFromCart(variant.id, 1)}><Minus size={20} /></button>
                     <div className='cart-item-quantity-num'>
                         <h3>{quantity}</h3>
                     </div>
-                    <button className='cart-item-quantity-btn' onClick={() => {addToCart(flower.id, 1)}}><Plus size={20}/></button>
+                    <button className='cart-item-quantity-btn' onClick={() => {addToCart(variant.id, 1)}}><Plus size={20}/></button>
 
                 </div>
             </td>
@@ -65,7 +68,7 @@ function CartItemMobile({flower, quantity}){
 
 function Cart() {
 
-    const { cartItems, isCartEmpty, getIdsInCart, getItemsInCart, getSubtotal } = useContext(CartContext);
+    const { cartItems, isCartEmpty, getItemsInCart, getSubtotal } = useContext(CartContext);
     const [ showMobileCart, setShowMobileCart ] = useState(window.innerWidth < 780);
     const navigate = useNavigate();
 
@@ -88,10 +91,10 @@ function Cart() {
         let cartItemDisplay = [];
         const items = getItemsInCart()
         
-        for(const flower of items){
+        for(const item of items){
             cartItemDisplay.push(<CartItem
-                flower={flower}
-                quantity={cartItems[flower.id]}
+                item={item}
+                quantity={cartItems[item.variant.id]}
             />)
         }
 
@@ -112,10 +115,10 @@ function Cart() {
         let cartItemDisplay = [];
         const items = getItemsInCart()
         
-        for(const flower of items){
+        for(const item of items){
             cartItemDisplay.push(<CartItemMobile
-                flower={flower}
-                quantity={cartItems[flower.id]}
+                item={item}
+                quantity={cartItems[item.variant.id]}
             />)
         }
 
