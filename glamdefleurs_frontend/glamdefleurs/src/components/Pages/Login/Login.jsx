@@ -5,21 +5,21 @@ import { toast } from 'react-toastify';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import PhoneInput from 'react-phone-number-input';
 
-import Header from '../../global/Header';
 import Footer from '../../global/Footer';
 import './Login.css';
 import AuthService from '../../../services/AuthService';
 import http from '../../../http-common';
 import { Navigate, redirect, useNavigate } from 'react-router-dom';
 import useToken from '../../auth/useToken';
-import CustomerService from '../../../services/CustomerService';
 import { RegionDropdown } from 'react-country-region-selector';
+import { useContext } from 'react';
+import { AdminContext } from '../../../context/AdminContext';
 
 function Login() {
     const [isLoggingIn, setIsLoggingIn] = useState(true);
     const [isCreating, setIsCreating] = useState(false);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768)
-    const navigate = useNavigate();
+    const { isStaff, setIsStaff } = useContext(AdminContext)
 
     const toggleIsLoggingIn = () => setIsLoggingIn(!isLoggingIn);
     const toggleIsCreating = () => setIsCreating(!isCreating);
@@ -76,13 +76,13 @@ function Login() {
             triggerSuccessToast("Login successful!");
 
             if (res.data.is_superuser || res.data.is_staff){
-                // TODO: replace url
+                setIsStaff(true);
+                // TODO: change url
                 window.open("http://localhost:8000/admin")
             }
-            navigate('/profile/account/')
         },
         onError: (error) => {
-            triggerErrorToast(error.response.data.non_field_errors[0]);
+            triggerErrorToast(error.response.data.error_message);
         }
     })
     const handleLoginSubmit = (e) => {
@@ -104,11 +104,7 @@ function Login() {
             toggleIsCreating();
         },
         onError: (error) => {
-            if(error.response.status == 500){
-                triggerErrorToast("An error occured on our side. Please try again later!")
-            }else{
-                triggerErrorToast(error.response.data.non_field_errors[0]);
-            }
+            triggerErrorToast(error.response.data.error_message);
         }
     })
     const handleSignupSubmit = (e) => {

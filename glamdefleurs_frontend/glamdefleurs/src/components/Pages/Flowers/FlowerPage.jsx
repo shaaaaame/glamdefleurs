@@ -32,7 +32,7 @@ function AddOns(){
 
     return (
         <div className='flower-addons'>
-            <h1 className='flower-addons-title'>add a finishing touch.</h1>
+            <h1 className='flower-addons-title'>Add a finishing touch.</h1>
             <div className='flower-addons-grid'>
                 {addons.map(a => <AddOnItem flower={a}/>)}
             </div>
@@ -100,9 +100,13 @@ function FlowerPage() {
         navigate(-1);
     }
 
-    if (flowerIsLoading) return (<h1>loading...</h1>)
+    useEffect(() => {
+        if (!flowerIsLoading){
+            setSelectedVariant(flower.default_variant)
+        }
+    }, [])
 
-    // TODO: add image carousel
+    if (flowerIsLoading) return (<h1>loading...</h1>)
 
     return (
         <div className='flower-page'>

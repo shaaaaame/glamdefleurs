@@ -97,7 +97,8 @@ function CheckoutPayment(){
 
             cart.forEach(i => {
                 items.push({
-                    item: i.flower.external_id,
+                    item: i.flower.id,
+                    variant: i.variant.id,
                     quantity: cartItems[i.variant.id]
                 })
             })

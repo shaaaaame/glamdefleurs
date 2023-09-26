@@ -11,8 +11,11 @@
     width: 55vw;
 }
 
-.profile-title{
+.profile-title-container{
     border-bottom: 1px solid var(--clr-dark);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }
 
 .profile-info{

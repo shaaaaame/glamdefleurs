@@ -43,7 +43,7 @@ class CategoryService{
 
             for (const s of sub.data){
                 for (const h of head.data){
-                    if (s.head_category == h.id){
+                    if (s.head_category == h.id && !s.hidden){
                         if (h.subcategories){
                             h.subcategories.push(s)
                         }else{

@@ -25,7 +25,7 @@ function Purchases() {
         <div className='purchase-units'>
           {flowers.map((f) =>
             <div className='purchase-unit'>
-              <img className='purchase-unit-img' src={f.photo}/>
+              <img className='purchase-unit-img' src={f.media[0].image}/>
               <h3 className='purchase-unit-title'>{f.name}</h3>
               <h3>x{props.items.find(o => o.item == f.id).quantity}</h3>
             </div>

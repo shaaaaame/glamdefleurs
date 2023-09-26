@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -28,7 +29,14 @@ class OrderItem(models.Model):
     flower.id : quantity
     '''
     item = models.ForeignKey("flowers.Flower", on_delete=models.CASCADE)
+    variant = models.ForeignKey("flowers.FlowerVariant", on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.IntegerField()
+
+    def save(self, *args, **kwargs):
+        if not self.variant:
+            self.variant = self.item.default_variant
+
+        return super().save(*args, **kwargs)
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='customer')

@@ -4,7 +4,12 @@ import uuid
 from django.db import models
 from django.urls import reverse
 from django.contrib import admin
+from django.core.files import File
 from django.utils.html import format_html
+from django.core.files.temp import NamedTemporaryFile
+from urllib.request import urlopen
+from flowers.utils.sheet_utils import extract_photo_drive_id, get_photo_url
+from glamdefleurs_api.drive_service.drive_service import download_file
 
 # Create your models here.
 
@@ -22,6 +27,7 @@ class Category(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=10000)
     head_category = models.ForeignKey("HeadCategory", on_delete=models.CASCADE, null=True)
+    hidden = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['name']
@@ -40,13 +46,13 @@ class Flower(models.Model):
     default_variant = models.OneToOneField("FlowerVariant", related_name="default_flower", on_delete=models.CASCADE, null=True)
     require_contact = models.BooleanField(default=False)
     price_text = models.CharField(max_length=255, null=True, blank=True)
+    hidden = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['name']
 
     def __str__(self) -> str:
         return self.name
-
 
 class FlowerVariant(models.Model):
     flower = models.ForeignKey("Flower", related_name="variants", on_delete=models.SET_NULL, null=True)
@@ -73,3 +79,27 @@ class FlowerMedia(models.Model):
 
     def __str__(self) -> str:
         return self.external_url
+
+    def save(self, *args, **kwargs):
+
+        if not self.image and self.external_url != "":
+            if "drive.google.com/file/d/" in self.external_url:
+                drive_id = extract_photo_drive_id(self.external_url)
+                self.external_url = get_photo_url(self.external_url)
+                file = download_file(drive_id)
+
+                self.image = File(file)
+            else:
+                self.image = self.get_image_from_url(self.external_url)
+
+        return super().save(*args, **kwargs)
+
+    def get_image_from_url(self, url):
+       img_tmp = NamedTemporaryFile(delete=True)
+       with urlopen(url) as uo:
+           assert uo.status == 200
+           img_tmp.write(uo.read())
+           img_tmp.flush()
+       img = File(img_tmp)
+
+       return img

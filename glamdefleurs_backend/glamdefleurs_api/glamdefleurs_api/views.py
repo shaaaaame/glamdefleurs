@@ -1,10 +1,11 @@
 from django.shortcuts import render
 
 # Create your views here.
+
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-
+from django.http import HttpResponseServerError, HttpResponseNotFound
 class CustomAuthToken(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
@@ -15,5 +16,6 @@ class CustomAuthToken(ObtainAuthToken):
         token, created = Token.objects.get_or_create(user=user)
         return Response({
             'token': token.key,
-            'is_superuser': user.is_superuser
+            'is_superuser': user.is_superuser,
+            'is_staff': user.is_staff,
         })

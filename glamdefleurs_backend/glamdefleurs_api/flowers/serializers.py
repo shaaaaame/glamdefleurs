@@ -2,8 +2,6 @@ from rest_framework import serializers
 from flowers.models import Flower, FlowerVariant, FlowerMedia, Category, HeadCategory
 from flowers.utils.sheet_utils import get_photo_url
 
-
-
 class FlowerMediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = FlowerMedia
@@ -54,7 +52,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description', 'head_category']
+        fields = ['id', 'name', 'description', 'head_category', 'hidden']
 
 class HeadCategorySerializer(serializers.ModelSerializer):
 

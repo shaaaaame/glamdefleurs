@@ -7,11 +7,14 @@ import useToken from "../../../auth/useToken";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CustomerService from "../../../../services/CustomerService";
 import http from "../../../../http-common";
+import { useContext } from "react";
+import { AdminContext } from "../../../../context/AdminContext";
 
 export default function Account(){
 
     const navigate = useNavigate();
     const { token, removeToken } = useToken();
+    const { isStaff, setIsStaff } = useContext(AdminContext);
     const queryClient = useQueryClient();
 
     const [ username, setUsername ] = useState();
@@ -53,6 +56,7 @@ export default function Account(){
         queryClient.removeQueries(['customer'])
         queryClient.removeQueries(['orders'])
         triggerInfoToast("Signed out!")
+        setIsStaff(false);
         navigate('/login');
     }
 
@@ -78,7 +82,10 @@ export default function Account(){
 
     return (
         <div className='profile-details'>
-            <h1 className='profile-title'>account</h1>
+            <div className="profile-title-container">
+                <h1 className='profile-title'>account</h1>
+                { isStaff && <a className="profile-admin link" href="http://localhost:8000/admin/" target="_blank" ><u>admin page {">"}</u></a> /*TODO: change url*/}
+            </div>
             <Form method="update" className='profile-form' onSubmit={handleSubmit}>
                 <div className="profile-info">
                     <div className='profile-info-item'>

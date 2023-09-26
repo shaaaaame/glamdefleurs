@@ -13,6 +13,7 @@ from glamdefleurs_api.sheets_service.sheets_service_v2 import read_spreadsheet, 
 from glamdefleurs_api.drive_service.drive_service import download_file
 
 # The ID and range of a sample spreadsheet.
+# TODO: change spreadsheet id
 SPREADSHEET_ID = '1_imuOcVRVfw8gWX9ilDGvHSoBNw5sr7UcyV0SqZDZEE'
 INITIAL_RANGE_NAME = 'flowers!A:H'
 WRITE_RANGE_NAME = 'current!A:L'

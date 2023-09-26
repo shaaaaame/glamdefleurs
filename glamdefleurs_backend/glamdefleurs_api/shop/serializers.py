@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from shop.models import Order, OrderItem, Customer, Address
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 
 from dotenv import load_dotenv
 import os
@@ -16,11 +17,11 @@ class AddressSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ['item', 'quantity']
+        fields = ['item', 'variant', 'quantity']
 
 class OrderSerializer(serializers.ModelSerializer):
     customer_id = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all(), required=False, allow_null=True)
-    items = OrderItemSerializer(many=True) # serializes as { "item": x, "quantity": q}
+    items = OrderItemSerializer(many=True) # serializes as { "item": x, "variant": v, "quantity": q}
     address = AddressSerializer()
 
     class Meta:
@@ -35,11 +36,11 @@ class OrderSerializer(serializers.ModelSerializer):
 
         address = Address.objects.create(**address_data)
 
-        items = []
-        items_dict = {}
+        items = [] # order items
+        items_dict = {} # variant_id : quantity
         for item in items_data:
             items.append(OrderItem.objects.create(**item))
-            items_dict[item["item"].id] = item["quantity"]
+            items_dict[item["variant"].id] = item["quantity"]
 
         order = Order.objects.create(**validated_data, address=address)
         order.items.set(items)
@@ -48,9 +49,9 @@ class OrderSerializer(serializers.ModelSerializer):
         send_purchase_email(items_dict, order.email, {
             "order_id": order.id,
             "name": order.first_name,
-            "subtotal": order.subtotal,
-            "shipping": order.shipping,
-            "total": order.total,
+            "subtotal": "$" + str(order.subtotal),
+            "shipping": "$" +  str(order.shipping),
+            "total": "$" +  str(order.total),
             "address": address_data,
             "date": order.date_created
         })
@@ -66,7 +67,7 @@ class OrderSerializer(serializers.ModelSerializer):
     </tr>
 """
         for item in items:
-            item_html = template.format(name=item.item.name, quantity=items_dict[item.item.id], price=item.item.price, subtotal=str(round(float(item.item.price) * int(item.quantity), 2)))
+            item_html = template.format(name=f"{item.item.name} ({item.variant.name})", quantity=items_dict[item.variant.id], price=item.variant.price, subtotal=str(round(float(item.variant.price) * int(item.quantity), 2)))
             order_items += item_html
 
         message = f"""
@@ -121,7 +122,8 @@ Shipping Address:
 
 
 """
-        send_html_email(message, "glamdefleurs@gmail.com", f"ORDER PLACED: {order.id}")
+        # TODO: change in production
+        send_html_email(message, "hanxheng@gmail.com", f"ORDER PLACED: {order.id}")
 
         return order
 
