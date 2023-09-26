@@ -58,7 +58,7 @@ function Purchases() {
             staleTime: Infinity
         })
 
-        setOrders(order_data.data)
+        setOrders(order_data)
     }
 
     getOrders()

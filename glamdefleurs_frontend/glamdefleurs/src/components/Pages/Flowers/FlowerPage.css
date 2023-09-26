@@ -107,14 +107,17 @@
 
 .flower-variants-container{
     display: flex;
-    justify-content: right;
+    justify-content: left;
     padding: 1rem 1rem 0 0;
+    width: auto;
+    max-width: 100%;
+    flex-wrap: wrap;
 }
 
 .flower-variants-item{
     width: 5em;
     height: 5em;
-    margin: 0 5px 0 5px;
+    margin: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -170,7 +173,7 @@
         margin: 1em 0 1em 0;
     }
     .flower-page-price{
-        margin: 1em 0 1em 0;
+        margin: 1em 1em 1em 0;
     }
 
 }
@@ -179,7 +182,7 @@
 
 .flower-addons{
     border-top: 1px solid var(--clr-dark);
-    margin: 50px;
+    padding: 2em;
 }
 
 .flower-addons-title{
@@ -208,7 +211,7 @@
 @media screen and (max-width: 768px) {
 
     .flower-addons-grid{
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
 }

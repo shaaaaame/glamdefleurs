@@ -197,3 +197,13 @@
 .purchase-unit-img{
     height: 100%;
 }
+
+@media screen and (max-width: 768px) {
+    .purchase-unit{
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    .purchase-unit-img{
+        height: 60%;
+    }
+}

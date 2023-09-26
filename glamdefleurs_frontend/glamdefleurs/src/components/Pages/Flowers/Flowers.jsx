@@ -8,8 +8,6 @@ import FlowerService from '../../../services/FlowerService';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import CategoryService from '../../../services/CategoryService';
 import { Filter } from 'react-feather';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
 
 
 function FlowerItem(props) {
@@ -17,7 +15,7 @@ function FlowerItem(props) {
   return (
     <Link className='flowers-item link' to={"/flowers/" + props.flower.id}>
       <div className='flower-item-img-container'>
-        <LazyLoadImage className='flowers-item-img' width={'100%'} height={'20em'} style={{border: '1px solid var(--clr-dark)'}}src={props.flower.media[0].image} alt='flower-img' effect='blur' />
+        <img className='flowers-item-img' width={'100%'} height={'20em'} style={{border: '1px solid var(--clr-dark)'}} src={props.flower.media[0].image} alt='flower-img' />
       </div>
       <div className='flowers-item-name-wrapper'>
         <h3 className='flowers-item-name'>{props.flower.name}</h3>

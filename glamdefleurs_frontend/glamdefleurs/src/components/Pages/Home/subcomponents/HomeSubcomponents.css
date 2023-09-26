@@ -257,6 +257,7 @@
     height:60vh;
     object-fit: cover;
     margin-bottom: 20px;
+    border: 1px solid var(--clr-dark);
 }
 
 .popular-item-name-wrapper{
@@ -287,7 +288,9 @@
 @media screen and (max-width: 780px) {
     .popular-content{
         grid-template-columns: repeat(2, 1fr);
-        padding: 25px;
+        padding: 2em;
+        column-gap: 1em;
+        row-gap: 2em;
     }
 
     .popular-item-img{
