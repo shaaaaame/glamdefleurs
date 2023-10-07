@@ -78,21 +78,7 @@ class FlowerMedia(models.Model):
     external_url = models.URLField(blank=True, null=True)
 
     def __str__(self) -> str:
-        return self.external_url
-
-    def save(self, *args, **kwargs):
-
-        if not self.image and self.external_url != "":
-            if "drive.google.com/file/d/" in self.external_url:
-                drive_id = extract_photo_drive_id(self.external_url)
-                self.external_url = get_photo_url(self.external_url)
-                file = download_file(drive_id)
-
-                self.image = File(file)
-            else:
-                self.image = self.get_image_from_url(self.external_url)
-
-        return super().save(*args, **kwargs)
+        return self.alt if self.alt else "flower_media"
 
     def get_image_from_url(self, url):
        img_tmp = NamedTemporaryFile(delete=True)

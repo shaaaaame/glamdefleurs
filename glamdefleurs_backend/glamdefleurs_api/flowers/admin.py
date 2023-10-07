@@ -7,13 +7,21 @@ from django.core.files import File
 from flowers.utils.sheet_utils import extract_photo_drive_id, get_photo_url
 from glamdefleurs_api.drive_service.drive_service import download_file
 import urllib3.request
+from django.core.exceptions import ValidationError
 
 from flowers.utils.sheet_utils import get_photo_url
+
+def validate_image(image):
+    file_size = image.size
+
+    limit_mb = 3
+    if file_size > limit_mb * 1024 * 1024:
+        raise ValidationError("Max size of file is %s MB" % limit_mb)
 
 # Register your models here.
 
 class FlowerForm(forms.ModelForm):
-    image = forms.ImageField(required=False)
+    image = forms.ImageField(required=False, validators=[validate_image])
     external_url = forms.URLField(required=False, label='Image URL')
     price = forms.DecimalField(decimal_places=2, required=False)
 
@@ -22,7 +30,7 @@ class FlowerForm(forms.ModelForm):
         fields = ['name', 'categories', 'description',  'price', 'is_popular', 'has_variants', 'require_contact', 'price_text', 'hidden', 'image', 'external_url']
 
     class Media:
-        js = ('admin/js/jquery.init.js', '/static/flowers/js/hide_attributes.js',)
+        js = ('admin/js/jquery.init.js', '/static/flowers/js/hide_attributes.js')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -125,6 +133,11 @@ class FlowerAdmin(admin.ModelAdmin):
             form.base_fields['image'].initial = obj.media.all()[0].image
             form.base_fields['external_url'].initial = obj.media.all()[0].external_url
             form.base_fields['price'].initial = obj.default_variant.price
+        else:
+            form.base_fields['image'].initial = None
+            form.base_fields['external_url'].initial = None
+            form.base_fields['price'].initial = None
+
         return form
 
 @admin.register(FlowerMedia)
