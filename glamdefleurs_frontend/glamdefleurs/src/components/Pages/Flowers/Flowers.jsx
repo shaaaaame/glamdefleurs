@@ -86,8 +86,19 @@ function Flowers() {
   }, { enabled: !!params.id, staleTime: Infinity })
 
   // query for all categories
-  const { data : fullCategories, isLoading: isFullLoading } = useQuery(['categories'], CategoryService.getCategories, { onSuccess: (data) => {
-    setHead(data[0].id);
+  const { data : fullCategories, isLoading: isFullLoading } = useQuery(['categories'], CategoryService.getCategories, { onSettled: (data) => {
+    // add "select" option
+    data.push({
+      id: "all",
+      name: "all",
+      subcategories: [{
+        id: "all",
+        name: "all",
+        head_category: "all"
+      }]
+    })
+
+    setHead(data[fullCategories.length - 1].id);
     setSub(data[0].subcategories[0].id)
   }})
 
@@ -125,7 +136,7 @@ function Flowers() {
                 }
               })}
             </select>
-            <Link className='link flowers-category-selector-btn' to={`/categories/s/${sub}`}><Filter /></Link>
+            <Link className='link flowers-category-selector-btn' to={sub === "all" ? '/categories/all' :  `/categories/s/${sub}` }><Filter /></Link>
           </div>
           <input className='flowers-search' type='text' placeholder='search' onChange={handleSearch} value={search}/>
 
