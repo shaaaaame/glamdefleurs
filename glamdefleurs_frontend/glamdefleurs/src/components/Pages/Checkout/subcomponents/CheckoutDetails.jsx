@@ -8,10 +8,13 @@ function CheckoutDetails() {
     const { cartItems, getItemsInCart, getSubtotal } = useContext(CartContext);
 
     // shipping info
-    const { user, shipping, setTotal } = useOutletContext();
+    const { user, shipping, setTotal, setTax } = useOutletContext();
 
     let total = Number(getSubtotal()) + Number(shipping);
+    let tax = total * 0.13;
+    total = total + tax;
     total = total.toFixed(2);
+    setTax(tax);
     setTotal(total);
 
     const items = getItemsInCart();
@@ -49,6 +52,10 @@ function CheckoutDetails() {
                 <div className='checkout-details-summary-item'>
                     <p>shipping to {user.address.address1} <Link to="/checkout/delivery"><small>[change]</small></Link>: </p>
                     <p>${shipping}</p>
+                </div>
+                <div className='checkout-details-summary-item'>
+                    <p>tax: </p>
+                    <p>${tax}</p>
                 </div>
                 <div className='checkout-details-summary-item checkout-total'>
                     <h3>total: </h3>

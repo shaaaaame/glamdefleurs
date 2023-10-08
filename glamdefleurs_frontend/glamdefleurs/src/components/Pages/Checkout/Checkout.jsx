@@ -11,6 +11,7 @@ import CustomerService from "../../../services/CustomerService";
 function Checkout() {
     const [ user, setUser ] = useState();
     const [ shipping, setShipping ] = useState();
+    const [ tax, setTax ] = useState();
     const [ total, setTotal ] = useState();
     const { isCartEmpty } = useContext(CartContext);
     const queryClient = useQueryClient();
@@ -29,7 +30,9 @@ function Checkout() {
                     shipping: shipping,
                     setShipping: setShipping,
                     total: total,
-                    setTotal: setTotal
+                    setTotal: setTotal,
+                    tax: tax,
+                    setTax: setTax,
                 }}/>
             </div>
         </div>
