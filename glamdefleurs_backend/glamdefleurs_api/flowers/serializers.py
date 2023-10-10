@@ -10,13 +10,17 @@ class FlowerMediaSerializer(serializers.ModelSerializer):
 class FlowerVariantSerializer(serializers.ModelSerializer):
     flower = serializers.PrimaryKeyRelatedField(queryset=Flower.objects.all(), required=False, allow_null=True)
     price = serializers.DecimalField(max_digits=6, decimal_places=2, allow_null=True, required=False)
+    media = FlowerMediaSerializer(allow_null=True, required=False)
+    is_using_flower_image = serializers.BooleanField(required=False, default=True)
 
     class Meta:
         model = FlowerVariant
-        fields = ['id', 'flower', 'name', 'price']
+        fields = ['id', 'flower', 'name', 'price', 'media', 'is_using_flower_image']
         extra_kwargs = {
             "flower": {"required": False, "allow_null": True},
-            "price": { "required": False, "allow_null": False}
+            "price": { "required": False, "allow_null": True},
+            "media": { "required": True, "allow_null": True},
+
         }
 
 class FlowerSerializer(serializers.ModelSerializer):

@@ -1,7 +1,11 @@
+from collections.abc import Iterator
 from typing import Any
 from django.contrib import admin
+from django.db.models.query import QuerySet
+from django.forms.fields import Field
+from django.http.request import HttpRequest
 from flowers.models import Flower, Category, FlowerVariant, FlowerMedia
-from django.contrib.admin.options import StackedInline
+from django.contrib.admin.options import InlineModelAdmin, StackedInline
 import django.forms as forms
 from django.core.files import File
 from flowers.utils.sheet_utils import extract_photo_drive_id, get_photo_url
@@ -75,7 +79,7 @@ class FlowerForm(forms.ModelForm):
             if len(existing) > 0:
                 flower_media = existing[0]
             else:
-                file = urllib3.request.urlretrieve(data['external_url'], "flower.png")
+                file = urllib3.request.urlretrieve(data['external_url'], f"flower_{flower.id}.png")
                 data['image'] = File(file)
 
                 flower_media = FlowerMedia(external_url=data['external_url'], image=data['image'])
@@ -86,8 +90,12 @@ class FlowerForm(forms.ModelForm):
 
         if self.cleaned_data['image']:
             file = File(self.cleaned_data['image'])
-            media = FlowerMedia(image=file)
-            media.save()
+            existing = FlowerMedia.objects.filter(image=file.name)
+            if len(existing) > 0:
+                media = existing[0]
+            else:
+                media = FlowerMedia(image=file)
+                media.save()
             flower.save()
             flower.media.clear()
             flower.media.add(media)
@@ -104,16 +112,66 @@ class FlowerForm(forms.ModelForm):
 
         self.data = data
 
-
-
         return super().save(commit)
 
 class VariantForm(forms.ModelForm):
     price = forms.DecimalField(decimal_places=2, required=False, label="Variant price")
+    image = forms.ImageField(required=False, validators=[validate_image])
+    external_url = forms.URLField(required=False, label='Image URL')
+    is_using_flower_image = forms.BooleanField(required=False, label="Use image attached to Flower?")
 
     class Meta:
         model = FlowerVariant
-        fields = ['name', 'price']
+        fields = ['name', 'price', 'image', 'external_url', 'is_using_flower_image']
+
+    def get_initial_for_field(self, field: Field, field_name: str) -> Any:
+
+        if self.instance.media is not None:
+            if field_name == "image":
+                return self.instance.media.image
+            elif field_name == "external_url":
+                return self.instance.media.external_url
+
+        return super().get_initial_for_field(field, field_name)
+
+    def save(self, commit: bool = ...) -> Any:
+
+        variant = super().save(commit=False)
+
+        if self.cleaned_data['external_url'] != "" and not self.cleaned_data['image']:
+            existing = []
+            if "drive.google.com/file/d/" in self.cleaned_data['external_url']:
+                drive_id = extract_photo_drive_id(self.cleaned_data['external_url'])
+                self.cleaned_data['external_url'] = get_photo_url(self.cleaned_data['external_url'])
+                file = download_file(drive_id)
+                self.cleaned_data['image'] = File(file)
+
+            existing = FlowerMedia.objects.filter(external_url=self.cleaned_data['external_url'])
+
+            if len(existing) > 0:
+                flower_media = existing[0]
+            else:
+                file = urllib3.request.urlretrieve(self.cleaned_data['external_url'], f"flower_{variant.id}.png")
+                self.cleaned_data['image'] = File(file)
+
+                flower_media = FlowerMedia(external_url=self.cleaned_data['external_url'], image=self.cleaned_data['image'])
+                flower_media.save()
+
+            variant.save()
+            variant.media = flower_media
+        elif self.cleaned_data['image']:
+            file = File(self.cleaned_data['image'])
+            existing = FlowerMedia.objects.filter(image=file.name)
+            if len(existing) > 0:
+                media = existing[0]
+            else:
+                media = FlowerMedia(image=file)
+                media.save()
+            variant.save()
+            variant.media = media
+
+
+        return variant
 
 class VariantAdminInline(StackedInline):
     extra = 0
@@ -139,6 +197,22 @@ class FlowerAdmin(admin.ModelAdmin):
             form.base_fields['price'].initial = None
 
         return form
+
+    def save_formset(self, request: Any, form: Any, formset: Any, change: Any) -> None:
+        instances = formset.save(commit=False)
+        for obj in formset.deleted_objects:
+            obj.delete()
+
+
+        if len(instances) > 0:
+            for instance in instances:
+                instance.save()
+            instances[0].flower.default_variant = instances[0]
+            instances[0].flower.save()
+
+        formset.save_m2m()
+
+        return super().save_formset(request, form, formset, change)
 
 @admin.register(FlowerMedia)
 class FlowerMediaAdmin(admin.ModelAdmin):

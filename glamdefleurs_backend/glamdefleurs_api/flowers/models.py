@@ -54,10 +54,20 @@ class Flower(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def save(self, *args, **kwargs):
+        if not self.has_variants:
+            for variant in self.variants.all():
+                variant.flower = None
+                variant.save()
+
+        return super().save(*args, **kwargs)
+
 class FlowerVariant(models.Model):
     flower = models.ForeignKey("Flower", related_name="variants", on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255, blank=True, null=True, default="")
     price = models.DecimalField(max_digits=8, decimal_places=2, default=None, null=True)
+    media = models.ForeignKey("FlowerMedia", related_name="variants", on_delete=models.CASCADE, null=True, blank=True)
+    is_using_flower_image = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['price']
@@ -71,6 +81,12 @@ class FlowerVariant(models.Model):
             price = ""
 
         return name + ":" + str(price)
+
+    def save(self, *args, **kwargs):
+        if self.is_using_flower_image:
+            self.media = None
+
+        return super().save(*args, **kwargs)
 
 class FlowerMedia(models.Model):
     image = models.ImageField(upload_to="flower_media", blank=True, null=True)
