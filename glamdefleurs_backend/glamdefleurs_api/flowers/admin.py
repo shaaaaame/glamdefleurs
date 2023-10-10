@@ -66,27 +66,24 @@ class FlowerForm(forms.ModelForm):
 
         # handle case where url exists
         existing = []
-        if data['external_url'] != "" and not self.cleaned_data['image']:
+        if self.cleaned_data['external_url'] != "" and not self.cleaned_data['image']:
 
-            if "drive.google.com/file/d/" in data['external_url']:
-                drive_id = extract_photo_drive_id(data['external_url'])
-                data['external_url'] = get_photo_url(data['external_url'])
+            if "drive.google.com/file/d/" in self.cleaned_data['external_url']:
+                drive_id = extract_photo_drive_id(self.cleaned_data['external_url'])
+                self.cleaned_data['external_url'] = get_photo_url(self.cleaned_data['external_url'])
                 file = download_file(drive_id)
-                data['image'] = File(file)
+                self.cleaned_data['image'] = File(file)
 
-            existing = FlowerMedia.objects.filter(external_url=data['external_url'])
+            existing = FlowerMedia.objects.filter(external_url=self.cleaned_data['external_url'])
 
             if len(existing) > 0:
                 flower_media = existing[0]
             else:
-                file = urllib3.request.urlretrieve(data['external_url'], f"flower_{flower.id}.png")
-                data['image'] = File(file)
+                file = urllib3.request.urlretrieve(self.cleaned_data['external_url'], f"flower_{flower.id}.png")
+                self.cleaned_data['image'] = File(file)
 
-                flower_media = FlowerMedia(external_url=data['external_url'], image=data['image'])
-                flower_media.save()
-
-            flower.save()
-            flower.media.add(flower_media)
+                flower_media = FlowerMedia(external_url=self.cleaned_data['external_url'], image=self.cleaned_data['image']).save()
+                self.cleaned_data['media'] = flower_media
 
         if self.cleaned_data['image']:
             file = File(self.cleaned_data['image'])
@@ -96,9 +93,7 @@ class FlowerForm(forms.ModelForm):
             else:
                 media = FlowerMedia(image=file)
                 media.save()
-            flower.save()
-            flower.media.clear()
-            flower.media.add(media)
+            self.cleaned_data['media'] = media
 
         # handle price if no variants
         if not self.cleaned_data['has_variants']:
@@ -107,8 +102,7 @@ class FlowerForm(forms.ModelForm):
                 price=self.cleaned_data['price']
             )
             default_variant.save()
-            flower.save()
-            flower.default_variant = default_variant
+            self.cleaned_data['default_variant'] = default_variant
 
         self.data = data
 
@@ -134,6 +128,18 @@ class VariantForm(forms.ModelForm):
 
         return super().get_initial_for_field(field, field_name)
 
+    def clean(self):
+        cleaned_data = super().clean()
+        is_using_flower_image = cleaned_data.get('is_using_flower_image')
+        image = cleaned_data.get('image')
+        external_url = cleaned_data.get('external_url')
+
+        if not image and not external_url and not is_using_flower_image:
+            self.add_error('image', ("Either image or image url must be filled if not using Flower image."))
+            raise ValidationError("Either image or image url must be filled if not using Flower image.")
+
+        return cleaned_data
+
     def save(self, commit: bool = ...) -> Any:
 
         variant = super().save(commit=False)
@@ -157,8 +163,8 @@ class VariantForm(forms.ModelForm):
                 flower_media = FlowerMedia(external_url=self.cleaned_data['external_url'], image=self.cleaned_data['image'])
                 flower_media.save()
 
-            variant.save()
-            variant.media = flower_media
+            self.cleaned_data['media'] = flower_media
+
         elif self.cleaned_data['image']:
             file = File(self.cleaned_data['image'])
             existing = FlowerMedia.objects.filter(image=file.name)
@@ -167,8 +173,8 @@ class VariantForm(forms.ModelForm):
             else:
                 media = FlowerMedia(image=file)
                 media.save()
-            variant.save()
-            variant.media = media
+
+            self.cleaned_data['media'] = media
 
 
         return variant
