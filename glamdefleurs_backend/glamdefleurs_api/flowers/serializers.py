@@ -38,7 +38,7 @@ class FlowerSerializer(serializers.ModelSerializer):
             "price_text": {"required": False, "allow_null": True},
             "media": {"many": True}
         }
-        depth = 1
+        depth = 2
 
     def to_internal_value(self, data):
         self.fields['media'] = serializers.PrimaryKeyRelatedField(many=True, queryset=FlowerMedia.objects.all())
