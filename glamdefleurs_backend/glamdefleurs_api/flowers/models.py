@@ -54,10 +54,20 @@ class Flower(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def save(self, *args, **kwargs):
+        if not self.has_variants:
+            for variant in self.variants.all():
+                variant.flower = None
+                variant.save()
+
+        return super().save(*args, **kwargs)
+
 class FlowerVariant(models.Model):
     flower = models.ForeignKey("Flower", related_name="variants", on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255, blank=True, null=True, default="")
     price = models.DecimalField(max_digits=8, decimal_places=2, default=None, null=True)
+    media = models.ForeignKey("FlowerMedia", related_name="variants", on_delete=models.CASCADE, null=True, blank=True)
+    is_using_flower_image = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['price']
@@ -72,27 +82,19 @@ class FlowerVariant(models.Model):
 
         return name + ":" + str(price)
 
+    def save(self, *args, **kwargs):
+        if self.is_using_flower_image:
+            self.media = None
+
+        return super().save(*args, **kwargs)
+
 class FlowerMedia(models.Model):
     image = models.ImageField(upload_to="flower_media", blank=True, null=True)
     alt = models.CharField(max_length=255, blank=True)
     external_url = models.URLField(blank=True, null=True)
 
     def __str__(self) -> str:
-        return self.external_url
-
-    def save(self, *args, **kwargs):
-
-        if not self.image and self.external_url != "":
-            if "drive.google.com/file/d/" in self.external_url:
-                drive_id = extract_photo_drive_id(self.external_url)
-                self.external_url = get_photo_url(self.external_url)
-                file = download_file(drive_id)
-
-                self.image = File(file)
-            else:
-                self.image = self.get_image_from_url(self.external_url)
-
-        return super().save(*args, **kwargs)
+        return self.alt if self.alt else "flower_media"
 
     def get_image_from_url(self, url):
        img_tmp = NamedTemporaryFile(delete=True)

@@ -17,7 +17,6 @@ def download_file(file_id):
     try:
         service = build('drive', 'v3', credentials=creds)
 
-        # Call the Sheets API
         request = service.files().get_media(fileId=file_id)
         file = io.BytesIO()
         downloader = MediaIoBaseDownload(file, request)

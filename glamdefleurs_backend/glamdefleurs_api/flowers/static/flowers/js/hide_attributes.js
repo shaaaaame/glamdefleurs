@@ -28,6 +28,7 @@ require_contact_toggle = () => {
         django.jQuery(".field-price_text").show();
         require_contact=true;
     } else {
+
         django.jQuery(".field-price_text").hide();
         require_contact=false;
     }

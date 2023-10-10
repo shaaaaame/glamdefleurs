@@ -75,12 +75,21 @@ function FlowerPage() {
             id: '-'
         }
     )
+    const [ image, setImage ] = useState()
 
     const { data: flower, isLoading: flowerIsLoading, isSuccess } = useQuery({
         queryKey: ['flower', {id: Number(params.id)}],
         queryFn: () => FlowerService.getFlower(params.id),
         staleTime: Infinity,
-        onSuccess: (data) => setSelectedVariant(data.default_variant)
+        onSuccess: (data) => {
+            setSelectedVariant(data.default_variant)
+
+            if (data.default_variant.is_using_flower_image){
+                setImage(data.media[0].image)
+            }else{
+                setImage(data.default_variant.media.image)
+            }
+        }
     });
 
     const triggerSuccessToast = (success) => toast.success(success,{
@@ -103,8 +112,26 @@ function FlowerPage() {
     useEffect(() => {
         if (!flowerIsLoading){
             setSelectedVariant(flower.default_variant)
+
+            if (flower.default_variant.is_using_flower_image){
+                setImage(flower.media[0].image)
+            }else{
+                setImage(flower.default_variant.media.image)
+            }
         }
     }, [])
+
+    useEffect(() => {
+        if (selectedVariant.price !== "-"){
+            console.log(selectedVariant)
+            if (selectedVariant.is_using_flower_image){
+                setImage(flower.media[0].image)
+            }else{
+                setImage(selectedVariant.media.image)
+            }
+        }
+
+    }, [selectedVariant])
 
     if (flowerIsLoading) return (<h1>loading...</h1>)
 
@@ -112,7 +139,7 @@ function FlowerPage() {
         <div className='flower-page'>
             <div className='flower-detail'>
                 <div className='flower-page-img-container'>
-                    <img className='flower-page-img' src={flower.media[0].image} alt={flower.name}/>
+                    <img className='flower-page-img' src={image} alt={flower.name}/>
                 </div>
                 <div className='flower-page-wrapper'>
                     <h1 className='flower-page-title'>{flower.name}</h1>
@@ -139,8 +166,8 @@ function FlowerPage() {
             </div>
             {flower.categories.includes("add_ons") ? <></> : <AddOns />}
         </div>
-        
-        
+
+
     )
 }
 

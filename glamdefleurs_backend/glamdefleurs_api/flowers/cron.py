@@ -44,7 +44,6 @@ def write_new():
 
     # write external ids in to "flowers" spreadsheet
     write_multiple_ranges(SPREADSHEET_ID, external_ids)
-    gc.collect()
 
     # write errors to errors spreadsheet
     clear_spreadsheet(SPREADSHEET_ID, ERROR_RANGE_NAME)
