@@ -10,6 +10,13 @@ from django.core.files.temp import NamedTemporaryFile
 from urllib.request import urlopen
 from flowers.utils.sheet_utils import extract_photo_drive_id, get_photo_url
 from glamdefleurs_api.drive_service.drive_service import download_file
+import urllib.request
+
+import requests
+import tempfile
+
+from django.core import files
+
 
 # Create your models here.
 
@@ -54,14 +61,6 @@ class Flower(models.Model):
     def __str__(self) -> str:
         return self.name
 
-    def save(self, *args, **kwargs):
-        if not self.has_variants:
-            for variant in self.variants.all():
-                variant.flower = None
-                variant.save()
-
-        return super().save(*args, **kwargs)
-
 class FlowerVariant(models.Model):
     flower = models.ForeignKey("Flower", related_name="variants", on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255, blank=True, null=True, default="")
@@ -82,11 +81,11 @@ class FlowerVariant(models.Model):
 
         return name + ":" + str(price)
 
-    def save(self, *args, **kwargs):
-        if self.is_using_flower_image:
-            self.media = None
+    # def save(self, *args, **kwargs):
+    #     if self.is_using_flower_image:
+    #         self.media = None
 
-        return super().save(*args, **kwargs)
+    #     return super().save(*args, **kwargs)
 
 class FlowerMedia(models.Model):
     image = models.ImageField(upload_to="flower_media", blank=True, null=True)
