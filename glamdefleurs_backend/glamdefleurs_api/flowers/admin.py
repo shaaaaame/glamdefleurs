@@ -177,6 +177,10 @@ class FlowerAdmin(admin.ModelAdmin):
     def save_formset(self, request, form, formset, change):
         instances = formset.save(commit=False)
 
+        if len(instances) > 0:
+            form.instance.default_variant = instances[0]
+            form.instance.save()
+
         for instance in instances:
             instance.flower = form.instance
             instance.save()
