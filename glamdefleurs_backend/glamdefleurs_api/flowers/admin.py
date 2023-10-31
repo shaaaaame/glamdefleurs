@@ -155,6 +155,7 @@ class VariantAdminInline(StackedInline):
     extra = 0
     form = VariantForm
     model = FlowerVariant
+    min_num = 1
 
 @admin.register(Flower)
 class FlowerAdmin(admin.ModelAdmin):
