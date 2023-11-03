@@ -87,17 +87,6 @@ function Flowers() {
 
   // query for all categories
   const { data : fullCategories, isLoading: isFullLoading } = useQuery(['categories'], CategoryService.getCategories, { onSettled: (data) => {
-    // add "select" option
-    data.push({
-      id: "all",
-      name: "all",
-      subcategories: [{
-        id: "all",
-        name: "all",
-        head_category: "all"
-      }]
-    })
-
     setHead(data[fullCategories.length - 1].id);
     setSub(data[0].subcategories[0].id)
   }})
@@ -108,8 +97,12 @@ function Flowers() {
   const handleHeadChange = (e) => {
     setHead(e.target.value);
 
-    const headcategory = fullCategories.find(element => element.id === e.target.value)
-    setSub(headcategory.subcategories[0].id);
+    if (e.target.value === "all"){
+      setSub("all")
+    } else {
+      const headcategory = fullCategories.find(element => element.id === e.target.value)
+      setSub(headcategory.subcategories[0].id);
+    }
   }
 
 
@@ -124,17 +117,21 @@ function Flowers() {
           <div className='flowers-category-selectors-container'>
             <select className='flowers-head-category-selector' onChange={handleHeadChange} value={head}>
               {fullCategories.map(fc => <option value={fc.id}>{fc.name}</option>)}
+              <option value="all">all</option>
             </select>
             <select className='flowers-sub-category-selector' onChange={(e) => setSub(e.target.value)} value={sub}>
-              {fullCategories.map(fc => {
-                if(fc.id === head){
-                  const subOptions = fc.subcategories.map(sc => <option value={sc.id}>{sc.name}</option>)
-                  return subOptions
-                }
-                else{
-                  return
-                }
-              })}
+              {
+                head === "all" ? <option value="all">all</option> :
+                  fullCategories.map(fc => {
+                    if(fc.id === head){
+                      const subOptions = fc.subcategories.map(sc => <option value={sc.id}>{sc.name}</option>)
+                      return subOptions
+                    }
+                    else{
+                      return
+                    }
+                  })
+              }
             </select>
             <Link className='link flowers-category-selector-btn' to={sub === "all" ? '/categories/all' :  `/categories/s/${sub}` }><Filter /></Link>
           </div>
