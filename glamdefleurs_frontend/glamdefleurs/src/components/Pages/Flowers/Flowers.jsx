@@ -87,8 +87,8 @@ function Flowers() {
 
   // query for all categories
   const { data : fullCategories, isLoading: isFullLoading } = useQuery(['categories'], CategoryService.getCategories, { onSettled: (data) => {
-    setHead(data[fullCategories.length - 1].id);
-    setSub(data[0].subcategories[0].id)
+    setHead("all");
+    setSub("all")
   }})
 
   if ((params.id && categoryIsLoading) || flowersIsLoading || isFullLoading) return (<h1>loading...</h1>)
