@@ -133,7 +133,7 @@ function Flowers() {
                   })
               }
             </select>
-            <Link className='link flowers-category-selector-btn' to={`/categories/s/${sub}`}><Filter /></Link>
+            <Link className='link flowers-category-selector-btn' to={sub === "all" ? '/categories/all' :  `/categories/s/${sub}` }><Filter /></Link>
           </div>
           <input className='flowers-search' type='text' placeholder='search' onChange={handleSearch} value={search}/>
 
