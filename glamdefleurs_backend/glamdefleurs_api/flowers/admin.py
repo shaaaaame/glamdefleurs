@@ -11,6 +11,8 @@ from django.core.files import File
 from flowers.utils.sheet_utils import extract_photo_drive_id, get_photo_url
 from glamdefleurs_api.drive_service.drive_service import download_file
 from django.core.files.temp import NamedTemporaryFile
+from django.urls import resolve
+
 import os
 
 import requests
@@ -59,6 +61,13 @@ class FlowerForm(forms.ModelForm):
         if not image:
             self.add_error('image', ("Image must be filled."))
 
+        if has_variants and int(self.data.get("variants-TOTAL_FORMS")) == 0:
+            self.add_error('has_variants', ("Has variants is checked but no variants added!"))
+
+        if self.data.get("variants-0-DELETE") and int(self.data.get("variants-TOTAL_FORMS")) == 1:
+            self.add_error('has_variants', ("Cannot delete variant becuase at least one variant needed if has variants checked!"))
+
+
         return cleaned_data
 
     def process_image(self, image):
@@ -78,7 +87,6 @@ class FlowerForm(forms.ModelForm):
         default_variant.save()
 
         return default_variant
-
 
     def save(self, *args, **kwargs) -> None:
 
@@ -155,7 +163,6 @@ class VariantAdminInline(StackedInline):
     extra = 0
     form = VariantForm
     model = FlowerVariant
-    min_num = 1
 
 @admin.register(Flower)
 class FlowerAdmin(admin.ModelAdmin):
@@ -177,6 +184,9 @@ class FlowerAdmin(admin.ModelAdmin):
 
     def save_formset(self, request, form, formset, change):
         instances = formset.save(commit=False)
+
+        for obj in formset.deleted_objects:
+            obj.delete()
 
         if len(instances) > 0:
             form.instance.default_variant = instances[0]

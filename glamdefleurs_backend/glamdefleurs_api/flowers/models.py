@@ -50,7 +50,7 @@ class Flower(models.Model):
     description = models.TextField(max_length=10000, default="", null=True, blank=True)
     is_popular = models.BooleanField(default=False)
     has_variants = models.BooleanField(default=False)
-    default_variant = models.OneToOneField("FlowerVariant", related_name="default_flower", on_delete=models.CASCADE, null=True)
+    default_variant = models.OneToOneField("FlowerVariant", related_name="default_flower", on_delete=models.SET_NULL, null=True)
     require_contact = models.BooleanField(default=False)
     price_text = models.CharField(max_length=255, null=True, blank=True)
     hidden = models.BooleanField(default=False)
