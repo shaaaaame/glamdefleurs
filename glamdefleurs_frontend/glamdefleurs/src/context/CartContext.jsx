@@ -62,7 +62,6 @@ export function CartContextProvider(props) {
                 queryFn: () => FlowerService.getFlowerVariant(id)
             })
         }
-
     }
 
     const removeFromCart = (id, quantity) => {

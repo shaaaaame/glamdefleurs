@@ -107,7 +107,8 @@ class FlowerForm(forms.ModelForm):
         if not has_variants:
             default_variant = self.create_default_variant(price)
             f.default_variant = default_variant
-
+            default_variant.flower = f
+            default_variant.save()
         f.save()
 
         return f

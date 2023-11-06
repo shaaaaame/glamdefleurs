@@ -14,6 +14,7 @@ function CartItem({item, quantity}){
     const variant = item.variant;
     const { addToCart, removeFromCart, deleteFromCart } = useContext(CartContext);
 
+
     return (
         <tr className='cart-item'>
             <td className='cart-item-img-row'><img className='cart-item-img' src={flower.media[0].image} alt={flower.name} /></td>
