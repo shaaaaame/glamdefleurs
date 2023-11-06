@@ -14,6 +14,7 @@ function CheckoutDetails() {
     let tax = total * 0.13;
     total = total + tax;
     total = total.toFixed(2);
+    tax = tax.toFixed(2)
     setTax(tax);
     setTotal(total);
 
