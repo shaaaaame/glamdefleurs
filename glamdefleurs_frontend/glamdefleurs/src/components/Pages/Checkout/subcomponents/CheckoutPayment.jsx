@@ -128,7 +128,7 @@ function CheckoutPayment(){
     }
 
     const onError = (err) => {
-        console.log(err);
+        navigate('/payment_failed');
     }
 
     return (
