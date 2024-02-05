@@ -36,6 +36,7 @@ import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { REACT_APP_CLIENT_ID } from './Config/Config';
 import Checkout from './components/Pages/Checkout/Checkout';
 import { AdminContextProvider } from './context/AdminContext';
+import PaymentFailed from './components/Pages/Checkout/PaymentFailed';
 
 
 
@@ -103,6 +104,10 @@ const router = createHashRouter([
       {
         path: "payment_success/",
         element: <PaymentSuccess />
+      },
+      {
+        path: "payment_failed/",
+        element: <PaymentFailed />
       },
       {
         path: "profile/",

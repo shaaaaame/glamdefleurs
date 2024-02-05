@@ -86,9 +86,9 @@ function Flowers() {
   }, { enabled: !!params.id, staleTime: Infinity })
 
   // query for all categories
-  const { data : fullCategories, isLoading: isFullLoading } = useQuery(['categories'], CategoryService.getCategories, { onSuccess: (data) => {
-    setHead(data[0].id);
-    setSub(data[0].subcategories[0].id)
+  const { data : fullCategories, isLoading: isFullLoading } = useQuery(['categories'], CategoryService.getCategories, { onSettled: (data) => {
+    setHead("all");
+    setSub("all")
   }})
 
   if ((params.id && categoryIsLoading) || flowersIsLoading || isFullLoading) return (<h1>loading...</h1>)
@@ -97,8 +97,12 @@ function Flowers() {
   const handleHeadChange = (e) => {
     setHead(e.target.value);
 
-    const headcategory = fullCategories.find(element => element.id === e.target.value)
-    setSub(headcategory.subcategories[0].id);
+    if (e.target.value === "all"){
+      setSub("all")
+    } else {
+      const headcategory = fullCategories.find(element => element.id === e.target.value)
+      setSub(headcategory.subcategories[0].id);
+    }
   }
 
 
@@ -113,19 +117,23 @@ function Flowers() {
           <div className='flowers-category-selectors-container'>
             <select className='flowers-head-category-selector' onChange={handleHeadChange} value={head}>
               {fullCategories.map(fc => <option value={fc.id}>{fc.name}</option>)}
+              <option value="all">all</option>
             </select>
             <select className='flowers-sub-category-selector' onChange={(e) => setSub(e.target.value)} value={sub}>
-              {fullCategories.map(fc => {
-                if(fc.id === head){
-                  const subOptions = fc.subcategories.map(sc => <option value={sc.id}>{sc.name}</option>)
-                  return subOptions
-                }
-                else{
-                  return
-                }
-              })}
+              {
+                head === "all" ? <option value="all">all</option> :
+                  fullCategories.map(fc => {
+                    if(fc.id === head){
+                      const subOptions = fc.subcategories.map(sc => <option value={sc.id}>{sc.name}</option>)
+                      return subOptions
+                    }
+                    else{
+                      return
+                    }
+                  })
+              }
             </select>
-            <Link className='link flowers-category-selector-btn' to={`/categories/s/${sub}`}><Filter /></Link>
+            <Link className='link flowers-category-selector-btn' to={sub === "all" ? '/categories/all' :  `/categories/s/${sub}` }><Filter /></Link>
           </div>
           <input className='flowers-search' type='text' placeholder='search' onChange={handleSearch} value={search}/>
 

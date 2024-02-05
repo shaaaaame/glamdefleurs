@@ -13,7 +13,7 @@ function CheckoutPayment(){
 
     const navigate = useNavigate();
     const { cartItems, getSubtotal, getItemsInCart} = useContext(CartContext);
-    const { total, shipping, user } = useOutletContext();
+    const { total, shipping, user, tax } = useOutletContext();
 
     // send order to backend
     const orderMutation = useMutation({
@@ -63,6 +63,10 @@ function CheckoutPayment(){
                             shipping: {
                                 currency_code: "CAD",
                                 value: shipping
+                            },
+                            tax_total: {
+                                currency_code: "CAD",
+                                value: tax
                             }
                         }
                     },
@@ -124,7 +128,7 @@ function CheckoutPayment(){
     }
 
     const onError = (err) => {
-        console.log(err);
+        navigate('/payment_failed');
     }
 
     return (

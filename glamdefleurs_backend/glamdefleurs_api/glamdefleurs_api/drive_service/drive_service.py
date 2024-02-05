@@ -9,7 +9,7 @@ from glamdefleurs_api.gcloud_manager import get_credentials
 
 def download_file(file_id):
     """
-    Reads spreadsheet and returns rows of flowers.
+    Download a file given its drive id.
     """
 
     creds = get_credentials()
@@ -24,7 +24,7 @@ def download_file(file_id):
         while done is False:
             status, done = downloader.next_chunk()
 
-        return File(file)
+        return file
 
     except HttpError as err:
         print(f"An error has occured: {err}")

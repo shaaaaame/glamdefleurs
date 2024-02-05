@@ -2,3 +2,4 @@ glamdefleurs_backend/.env
 glamdefleurs_frontend/glamdefleurs/.env
 glamdefleurs_backend/datadump.json
 glamdefleurs_backend/glamdefleurs_api/db.sqlite3
+glamdefleurs_backend/glamdefleurs_api/glamdefleurs_api/utils/d3.json

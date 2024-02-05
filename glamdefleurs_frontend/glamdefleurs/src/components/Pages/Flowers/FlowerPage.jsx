@@ -123,7 +123,6 @@ function FlowerPage() {
 
     useEffect(() => {
         if (selectedVariant.price !== "-"){
-            console.log(selectedVariant)
             if (selectedVariant.is_using_flower_image){
                 setImage(flower.media[0].image)
             }else{

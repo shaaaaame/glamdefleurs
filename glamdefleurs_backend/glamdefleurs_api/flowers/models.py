@@ -10,6 +10,13 @@ from django.core.files.temp import NamedTemporaryFile
 from urllib.request import urlopen
 from flowers.utils.sheet_utils import extract_photo_drive_id, get_photo_url
 from glamdefleurs_api.drive_service.drive_service import download_file
+import urllib.request
+
+import requests
+import tempfile
+
+from django.core import files
+
 
 # Create your models here.
 
@@ -34,7 +41,7 @@ class Flower(models.Model):
     description = models.TextField(max_length=10000, default="", null=True, blank=True)
     is_popular = models.BooleanField(default=False)
     has_variants = models.BooleanField(default=False)
-    default_variant = models.OneToOneField("FlowerVariant", related_name="default_flower", on_delete=models.CASCADE, null=True)
+    default_variant = models.OneToOneField("FlowerVariant", related_name="default_flower", on_delete=models.SET_NULL, null=True)
     require_contact = models.BooleanField(default=False)
     price_text = models.CharField(max_length=255, null=True, blank=True)
     hidden = models.BooleanField(default=False)
@@ -44,14 +51,6 @@ class Flower(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.has_variants:
-            for variant in self.variants.all():
-                variant.flower = None
-                variant.save()
-
-        return super().save(*args, **kwargs)
 
 class FlowerVariant(models.Model):
     flower = models.ForeignKey("Flower", related_name="variants", on_delete=models.SET_NULL, null=True)
@@ -73,11 +72,11 @@ class FlowerVariant(models.Model):
 
         return name + ":" + str(price)
 
-    def save(self, *args, **kwargs):
-        if self.is_using_flower_image:
-            self.media = None
+    # def save(self, *args, **kwargs):
+    #     if self.is_using_flower_image:
+    #         self.media = None
 
-        return super().save(*args, **kwargs)
+    #     return super().save(*args, **kwargs)
 
 class FlowerMedia(models.Model):
     image = models.ImageField(upload_to="flower_media", blank=True, null=True)
