@@ -2,3 +2,4 @@ venv/
 .env/
 glamdefleurs_api/media/
 glamdefleurs_api/static/
+*/__pycache__/

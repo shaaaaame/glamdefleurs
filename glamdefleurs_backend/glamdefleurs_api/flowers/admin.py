@@ -1,11 +1,8 @@
-from collections.abc import Iterator
 from typing import Any
 from django.contrib import admin
-from django.db.models.query import QuerySet
 from django.forms.fields import Field
-from django.http.request import HttpRequest
-from flowers.models import Flower, Category, FlowerVariant, FlowerMedia
-from django.contrib.admin.options import InlineModelAdmin, StackedInline
+from flowers.models import Flower, Category, FlowerVariant, FlowerMedia, HeadCategory
+from django.contrib.admin.options import StackedInline
 import django.forms as forms
 from django.core.files import File
 from flowers.utils.sheet_utils import extract_photo_drive_id, get_photo_url
@@ -225,4 +222,6 @@ class FlowerMediaAdmin(admin.ModelAdmin):
     fields = ['image', 'external_url']
 
 admin.site.register(Category)
+admin.site.register(HeadCategory)
+
 admin.site.register(FlowerVariant)
