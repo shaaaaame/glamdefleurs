@@ -22,6 +22,7 @@ function FullMenu(props){
 
         {categories.map((category) => 
         <li className='header-option header-dd'>
+            {categories.hasOwnProperty("subcategories") ? 
             <p>
                 <Link className='link' to={`/categories/h/${category.id}`}>{category.name} <ChevronDown size='10px'/></Link>
                 <div className='header-dd-menu-wrapper'>
@@ -34,6 +35,11 @@ function FullMenu(props){
                     </ul>
                 </div>
             </p>
+
+            : 
+            <></>
+            }
+            
             
         </li>)}
 

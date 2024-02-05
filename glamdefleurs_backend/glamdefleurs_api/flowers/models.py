@@ -20,15 +20,6 @@ from django.core import files
 
 # Create your models here.
 
-class HeadCategory(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
-    name = models.CharField(max_length=255)
-    description = models.TextField(max_length=10000)
-    display_photo = models.URLField(default="https://drive.google.com/uc?export=view&id=1qZOythbdopUd6AW-QCk6rIcpxK81C9gv")
-
-    def __str__(self) -> str:
-        return self.name
-
 class Category(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
     name = models.CharField(max_length=255)
@@ -104,3 +95,12 @@ class FlowerMedia(models.Model):
        img = File(img_tmp)
 
        return img
+   
+class HeadCategory(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField(max_length=10000)
+    display_photo = models.ImageField(upload_to="category_media", blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.name

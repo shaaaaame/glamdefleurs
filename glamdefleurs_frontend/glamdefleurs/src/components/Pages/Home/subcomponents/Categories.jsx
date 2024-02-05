@@ -18,7 +18,7 @@ function Categories() {
           {categories.map((head) => {
             return(
               <li className='categories-item' key={head.id}>
-                <img className='categories-item-img' src={head.display_photo}/>
+                <img className='categories-item-img' src={head.display_photo ? head.display_photo : ""} alt={head.name}/>
                 <h3 className='categories-item-title'>{head.name}</h3>
                 <div className='categories-item-text-wrapper'>
                   <div className='categories-item-text'>{head.description}</div>
