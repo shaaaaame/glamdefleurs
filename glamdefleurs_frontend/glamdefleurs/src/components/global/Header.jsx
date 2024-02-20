@@ -19,12 +19,12 @@ function FullMenu(props){
     return (<div className='header-full_menu'>
     <ul className='header-options'>
         <li className='header-option'><p><Link className='link' to='/'>home</Link></p></li>
-
         {categories.map((category) => 
         <li className='header-option header-dd'>
-            {categories.hasOwnProperty("subcategories") ? 
+
+            {category.hasOwnProperty("subcategories") ?
             <p>
-                <Link className='link' to={`/categories/h/${category.id}`}>{category.name} <ChevronDown size='10px'/></Link>
+                <Link className='link' to={`/categories/h/${category.id}`}>{category.name}<ChevronDown size='10px'/></Link>
                 <div className='header-dd-menu-wrapper'>
                     <ul className='header-dd-menu'>
 
