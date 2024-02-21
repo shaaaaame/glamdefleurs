@@ -13,6 +13,9 @@ function Checkout() {
     const [ shipping, setShipping ] = useState();
     const [ tax, setTax ] = useState();
     const [ total, setTotal ] = useState();
+    const [ deliveryMethod, setDeliveryMethod ] = useState();
+    const [ specialInstructions, setSpecialInstructions ] = useState();
+    const [ deliveryTime, setDeliveryTime ] = useState();
     const { isCartEmpty } = useContext(CartContext);
     const queryClient = useQueryClient();
     const { token } = useToken();
@@ -25,7 +28,13 @@ function Checkout() {
         <div className="checkout">
             <div className="checkout-main">
                 <Outlet context={{
+                    specialInstructions: specialInstructions,
+                    setSpecialInstructions: setSpecialInstructions,
+                    deliveryTime: deliveryTime,
+                    setDeliveryTime: setDeliveryTime,
                     setUser : setUser,
+                    deliveryMethod: deliveryMethod,
+                    setDeliveryMethod: setDeliveryMethod,
                     user: user,
                     shipping: shipping,
                     setShipping: setShipping,

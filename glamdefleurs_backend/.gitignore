@@ -3,3 +3,4 @@ venv/
 glamdefleurs_api/media/
 glamdefleurs_api/static/
 */__pycache__/
+__pycache__/
