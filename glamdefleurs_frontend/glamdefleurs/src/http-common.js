@@ -10,6 +10,6 @@ if(sessionStorage.getItem("auth_token")){
 
 // TODO: change the base URL 
 export default axios.create({
-    baseURL: "https://api.glamdefleurs.ca/",
+    baseURL: "http://localhost:8000/",
     headers: headers
 });
