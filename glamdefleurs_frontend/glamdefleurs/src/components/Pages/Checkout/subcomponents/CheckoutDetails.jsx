@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { CartContext } from '../../../../context/CartContext'
 import { Navigate, useOutletContext, Link} from 'react-router-dom';
 
@@ -8,15 +8,16 @@ function CheckoutDetails() {
     const { cartItems, getItemsInCart, getSubtotal } = useContext(CartContext);
 
     // shipping info
-    const { user, shipping, setTotal, setTax } = useOutletContext();
+    const { user, shipping, setTotal, setTax, deliveryMethod } = useOutletContext();
 
     let total = Number(getSubtotal()) + Number(shipping);
     let tax = total * 0.13;
     total = total + tax;
     total = total.toFixed(2);
-    tax = tax.toFixed(2)
+    tax = tax.toFixed(2);
     setTax(tax);
     setTotal(total);
+
 
     const items = getItemsInCart();
 
@@ -24,7 +25,7 @@ function CheckoutDetails() {
         return <Navigate to="/cart" />
     }
 
-    if (!user || !shipping){
+    if ((!user || !shipping) && deliveryMethod == "delivery" ){
         return <Navigate to="/checkout/delivery" />
     }
 
@@ -50,10 +51,14 @@ function CheckoutDetails() {
                     <p>subtotal: </p>
                     <p>${getSubtotal()}</p>
                 </div>
-                <div className='checkout-details-summary-item'>
-                    <p>shipping to {user.address.address1} <Link to="/checkout/delivery"><small>[change]</small></Link>: </p>
-                    <p>${shipping}</p>
-                </div>
+                {
+                    deliveryMethod == "delivery" &&
+                    <div className='checkout-details-summary-item'>
+                        <p>shipping to {user.address.address1} <Link to="/checkout/delivery"><small>[change]</small></Link>: </p>
+                        <p>${shipping}</p>
+                    </div>
+                }
+
                 <div className='checkout-details-summary-item'>
                     <p>tax: </p>
                     <p>${tax}</p>

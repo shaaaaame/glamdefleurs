@@ -78,7 +78,10 @@ def send_purchase_email(items, to, details):
     email_sender = 'glamdefleursnotifications@gmail.com'
     email_password = os.environ["EMAIL_PASSWORD"]
 
-    html_file = open("glamdefleurs_api/email_service/email/email.html", 'r')
+    if details["delivery_method"] == "delivery":
+        html_file = open("glamdefleurs_api/email_service/email/email.html", 'r')
+    else:
+        html_file = open("glamdefleurs_api/email_service/email/email_pickup.html", 'r')
     content = html_file.read()
     html_file.close()
 

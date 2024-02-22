@@ -22,7 +22,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     customer_id = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all(), required=False, allow_null=True)
     items = OrderItemSerializer(many=True) # serializes as { "item": x, "variant": v, "quantity": q}
-    address = AddressSerializer()
+    address = AddressSerializer(required=False)
 
     class Meta:
         model = Order
@@ -31,10 +31,20 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         # handle data for object
-        address_data = validated_data.pop('address')
         items_data = validated_data.pop('items')
 
-        address = Address.objects.create(**address_data)
+        if "address" in validated_data:
+            address_data = validated_data.pop('address')
+            address = Address.objects.create(**address_data)
+        else:
+            address = None
+            address_data = {
+                "address1": "-",
+                "address2": "-",
+                "city": "-",
+                "province": "-",
+                "postcode": "-",
+                }
 
         items = [] # order items
         items_dict = {} # variant_id : quantity
@@ -49,14 +59,18 @@ class OrderSerializer(serializers.ModelSerializer):
         send_purchase_email(items_dict, order.email, {
             "order_id": order.id,
             "name": order.first_name,
+            "delivery_method": order.delivery_method,
+            "delivery_time": order.delivery_time,
+            "special_instructions": order.special_instructions,
             "subtotal": "$" + str(order.subtotal),
+            "tax": "$" + str(order.tax),
             "shipping": "$" +  str(order.shipping),
             "total": "$" +  str(order.total),
             "address": address_data,
             "date": order.date_created
         })
 
-        # send an email to client to let them know
+        # send an email to shop to let them know
         order_items = ""
         template = """
     <tr>
@@ -85,7 +99,6 @@ Order items:
     <th>Item name</th>
     <th>Quantity</th>
     <th>Price</th>
-    <th>Subtotal</th>
   </tr>
   {order_items}
 </table>
@@ -94,6 +107,9 @@ Order items:
 Order summary:
 </h3>
 <ul>
+    <li>Subtotal: {order.subtotal}</li>
+    <li>Shipping: {order.shipping} (Delivery Method: {order.delivery_method})</li>
+    <li>Tax: {order.tax}</li>
     <li>Total: {order.total}</li>
     <li>PayPal Payment ID: {order.payment_id}</li>
 </ul>
@@ -109,17 +125,20 @@ User details:
 </ul>
 
 <h3>
-Shipping Address:
+Delivery/Pickup:
 </h3>
-<p>
-    {address_data["address1"]} <br>
-    {address_data["address2"]} <br>
-    {address_data["city"]} <br>
-    {address_data["province"]} <br>
-    {address_data["postcode"]}
-</p>
-
-
+<ul>
+    <li>Delivery method: {order.delivery_method}</li>
+    <li>Delivery/Pickup date: {order.delivery_time}</li>
+    <li>Address (if applicable)
+        {address_data["address1"]} <br>
+        {address_data["address2"]} <br>
+        {address_data["city"]} <br>
+        {address_data["province"]} <br>
+        {address_data["postcode"]}
+    </li>
+    <li>Special instructions: {order.special_instructions}</li>
+</ul>
 
 """
         # TODO: change in production
