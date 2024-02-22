@@ -1,6 +1,7 @@
 from collections.abc import Iterable
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 # Create your models here.
 
@@ -13,6 +14,10 @@ class Order(models.Model):
     total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     subtotal = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     shipping = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    tax = models.DecimalField(max_digits=8, decimal_places=2, default = 0)
+    delivery_method = models.CharField(max_length=10, default="delivery")
+    special_instructions = models.TextField(null=True)
+    delivery_time = models.DateField(default=datetime.date.today)
 
 
 

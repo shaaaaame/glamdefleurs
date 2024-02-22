@@ -13,7 +13,7 @@ function CheckoutPayment(){
 
     const navigate = useNavigate();
     const { cartItems, getSubtotal, getItemsInCart} = useContext(CartContext);
-    const { total, shipping, user, tax } = useOutletContext();
+    const { total, shipping, user, tax, deliveryMethod, specialInstructions, deliveryTime } = useOutletContext();
 
     // send order to backend
     const orderMutation = useMutation({
@@ -32,7 +32,7 @@ function CheckoutPayment(){
         // }
     })
 
-    // async function that returns order id
+    // async function that create paypal order and returns order id
     const createOrder = (data, actions) => {
         const subtotal = getSubtotal();
         const flower_items = getItemsInCart();
@@ -70,7 +70,7 @@ function CheckoutPayment(){
                             }
                         }
                     },
-                    shipping: {
+                    ...(deliveryMethod == "delivery" && {shipping: {
                         address:{
                             address_line_1: user.address.address1,
                             address_line_2: user.address.address2,
@@ -79,13 +79,11 @@ function CheckoutPayment(){
                             postal_code: user.address.postcode,
                             country_code: "CA",
                         }
-                    }
+                    }})
+
                 }
             ],
             intent: "CAPTURE",
-            application_context:{
-                shipping_preference: "SET_PROVIDED_ADDRESS"
-            }
         })
         .then((orderId) => {
             return orderId;
@@ -109,9 +107,13 @@ function CheckoutPayment(){
 
 
             const order_data = {
+                delivery_method: deliveryMethod,
+                special_instructions: specialInstructions,
+                delivery_time: deliveryTime.getFullYear() + "-" + deliveryTime.getMonth() + "-" + deliveryTime.getDate(),
                 payment_id: details.id,
-                customer_id: user.id ? user.id : null,
                 items: items,
+                tax: tax,
+                customer_id: user.id ? user.id : null,
                 address: user.address,
                 first_name: user.first_name,
                 last_name: user.last_name,
@@ -128,6 +130,7 @@ function CheckoutPayment(){
     }
 
     const onError = (err) => {
+        console.log(err);
         navigate('/payment_failed');
     }
 

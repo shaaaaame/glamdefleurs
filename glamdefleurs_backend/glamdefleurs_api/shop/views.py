@@ -26,11 +26,11 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         data = { 'grant_type': 'client_credentials' }
         headers= {'Accept': 'application/json','Accept-Language': 'en_US'}
-        response = requests.post(url="https://api.paypal.com/v1/oauth2/token/", data=data, headers=headers, auth=(ID, SECRET)).json()
+        response = requests.post(url="https://api.sandbox.paypal.com/v1/oauth2/token/", data=data, headers=headers, auth=(ID, SECRET)).json()
         access_token = response['access_token']
 
         headers = { 'Authorization' : f'Bearer {access_token}'}
-        order = requests.get(url=f"https://api-m.paypal.com/v2/checkout/orders/{request.data['payment_id']}", headers=headers).json()
+        order = requests.get(url=f"https://api-m.sandbox.paypal.com/v2/checkout/orders/{request.data['payment_id']}", headers=headers).json()
 
         if order["status"] == "COMPLETED":
             return super().create(request, *args, **kwargs)

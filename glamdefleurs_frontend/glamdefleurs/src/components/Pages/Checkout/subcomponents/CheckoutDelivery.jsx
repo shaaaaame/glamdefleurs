@@ -80,6 +80,7 @@ function CheckoutDelivery(){
 
         setShipping(Number(Math.ceil(distance / 1000)).toFixed(2));
         setUser(user);
+        setSpecialInstructions(instructions);
         setDeliveryMethod("delivery");
         setDeliveryTime(startDate);
 
@@ -94,7 +95,17 @@ function CheckoutDelivery(){
     const handlePickupSubmit = async (e) => {
         e.preventDefault();
 
+        const user = {
+            id: id,
+            email: email,
+            phone_number: phoneNumber,
+            first_name: firstName,
+            last_name: lastName,
+        }
+
+        setUser(user);
         setShipping(0);
+        setSpecialInstructions(instructions);
         setDeliveryMethod("pickup");
         setDeliveryTime(startDate);
 
@@ -153,7 +164,7 @@ function CheckoutDelivery(){
             </div>
             {
                 currentDeliveryMethod == "delivery" ?
-                <form classname="checkout-delivery-form" onSubmit={handleDeliverySubmit}>
+                <form className="checkout-delivery-form" onSubmit={handleDeliverySubmit}>
                     <table className="checkout-delivery-table">
                         <tr>
                             <td colSpan={2}>
