@@ -46,11 +46,11 @@ function CheckoutDelivery(){
     const [ firstName, setFirstName ] = useState(user?.first_name);
     const [ lastName, setLastName ] = useState(user?.last_name);
 
-    const [ address1, setAddress1 ] = useState(user?.address.address1);
-    const [ address2, setAddress2 ] = useState(user?.address.address2);
-    const [ city, setCity ] = useState(user?.address.city);
-    const [ province, setProvince ] = useState(user?.address.province);
-    const [ postcode, setPostcode] = useState(user?.address.postcode);
+    const [ address1, setAddress1 ] = useState(user?.address?.address1);
+    const [ address2, setAddress2 ] = useState(user?.address?.address2);
+    const [ city, setCity ] = useState(user?.address?.city);
+    const [ province, setProvince ] = useState(user?.address?.province);
+    const [ postcode, setPostcode] = useState(user?.address?.postcode);
 
     // pickup agree state
     const [ agree, setAgree ] = useState(false);
@@ -126,15 +126,17 @@ function CheckoutDelivery(){
             setFirstName(data.first_name);
             setLastName(data.last_name);
 
-            setAddress1(data.address.address1);
-            setAddress2(data.address.address2);
-            setCity(data.address.city);
-            setProvince(data.address.province);
-            setPostcode(data.address.postcode);
+            if (data.address) {
+                setAddress1(data.address.address1);
+                setAddress2(data.address.address2);
+                setCity(data.address.city);
+                setProvince(data.address.province);
+                setPostcode(data.address.postcode);
+            }
         }
 
         // get user data if they are logged in
-        if(token){
+        if(token && queryClient){
             getUserData();
         }
 
